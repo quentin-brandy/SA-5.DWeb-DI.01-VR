@@ -1,0 +1,91 @@
+<html>
+
+<head>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-blink-controls/dist/aframe-blink-controls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.2.0/dist/aframe-extras.misc.min.js"></script>
+  <script src="https://unpkg.com/aframe-template-component@3.x.x/dist/aframe-template-component.min.js"></script>
+  <script src="https://unpkg.com/aframe-layout-component@4.x.x/dist/aframe-layout-component.min.js"></script>
+  <script src="https://unpkg.com/aframe-event-set-component@5.x.x/dist/aframe-event-set-component.min.js"></script>
+  <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
+  <script id="link" type="text/html">
+    <a-entity class="link"
+      geometry="primitive: plane; height: 1; width: 1"
+      material="shader: flat; src: ${thumb}"
+      sound="on: click; src: #click-sound"
+      event-set__mouseenter="scale: 1.2 1.2 1"
+      event-set__mouseleave="scale: 1 1 1"
+      event-set__click="_target: #image-360; _delay: 300; material.src: ${src}"
+      proxy-event="event: click; to: #image-360; as: fade"></a-entity>
+  </script>
+</head>
+
+<body>
+ 
+  <a-scene stats id="scene">
+    <!-- Assets -->
+    <a-assets>
+      <img id="skyTexture" src="assets/img/sky.jpg">
+      <img id="imgscène1" src="assets/img/sky.jpg">
+      <img id="img1" src="assets/img/1.jpg">
+      <img id="img2" src="assets/img/2.jpg">
+      <img id="img3" src="assets/img/3.JPG">
+      <img id="img4" src="assets/img/4.JPG">
+    </a-assets>
+
+    
+    <a-sky id="image-360" radius="10" src="#img1" material="color: #FFFFFF"
+           >
+    </a-sky>
+  
+    
+  
+    <!-- Display coordinates -->
+    <a-text id="coordinates" value="Coordinates: " position="0 2 -3" color="#000"></a-text>
+  
+
+    <!-- Links -->
+    <a-entity id="links" layout="type: line; margin: 1.5" position="-1.5 -1 -4">
+      <a-entity template="src: #link" data-src="#img2" data-thumb="#city-thumb"></a-entity>
+      <a-entity template="src: #link" data-src="#img3" data-thumb="#cubes-thumb"></a-entity>
+      <a-entity template="src: #link" data-src="#img4" data-thumb="#sechelt-thumb"></a-entity>
+    </a-entity>
+
+
+    <a-box id="click-box" position="0 1.6 -4" width="100" height="100" depth="1" visible="false"></a-box>
+
+
+    <!-- Camera and cursor -->
+    <a-entity id="camera" camera look-controls>
+      <a-cursor id="cursor"
+                animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
+                animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
+                event-set__mouseenter="_event: mouseenter; color: springgreen"
+                event-set__mouseleave="_event: mouseleave; color: black"
+                raycaster="objects: .link, #click-box">
+      </a-cursor>
+    </a-entity>
+  </a-scene>
+  
+  <script>
+    // Afficher les coordonnées sur clic
+    document.querySelector('a-scene').addEventListener('click', function (evt) {
+      var intersection = evt.detail.intersection;
+      if (intersection) {
+        var point = intersection.point;
+        var coordinatesText = document.querySelector('#coordinates');
+        coordinatesText.setAttribute('value', 'Coordinates: ' + point.x.toFixed(2) + ', ' + point.y.toFixed(2) + ', ' + point.z.toFixed(2));
+      }
+    });
+  
+    // Récupérer la direction de la caméra
+    document.querySelector('#click-box').addEventListener('click', function () {
+      var camera = document.querySelector('#camera').object3D;
+      var direction = new THREE.Vector3();
+      camera.getWorldDirection(direction);
+  
+      // Afficher les coordonnées dans la direction de la caméra
+      var coordinatesText = document.querySelector('#coordinates');
+      coordinatesText.setAttribute('value', 'Direction: ' + direction.x.toFixed(2) + ', ' + direction.y.toFixed(2) + ', ' + direction.z.toFixed(2));
+    });
+  </script>
