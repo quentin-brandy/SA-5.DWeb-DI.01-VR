@@ -1,0 +1,83 @@
+<html>
+<head>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <style>
+    /* Style for the editor panel */
+    #editor {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      width: 200px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      z-index: 10; /* Ensures the editor is above the A-Frame canvas */
+    }
+
+    /* Simple form styling */
+    #editor label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    #editor input, #editor button {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Editor interface -->
+  <div id="editor">
+    <h3>Editor Mode</h3>
+    <label for="entity-color">Change Color:</label>
+    <input type="color" id="entity-color" value="#FF0000">
+    <button id="apply-color">Apply Color</button>
+    <button id="add-entity-button">test</button>
+  </div>
+  <a-scene>
+    <!-- Sky -->
+    <a-sky src="assets/img/sky.jpg"></a-sky>
+
+    <!-- Camera and cursor -->
+    <a-entity id="camera" camera position="0 1.6 0" look-controls>
+      <a-cursor fuse="true" fuse-timeout="1000"></a-cursor>
+    </a-entity>
+
+    <!-- Button to add entity -->
+    
+
+    <!-- Display coordinates -->
+    <a-text id="coordinates" value="Coordinates: " position="0 2 -3" color="#000"></a-text>
+  </a-scene>
+
+  <script>
+    document.querySelector('#add-entity-button').addEventListener('click', function () {
+      var cameraEl = document.querySelector('#camera').object3D;
+      var direction = new THREE.Vector3();
+      cameraEl.getWorldDirection(direction);
+console.log(cameraEl.getWorldDirection(direction));
+      // Calculer la position à une certaine distance devant la caméra
+      var distance = -5;
+      var position = cameraEl.position.clone().add(direction.multiplyScalar(distance));
+console.log(position.x);
+      // Créer une nouvelle entité à la position déterminée
+      var newEntity = document.createElement('a-sphere');
+      newEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);
+      newEntity.setAttribute('radius', '3');
+      newEntity.setAttribute('color', '#FF0000');
+
+      // Ajouter la nouvelle entité à la scène
+      document.querySelector('a-scene').appendChild(newEntity);
+
+      // Mettre à jour l'affichage des coordonnées
+      var coordinatesText = document.querySelector('#coordinates');
+      coordinatesText.setAttribute('value', 'Coordinates: ' + position.x.toFixed(2) + ', ' + position.y.toFixed(2) + ', ' + position.z.toFixed(2));
+    });
+  </script>
+</body>
+</html>

@@ -18,11 +18,44 @@
       event-set__click="_target: #image-360; _delay: 300; material.src: ${src}"
       proxy-event="event: click; to: #image-360; as: fade"></a-entity>
   </script>
+  <style>
+    /* Style for the editor panel */
+    #editor {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      width: 200px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      z-index: 10; /* Ensures the editor is above the A-Frame canvas */
+    }
+
+    /* Simple form styling */
+    #editor label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    #editor input, #editor button {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 
 <body>
- 
-  <a-scene stats id="scene">
+  <div id="editor">
+    <h3>Editor Mode</h3>
+    <label for="entity-color">Change Color:</label>
+    <input type="color" id="entity-color" value="#FF0000">
+    <button id="apply-color">Apply Color</button>
+    <button id="add-entity-button">test</button>
+  </div>
+  <a-scene  id="scene">
     <!-- Assets -->
     <a-assets>
       <img id="skyTexture" src="assets/img/sky.jpg">
@@ -32,29 +65,21 @@
       <img id="img3" src="assets/img/3.JPG">
       <img id="img4" src="assets/img/4.JPG">
     </a-assets>
-
-    
-    <a-sky id="image-360" radius="10" src="#img1" material="color: #FFFFFF"
-           >
-    </a-sky>
   
-    
+    <a-sky id="image-360" radius="10" src="#img1" material="color: #FFFFFF"></a-sky>
   
     <!-- Display coordinates -->
     <a-text id="coordinates" value="Coordinates: " position="0 2 -3" color="#000"></a-text>
   
-
     <!-- Links -->
     <a-entity id="links" layout="type: line; margin: 1.5" position="-1.5 -1 -4">
       <a-entity template="src: #link" data-src="#img2" data-thumb="#city-thumb"></a-entity>
       <a-entity template="src: #link" data-src="#img3" data-thumb="#cubes-thumb"></a-entity>
       <a-entity template="src: #link" data-src="#img4" data-thumb="#sechelt-thumb"></a-entity>
     </a-entity>
-
-
-    <a-box id="click-box" position="0 1.6 -4" width="100" height="100" depth="1" visible="false"></a-box>
-
-
+  
+ 
+  
     <!-- Camera and cursor -->
     <a-entity id="camera" camera look-controls>
       <a-cursor id="cursor"
@@ -62,30 +87,34 @@
                 animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
                 event-set__mouseenter="_event: mouseenter; color: springgreen"
                 event-set__mouseleave="_event: mouseleave; color: black"
-                raycaster="objects: .link, #click-box">
+                raycaster="objects: .link, #click-ring"
+                fuse="true" 
+                fuse-timeout="1000">
       </a-cursor>
     </a-entity>
   </a-scene>
   
   <script>
-    // Afficher les coordonnées sur clic
-    document.querySelector('a-scene').addEventListener('click', function (evt) {
-      var intersection = evt.detail.intersection;
-      if (intersection) {
-        var point = intersection.point;
-        var coordinatesText = document.querySelector('#coordinates');
-        coordinatesText.setAttribute('value', 'Coordinates: ' + point.x.toFixed(2) + ', ' + point.y.toFixed(2) + ', ' + point.z.toFixed(2));
-      }
-    });
-  
-    // Récupérer la direction de la caméra
-    document.querySelector('#click-box').addEventListener('click', function () {
-      var camera = document.querySelector('#camera').object3D;
+    document.querySelector('#add-entity-button').addEventListener('click', function () {
+      var cameraEl = document.querySelector('#camera').object3D;
       var direction = new THREE.Vector3();
-      camera.getWorldDirection(direction);
-  
-      // Afficher les coordonnées dans la direction de la caméra
+      cameraEl.getWorldDirection(direction);
+console.log(cameraEl.getWorldDirection(direction));
+      // Calculer la position à une certaine distance devant la caméra
+      var distance = -5;
+      var position = cameraEl.position.clone().add(direction.multiplyScalar(distance));
+console.log(position.x);
+      // Créer une nouvelle entité à la position déterminée
+      var newEntity = document.createElement('a-sphere');
+      newEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);
+      newEntity.setAttribute('radius', '3');
+      newEntity.setAttribute('color', '#FF0000');
+
+      // Ajouter la nouvelle entité à la scène
+      document.querySelector('a-scene').appendChild(newEntity);
+
+      // Mettre à jour l'affichage des coordonnées
       var coordinatesText = document.querySelector('#coordinates');
-      coordinatesText.setAttribute('value', 'Direction: ' + direction.x.toFixed(2) + ', ' + direction.y.toFixed(2) + ', ' + direction.z.toFixed(2));
+      coordinatesText.setAttribute('value', 'Coordinates: ' + position.x.toFixed(2) + ', ' + position.y.toFixed(2) + ', ' + position.z.toFixed(2));
     });
   </script>
