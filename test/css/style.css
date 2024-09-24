@@ -1,3 +1,10 @@
+/* Import */
+@import "./left_board.css";
+@import "./root.css";
+
+
+/* Reset CSS */
+
 *,
 *::before,
 *::after {
@@ -10,39 +17,3 @@ html {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-img {
-    width: 20px;
-    height: 20px;
-}
-
-.scene__section {
-    position: fixed;
-      top: 10px;
-      left: 10px;
-      border: solid 1px red;
-      padding: 10px;
-      border-radius: 8px;
-      z-index: 10;
-}
-
-.title__scene {
-    text-align: center;
-    margin: 1rem 0;
-}
-
-.header__section {
-    display: flex;
-    gap: .5rem;
-    margin: 2.5rem 0;
-}
-
-.div__icons {
-    margin-left: 1rem;
-}
-
-.icon__scene {
-}
-
-.link__icon {
-    text-decoration: none;
-}

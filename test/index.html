@@ -31,19 +31,100 @@
 
     <div class="header__section">
       <img src="./assets/svg/collection.svg" alt="Collection icon">
-      <h3>Scène</h3>
-      <div class="div__icons">
-        <a href="" class="link__icon">
+      <label for="pet-select">Scène</label>
+      <div class="div__tools">
+        <button class="btn__icon">
           <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
-        </a>
-        <a href="" class="link__icon">
+        </button>
+        <button class="btn__icon">
           <img class="icon__scene" src="./assets/svg/copy.svg" alt="Copy icon">
-        </a>
-        <a href="" class="link__icon">
+        </button>
+        <button class="btn__icon">
           <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
-        </a>
+        </button>
       </div>
     </div>
+
+    <select name="scenes" id="scene-select">
+      <option value="Scene">Scene</option>
+      <option value="Scene">Scene</option>
+      <option value="Scene">Scene</option>
+    </select>
+
+    <div class="rename__section">
+      <label class="label__rename" for="rename">Renommez</label>
+      <div class="div__rename">
+        <input class="input__champ" type="text" id="rename" name="rename" placeholder="Renommez" />
+        <button class="button__submit">Valider</button>
+      </div>
+    </div>
+
+    <div class="import__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/folder.svg" alt="Folder icon">
+        <label for="input_file">Photo importé</label>
+      </div>
+
+      <div class="div__import">
+        <label for="file-upload" class="custom-file-upload">
+          add images
+        </label>
+        <input id="file-upload" type="file" />
+
+        <div class="div__tools">
+          <button class="btn__icon">
+            <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
+          </button>
+          <button class="btn__icon">
+            <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tag__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/tag.svg" alt="Tag icon">
+        <label>Ajouter un tag</label>
+      </div>
+
+      <div class="div__tags">
+        <button class="btn__tag">
+          <img src="./assets/svg/door-closed.svg" alt="Door icon">
+          Porte
+        </button>
+        <button class="btn__tag">
+          <img src="./assets/svg/info-circle.svg" alt="Info Bulle icon">
+          Info Bulle
+        </button>
+        <button class="btn__tag">
+          <img src="./assets/svg/card-text.svg" alt="Texte icon">
+          Texte
+        </button>
+        <button class="btn__tag">
+          <img src="./assets/svg/file-image.svg" alt="Photo icon">
+          Photo
+        </button>
+      </div>
+    </div>
+
+    <div class="techtree__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/diagram-2.svg" alt="Techtree icon">
+        <label>Explorer</label>
+      </div>
+      <div class="explorer__div">
+        <p class="title__explorer">Scène</p>
+
+        <ul class="ul__objet">
+          <li class="list__objet porte">Porte 1</li>
+          <li class="list__objet info_bulle">Info Bulle 1</li>
+          <li class="list__objet texte">texte 1</li>
+          <li class="list__objet photo">Photo 1</li>
+        </ul>
+      </div>
+    </div>
+
   </section>
 
   <!-- <div id="fileInputContainer">
