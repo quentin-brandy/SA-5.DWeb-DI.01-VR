@@ -3,7 +3,7 @@ let VR = {
         scene1: {
             name: 'scene1',
             tags: [],
-            image: '../assets/img/1.jpg'
+            image: '/assets/img/1.jpg'
         }
     }
 };
@@ -13,6 +13,7 @@ let VR = {
 
 
 function AddScene() {
+    const selectElement = document.getElementById('selectscene');
 const sceneCount = Object.keys(VR.scenes).length;
 const newSceneName = `scene${sceneCount + 1}`;
 VR.scenes[newSceneName] = {
@@ -21,6 +22,8 @@ VR.scenes[newSceneName] = {
     image: ''
 };
 AddSceneSelectOption();
+selectElement.selectedIndex = sceneCount;
+
 }
 
 
@@ -33,7 +36,6 @@ function DeleteScene() {
     let oldscene = selectElement.value;
     delete VR.scenes[oldscene];
     console.log(VR);
-
     AddSceneSelectOption();
     switchScene();
 };
@@ -131,8 +133,8 @@ Deletescene.addEventListener('click', DeleteScene);
 let SceneSelect= document.getElementById('selectscene');
 SceneSelect.addEventListener('change', switchScene);
 
-let SceneName = document.getElementById('scene-name');
-SceneName.addEventListener('change', ChangeSceneName);
+let SceneName = document.getElementById('switchscenename');
+SceneName.addEventListener('click', ChangeSceneName);
 
 let Duplicatescene = document.getElementById('duplicate-scene');
 Duplicatescene.addEventListener('click', DuplicateScene);

@@ -34,28 +34,25 @@
       <label for="pet-select">Scène</label>
       <div class="div__tools">
         <button class="btn__icon">
-          <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
+          <img id="plus-scene" class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
         </button>
         <button class="btn__icon">
-          <img class="icon__scene" src="./assets/svg/copy.svg" alt="Copy icon">
+          <img id="duplicate-scene" class="icon__scene" src="./assets/svg/copy.svg" alt="Copy icon">
         </button>
         <button class="btn__icon">
-          <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
+          <img id="minus-scene" class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
         </button>
       </div>
     </div>
 
-    <select name="scenes" id="scene-select">
-      <option value="Scene">Scene</option>
-      <option value="Scene">Scene</option>
-      <option value="Scene">Scene</option>
+    <select name="scene" id="selectscene">
     </select>
 
     <div class="rename__section">
       <label class="label__rename" for="rename">Renommez</label>
       <div class="div__rename">
-        <input class="input__champ" type="text" id="rename" name="rename" placeholder="Renommez" />
-        <button class="button__submit">Valider</button>
+        <input id="scene-name" class="input__champ" type="text" id="rename" name="rename" placeholder="Renommez" />
+        <button id="switchscenename" class="button__submit">Valider</button>
       </div>
     </div>
 

@@ -11,11 +11,12 @@
     height: 97%;
     top: 10px;
     left: 10px;
-    border: solid 1px var(--clr-blue);
+    border: solid 3px var(--clr-blue);
     padding: 0 1.5rem;
     border-radius: 8px;
     z-index: 10;
     /* overflow-y: scroll; */
+    background-color: white;
 }
 
 .title__scene {
