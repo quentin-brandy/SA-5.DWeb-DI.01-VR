@@ -3,26 +3,33 @@ let VR = {
         scene1: {
             name: 'scene1',
             tags: [],
-            image: '/assets/img/1.jpg'
+            image: {
+                url: '/assets/img/1.jpg',
+                name: '1.jpg'
+            }
         }
     }
 };
 
 
 
-
-
 function AddScene() {
     const selectElement = document.getElementById('selectscene');
+    const sceneNameInput = document.getElementById('scene-name');
 const sceneCount = Object.keys(VR.scenes).length;
 const newSceneName = `scene${sceneCount + 1}`;
 VR.scenes[newSceneName] = {
     name: newSceneName,
     tags: [],
-    image: ''
+    image: {
+        url: '/assets/img/sky.jpg',
+        name: 'sky.jpg'
+    }
 };
 AddSceneSelectOption();
 selectElement.selectedIndex = sceneCount;
+sceneNameInput.value = newSceneName;
+switchScene();
 
 }
 
@@ -66,31 +73,37 @@ function DuplicateScene() {
 
 function AddFile() {
     // files
-    const fileInput = document.getElementById('file-input');
+    const fileInput = document.getElementById('file-upload');
     const skyElement = document.getElementById('image-360');
     const assetsContainer = document.getElementById('assets-container');
     const sceneSelect = document.getElementById('selectscene');
-
+    const Filename = document.getElementById('name_import');
     fileInput.addEventListener('change', function (event) {
         const file = event.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
 
-            reader.onload = function (e) {
-                const imageUrl = e.target.result;
+            if (file && file.type.startsWith('image/'))  {
+            
+             const reader = new FileReader();
+
+             reader.onload = function (e) {
+                 const imageUrl = e.target.result;
 
            
-                const imgElement = document.createElement('img');
-                imgElement.setAttribute('id', 'uploaded-image');
-                imgElement.setAttribute('src', imageUrl);
-                assetsContainer.appendChild(imgElement);
+                 const imgElement = document.createElement('img');
+                 imgElement.setAttribute('id', 'uploaded-image');
+                 imgElement.setAttribute('src', imageUrl);
+                 assetsContainer.appendChild(imgElement);
                 
-               let Scene = sceneSelect.value;
+                let Scene = sceneSelect.value;
         
-                skyElement.setAttribute('src', '#uploaded-image');
+                 skyElement.setAttribute('src', '#uploaded-image');
 
-                VR.scenes[Scene].image = imageUrl;
-            };
+                 VR.scenes[Scene].image.url = imageUrl;
+                 VR.scenes[Scene].image.name = file.name;
+                const AddFileName = document.createElement('li');
+                AddFileName.textContent = file.name;
+                Filename.appendChild(AddFileName);
+             };
 
             reader.readAsDataURL(file);
             console.log(VR);
@@ -98,13 +111,45 @@ function AddFile() {
     });
 }
 
+function LoadFile() { 
+    const skyElement = document.getElementById('image-360');
+    const assetsContainer = document.getElementById('assets-container');
+    const sceneSelect = document.getElementById('selectscene');
+    const Filename = document.getElementById('name_import');
+    
+    // Clear previous images and filenames
+    assetsContainer.innerHTML = '';
+    Filename.innerHTML = '';
+
+    const selectedScene = VR.scenes[sceneSelect.value];
+    if (selectedScene && selectedScene.image.url) {
+        const imgElement = document.createElement('img');
+        imgElement.setAttribute('id', 'uploaded-image');
+        imgElement.setAttribute('src', selectedScene.image.url);
+        assetsContainer.appendChild(imgElement);
+        skyElement.setAttribute('src', '#uploaded-image');
+        
+        const AddFileName = document.createElement('li');
+        AddFileName.textContent = selectedScene.image.name;
+        Filename.appendChild(AddFileName);
+    }
+
+    AddFile();
+}
 
 function switchScene() {
     const skyElement = document.getElementById('image-360');
     const sceneselect = document.getElementById('selectscene');
     const sceneNameInput = document.getElementById('scene-name');
-    skyElement.setAttribute('src', VR.scenes[sceneselect.value].image);
-    sceneNameInput.value = sceneselect.options[sceneselect.selectedIndex].text;    
+    const selectedScene = VR.scenes[sceneselect.value];
+    
+    if (selectedScene.image.url) {
+        skyElement.setAttribute('src', selectedScene.image.url);
+    } else {
+        skyElement.setAttribute('src', '/assets/img/sky.jpg');
+    }
+    sceneNameInput.value = sceneselect.options[sceneselect.selectedIndex].text;
+    LoadFile();
 }
 
 
@@ -142,4 +187,4 @@ Duplicatescene.addEventListener('click', DuplicateScene);
 
 AddSceneSelectOption();
 switchScene();
-AddFile();
+LoadFile();
