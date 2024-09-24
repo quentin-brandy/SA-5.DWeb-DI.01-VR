@@ -26,12 +26,12 @@
 </head>
 
 <body>
-  <section class="scene__section">
+  <section class="fixed__section scene">
     <h2 class="title__scene">Scène</h2>
 
     <div class="header__section">
       <img src="./assets/svg/collection.svg" alt="Collection icon">
-      <label for="pet-select">Scène</label>
+      <label for="scene-select">Scène</label>
       <div class="div__tools">
         <button class="btn__icon">
           <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <select name="scenes" id="scene-select">
+    <select name="scene-select" id="scene-select">
       <option value="Scene">Scene</option>
       <option value="Scene">Scene</option>
       <option value="Scene">Scene</option>
@@ -126,14 +126,30 @@
     </div>
 
   </section>
+  <section class="fixed__section objet">
+    <h2 class="title__scene">Objet</h2>
 
-  <!-- <div id="fileInputContainer">
-    <label for="file-input">Choisissez une image :</label>
-    <input id="file-input" type="file" accept="image/*">
-  </div>
-  <button id="switchscène"></button>
-  <select name="scene" id="selectscene">
-  </select> -->
+    <div class="header__section">
+      <img src="./assets/svg/box.svg" alt="Box icon">
+      <label>Objet</label>
+      <div class="div__tools">
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
+        </button>
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/copy.svg" alt="Copy icon">
+        </button>
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <img src="./assets/svg/door-closed-dark.svg" alt="Door icon">
+      <p>Porte 1</p>
+    </div>
+  </section>
 
   <a-scene>
     <a-assets id="assets-container">

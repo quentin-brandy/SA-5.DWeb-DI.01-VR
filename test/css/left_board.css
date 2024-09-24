@@ -6,16 +6,19 @@
     margin-bottom: 5px;
 }
 
-.scene__section {
+.fixed__section {
     position: fixed;
     height: 97%;
-    top: 10px;
-    left: 10px;
     border: solid 1px var(--clr-blue);
     padding: 0 1.5rem;
     border-radius: 8px;
     z-index: 10;
     /* overflow-y: scroll; */
+}
+
+.scene {
+    top: 10px;
+    left: 10px;
 }
 
 .title__scene {
