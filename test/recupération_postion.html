@@ -1,4 +1,5 @@
 <html>
+
 <head>
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <style>
@@ -12,7 +13,8 @@
       background: rgba(255, 255, 255, 0.9);
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      z-index: 10; /* Ensures the editor is above the A-Frame canvas */
+      z-index: 10;
+      /* Ensures the editor is above the A-Frame canvas */
     }
 
     /* Simple form styling */
@@ -22,13 +24,25 @@
       font-weight: bold;
     }
 
-    #editor input, #editor button {
+    #editor input,
+    #editor button {
       width: 100%;
       padding: 8px;
       margin-bottom: 10px;
     }
+
+    #editor input[type="range"] {
+      width: 100%;
+    }
+
+    #editor .value-display {
+      text-align: center;
+      margin-top: 5px;
+      font-weight: bold;
+    }
   </style>
 </head>
+
 <body>
 
   <!-- Editor interface -->
@@ -38,7 +52,11 @@
     <input type="color" id="entity-color" value="#FF0000">
     <button id="apply-color">Apply Color</button>
     <button id="add-entity-button">test</button>
+    <label for="x-slider">X Position:</label>
+    <input type="range" id="x-slider" min="-10" max="10" step="0.1" value="0">
+    <div class="value-display" id="x-value">X: 0</div>
   </div>
+
   <a-scene>
     <!-- Sky -->
     <a-sky src="assets/img/sky.jpg"></a-sky>
@@ -49,7 +67,7 @@
     </a-entity>
 
     <!-- Button to add entity -->
-    
+
 
     <!-- Display coordinates -->
     <a-text id="coordinates" value="Coordinates: " position="0 2 -3" color="#000"></a-text>
@@ -59,25 +77,36 @@
     document.querySelector('#add-entity-button').addEventListener('click', function () {
       var cameraEl = document.querySelector('#camera').object3D;
       var direction = new THREE.Vector3();
-      cameraEl.getWorldDirection(direction);
-console.log(cameraEl.getWorldDirection(direction));
-      // Calculer la position à une certaine distance devant la caméra
-      var distance = -5;
-      var position = cameraEl.position.clone().add(direction.multiplyScalar(distance));
-console.log(position.x);
+      var coord = cameraEl.getWorldDirection(direction);
+      // // Calculer la position à une certaine distance devant la caméra en gros changer la distance de la camera
+       var distance = -5;
+       var position = cameraEl.position.clone().add(direction.multiplyScalar(distance));
       // Créer une nouvelle entité à la position déterminée
       var newEntity = document.createElement('a-sphere');
-      newEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);
+      newEntity.setAttribute('position', coord.x + ' ' + coord.y + ' ' + coord.z);
       newEntity.setAttribute('radius', '3');
       newEntity.setAttribute('color', '#FF0000');
-
+      newEntity.setAttribute('id', 'new-entity');
       // Ajouter la nouvelle entité à la scène
       document.querySelector('a-scene').appendChild(newEntity);
 
       // Mettre à jour l'affichage des coordonnées
       var coordinatesText = document.querySelector('#coordinates');
-      coordinatesText.setAttribute('value', 'Coordinates: ' + position.x.toFixed(2) + ', ' + position.y.toFixed(2) + ', ' + position.z.toFixed(2));
+      coordinatesText.setAttribute('value', 'Coordinates: ' + coord.x.toFixed(2) + ', ' + coord.y.toFixed(2) + ', ' + coord.z.toFixed(2));
     });
+
+    // Update the displayed X value when the slider is moved
+    document.querySelector('#x-slider').addEventListener('input', function () {
+      var xValue = this.value;
+      document.querySelector('#x-value').textContent = 'X: ' + xValue;
+      let newEntity = document.querySelector('#new-entity');
+      console.log(newEntity.getAttribute("position"));
+      if (newEntity) {
+        newEntity.setAttribute('position', xValue + ' 0 0');
+
+      }
+    });
+    
   </script>
 </body>
 </html>
