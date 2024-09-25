@@ -6,17 +6,20 @@
     margin-bottom: 5px;
 }
 
-.scene__section {
+.fixed__section {
     position: fixed;
     height: 97%;
-    top: 10px;
-    left: 10px;
-    border: solid 3px var(--clr-blue);
+    border: solid 1px var(--clr-blue);
     padding: 0 1.5rem;
     border-radius: 8px;
-    z-index: 10;
-     overflow-y: scroll; 
-    background-color: white;
+    z-index: 25;
+    background-color: var(--clr-white);
+    overflow-y: scroll;
+}
+
+.scene {
+    top: 10px;
+    left: 10px;
 }
 
 .title__scene {
@@ -48,12 +51,13 @@
 
 /* Composant de Scenes */
 
-#scene-select {
+.scene-select {
     width: 100%;
     padding: .25rem;
     border: none;
     border-radius: 5px;
     background-color: var(--clr-light-gray);
+    color: var(--clr-dark-gray);
 }
 
 
@@ -88,6 +92,7 @@
 }
 
 .button__submit {
+    width: 61.59px;
     font-size: 15px;
     padding: .5rem .5rem;
     border: none;
@@ -97,17 +102,15 @@
     cursor: pointer;
 }
 
-.name_alert {
-    color: red;
-    font-size: 12px;
-    margin-top: 5px;
-}
+
 
 /* Composant d'Import */
 
 .import__section,
 .tag__section,
-.techtree__section {
+.techtree__section,
+.texte__section,
+.position__section {
     margin-top: 50px;
 }
 
@@ -132,12 +135,7 @@ input[type="file"] {
     cursor: pointer;
 }
 
-.imported_file_name{
-    display: flex;
-    gap: .5rem;
-    align-items: center;
-    justify-content: start;
-}
+
 
 /* Composant de Tag */
 
@@ -199,7 +197,6 @@ input[type="file"] {
     gap: .5rem;
     padding: .5rem;
     border-bottom: 1px solid var(--clr-gray);
-    cursor: pointer;
 }
 
 .porte::before {

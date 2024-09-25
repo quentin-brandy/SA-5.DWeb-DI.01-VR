@@ -12,7 +12,7 @@
     border: solid 1px var(--clr-blue);
     padding: 0 1.5rem;
     border-radius: 8px;
-    z-index: 10;
+    z-index: 25;
     background-color: var(--clr-white);
     overflow-y: scroll;
 }

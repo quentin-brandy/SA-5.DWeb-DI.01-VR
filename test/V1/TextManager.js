@@ -61,3 +61,13 @@ export function Loadtext() {
         }
     });
 }
+
+
+export function ModifyText(event) {
+    const templateText = document.getElementById('template__texte').innerHTML;
+    const recipe = document.getElementById('fixedSectionObjet');
+
+    console.log(templateText);
+
+    recipe.innerHTML = templateText;
+}

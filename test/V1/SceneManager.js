@@ -1,7 +1,7 @@
 import  VR  from './main.js';
 import { LoadFile } from './FileManager.Js';
 import { LoadDoors } from './DoorManager.js';
-import { Loadtext } from './TextManager.js';
+import { Loadtext, ModifyText } from './TextManager.js';
 
 export function AddScene() {
     const selectElement = document.getElementById('selectscene');
@@ -12,7 +12,7 @@ VR.scenes[newSceneName] = {
     name: newSceneName,
     tags: [],
     image: {
-        url: '/assets/img/sky.jpg',
+        url: './assets/img/sky.jpg',
         name: 'sky.jpg'
     }
 };
