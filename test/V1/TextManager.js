@@ -71,9 +71,20 @@ export function ModifyText(event) {
 
     recipe.innerHTML = templateText;
     recipe.classList.add('fixed__section', 'objet');
+
+    document.getElementById('RenameButton').addEventListener('click', renameText(event.target.id));
 }
 
 
-export function RenameText(event) {
+function renameText( nom ) {
+    let sceneName = document.getElementById('selectscene').value;
+    let fil = VR.scenes[sceneName].tags;
+    let result = fil.find(isGoodText);
+    console.log(nom);
     
+    console.log(result.name);
+
+    function isGoodText(text) {
+        return text.name === nom;
+    }
 }
