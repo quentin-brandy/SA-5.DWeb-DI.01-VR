@@ -136,9 +136,9 @@ export function SceneExplorer() {
 }
 
 export function AddSceneExplorer(newtag , type){
-    console.log(newtag);
+    /* console.log(newtag);
     console.log(type);
-    console.log('test');
+    console.log('test'); */
     const sceneExplorer = document.getElementById('scene-tags');
     const tagElement = document.createElement('li');
         tagElement.textContent = newtag;

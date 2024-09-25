@@ -1,5 +1,7 @@
 import VR from './main.js';
 import { AddSceneExplorer } from './SceneManager.js';
+import { SceneExplorer } from './SceneManager.js';
+
 export function addText() {
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
@@ -12,9 +14,9 @@ export function addText() {
 
     const textCount = selectedScene.tags.filter(tag => tag.type === 'text').length;
     const textName = `text${textCount + 1}`;
-    
+
     var rotation = cameraEl.rotation.clone();
-    
+
     selectedScene.tags.push({
         type: 'text',
         position: { x: position.x, y: position.y, z: position.z },
@@ -54,9 +56,9 @@ export function Loadtext() {
             newEntity.setAttribute('scale', '5 5 5');
             newEntity.setAttribute('id', tag.textName);
             newEntity.object3D.rotation.set(tag.rotation.x, tag.rotation.y, tag.rotation.z);
-           
-          
-        
+
+
+
             document.querySelector('#text-entity').appendChild(newEntity);
         }
     });
@@ -66,25 +68,32 @@ export function Loadtext() {
 export function ModifyText(event) {
     let templateText = document.getElementById('template__texte').innerHTML;
     const recipe = document.getElementById('fixedSectionObjet');
-
     templateText = templateText.replaceAll("{{name}}", event.target.innerText);
-
     recipe.innerHTML = templateText;
     recipe.classList.add('fixed__section', 'objet');
 
-    document.getElementById('RenameButton').addEventListener('click', renameText(event.target.id));
+    console.log("click");
+
+    document.getElementById('RenameButton').addEventListener('click', function () {
+        renameText(event.target.id);
+    });
 }
 
 
-function renameText( nom ) {
+function renameText(nom) {
     let sceneName = document.getElementById('selectscene').value;
-    let fil = VR.scenes[sceneName].tags;
-    let result = fil.find(isGoodText);
-    console.log(nom);
-    
-    console.log(result.name);
+    let scene = VR.scenes[sceneName];
+    let tags = scene.tags;
+    let tag = tags.find(isGoodText);
+
+    if (tag) {
+        let inputRename = document.getElementById('rename').value;
+        tag.name = inputRename;
+    }
 
     function isGoodText(text) {
         return text.name === nom;
     }
+
+    SceneExplorer();
 }
