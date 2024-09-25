@@ -43,6 +43,7 @@ AddText.addEventListener('click', addText);
 
 
 
+
 AddSceneSelectOption();
 switchScene();
 LoadFile();

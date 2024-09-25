@@ -124,32 +124,46 @@ export function SceneExplorer() {
         const tagElement = document.createElement('li');
         tagElement.textContent = tag.name;
         tagElement.id = tag.name;
-        tagElement.className = 'list__objet';
-        
-        // Add class based on tag type
         if (tag.type === 'door') {
-            tagElement.classList.add('porte');
-            tagElement.addEventListener('click', function (event) {
-                ModifyDoor(event);
-            });
+            tagElement.className = 'list__objet porte';
+        
         } else if (tag.type === 'text') {
-            tagElement.classList.add('texte');
-            tagElement.addEventListener('click', function (event) {
-                ModifyText(event);
-            });
+            tagElement.className = 'list__objet texte';
         }
 
         sceneExplorer.appendChild(tagElement);
     });
 }
 
-export function AddSceneExplorer(newtag){
+export function AddSceneExplorer(newtag , type){
     console.log(newtag);
+    console.log(type);
     console.log('test');
     const sceneExplorer = document.getElementById('scene-tags');
     const tagElement = document.createElement('li');
         tagElement.textContent = newtag;
         tagElement.className = 'list__objet';
         sceneExplorer.appendChild(tagElement);
+        tagElement.id = newtag;
+     if (type === 'door') {
+            tagElement.className = 'list__objet porte';
+            document.addEventListener('click', function (event) {
+                if (event.target.id === newtag) {
+                    ModifyDoor(event);
+                    console.log('test door');
+                }
+            });
+        
+        } else if (type === 'text') {
+            tagElement.className = 'list__objet texte';
+            document.addEventListener('click', function (event) {
+            if (event.target.id === newtag) {
+                ModifyText(event);
+                console.log('test text');
+            }
+        });
+        }
+
+
 }
 

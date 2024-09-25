@@ -1,5 +1,5 @@
 import  VR from './main.js';
-import { AddSceneExplorer , switchScene} from './SceneManager.js';
+import { AddSceneExplorer , switchScene } from './SceneManager.js';
 
 
 export function addDoor() {
@@ -34,7 +34,7 @@ export function addDoor() {
     });
     document.querySelector('#door-entity').appendChild(newEntity);
     console.log(VR);
-    AddSceneExplorer(doorName);
+    AddSceneExplorer(doorName , 'door');
 }
 
 

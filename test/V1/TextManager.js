@@ -34,7 +34,7 @@ export function addText() {
 
     document.querySelector('#text-entity').appendChild(newEntity);
     console.log(VR);
-    AddSceneExplorer(textName);
+    AddSceneExplorer(textName, 'text');
 }
 
 export function Loadtext() {
