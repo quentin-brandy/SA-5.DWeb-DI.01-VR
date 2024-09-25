@@ -59,7 +59,7 @@
     <div class="import__section">
       <div class="div__section_title">
         <img src="./assets/svg/folder.svg" alt="Folder icon">
-        <label >Photo importé</label>
+        <label >Image 360 importé (1 max)</label>
       </div>
       <ul id="name_import">
 
@@ -69,14 +69,11 @@
         <label for="file-upload" class="custom-file-upload">
           ajouter une image 360
         </label>
-        <input id="file-upload" type="file" />
+        <input id="file-upload" type="file" accept=".png, .jpg, .jpeg" />
 
         <div class="div__tools">
           <button class="btn__icon">
             <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
-          </button>
-          <button class="btn__icon">
-            <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
           </button>
         </div>
       </div>
@@ -90,7 +87,7 @@
 
       <div class="div__tags">
         <button class="btn__tag">
-          <img src="./assets/svg/door-closed.svg" alt="Door icon">
+          <img id="plus-door" src="./assets/svg/door-closed.svg" alt="Door icon">
           Porte
         </button>
         <button class="btn__tag">

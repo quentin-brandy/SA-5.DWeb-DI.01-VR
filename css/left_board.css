@@ -97,7 +97,11 @@
     cursor: pointer;
 }
 
-
+.name_alert {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
 
 /* Composant d'Import */
 
@@ -128,7 +132,12 @@ input[type="file"] {
     cursor: pointer;
 }
 
-
+.imported_file_name{
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    justify-content: start;
+}
 
 /* Composant de Tag */
 
