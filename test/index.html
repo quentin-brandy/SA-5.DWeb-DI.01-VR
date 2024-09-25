@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <select name="scene-select" id="scene-select">
+    <select name="scene-select" id="scene-select" class="scene-select">
       <option value="Scene">Scene</option>
       <option value="Scene">Scene</option>
       <option value="Scene">Scene</option>
@@ -128,6 +128,349 @@
 
 
   <section class="fixed__section objet">
+    <h2 class="title__scene">Objet</h2>
+
+    <div class="header__section">
+      <img src="./assets/svg/box.svg" alt="Box icon">
+      <label>Objet</label>
+      <div class="div__tools">
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
+        </button>
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/copy.svg" alt="Copy icon">
+        </button>
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
+        </button>
+      </div>
+    </div>
+
+    <div class="info__div photo">
+      <p class="info__para">Image 1</p>
+    </div>
+
+    <div class="rename__section"></div>
+    <label class="label__rename" for="rename">Renommez</label>
+    <div class="div__rename">
+      <input class="input__champ" type="text" id="rename" name="rename" placeholder="Renommez" />
+      <button class="button__submit">Valider</button>
+    </div>
+    </div>
+
+    <div class="import__section"></div>
+      <div class="div__section_title">
+        <img src="./assets/svg/folder.svg" alt="Folder icon">
+        <label for="input_file">Photo importé</label>
+      </div>
+
+      <div class="div__import">
+        <label for="file-upload" class="custom-file-upload">
+          add images
+        </label>
+        <input id="file-upload" type="file" />
+
+        <div class="div__tools">
+          <button class="btn__icon">
+            <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
+          </button>
+          <button class="btn__icon">
+            <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="position__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
+        <label>Position</label>
+      </div>
+
+      <div class="position__div">
+        <label for="x">x</label>
+        <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+      <div class="position__div">
+        <label for="y">y</label>
+        <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+      <div class="position__div">
+        <label for="z">z</label>
+        <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+    </div>
+
+    <div class="position__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/arrows-angle-expand.svg" alt="Arrows icon">
+        <label>Taille</label>
+      </div>
+
+      <div class="position__div">
+        <label for="w">w</label>
+        <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+      <div class="position__div">
+        <label for="h">h</label>
+        <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+    </div>
+  </section>
+
+  <a-scene>
+    <a-assets id="assets-container">
+    </a-assets>
+
+    <a-sky id="image-360" radius="10" src="#img1" material="color: #FFFFFF"></a-sky>
+    <!-- Assets 360 -->
+    <a-entity id="links" layout="type: line; margin: 1.5" position="-1.5 -1 -4">
+      <a-entity template="src: #link" data-src="#img2" data-thumb="#city-thumb"></a-entity>
+      <a-entity template="src: #link" data-src="#img3" data-thumb="#cubes-thumb"></a-entity>
+      <a-entity template="src: #link" data-src="#img4" data-thumb="#sechelt-thumb"></a-entity>
+    </a-entity>
+
+    <!-- Camera and cursor -->
+    <a-entity id="camera" camera look-controls>
+      <a-cursor id="cursor"
+        animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
+        animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
+        event-set__mouseenter="_event: mouseenter; color: springgreen"
+        event-set__mouseleave="_event: mouseleave; color: black" raycaster="objects: .link, #click-ring" fuse="true"
+        fuse-timeout="1000">
+      </a-cursor>
+    </a-entity>
+  </a-scene>
+
+  <template id="template__porte">
+    <h2 class="title__scene">Objet</h2>
+
+    <div class="header__section">
+      <img src="./assets/svg/box.svg" alt="Box icon">
+      <label>Objet</label>
+      <div class="div__tools">
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
+        </button>
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/copy.svg" alt="Copy icon">
+        </button>
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
+        </button>
+      </div>
+    </div>
+
+    <div class="info__div porte">
+      <p class="info__para">Porte 1</p>
+    </div>
+
+    <div class="rename__section"></div>
+    <label class="label__rename" for="rename">Renommez</label>
+    <div class="div__rename">
+      <input class="input__champ" type="text" id="rename" name="rename" placeholder="Renommez" />
+      <button class="button__submit">Valider</button>
+    </div>
+    </div>
+
+    <div class="texte__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/braces.svg" alt="Braces icon">
+        <label>Trigger</label>
+      </div>
+
+      <div class="legend__section">
+        <label class="legend__label" for="text_legend">Vers scène</label>
+        <select name="scene-select" id="scene-select" class="scene-select">
+          <option value="Scene">Scene</option>
+          <option value="Scene">Scene</option>
+          <option value="Scene">Scene</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="position__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
+        <label>Position</label>
+      </div>
+
+      <div class="position__div">
+        <label for="x">x</label>
+        <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+      <div class="position__div">
+        <label for="y">y</label>
+        <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+      <div class="position__div">
+        <label for="z">z</label>
+        <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+    </div>
+
+    <div class="position__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/arrows-angle-expand.svg" alt="Arrows icon">
+        <label>Taille</label>
+      </div>
+
+      <div class="position__div">
+        <label for="w">w</label>
+        <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+      <div class="position__div">
+        <label for="h">h</label>
+        <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+    </div>
+
+    <div class="position__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/palette.svg" alt="Palette icon">
+        <label>Couleurs</label>
+      </div>
+
+      <div class="div__color">
+        <label for="fill">Fill</label>
+        <div class="sec__input_color">
+          <input type="color" name="fill" id="fill" value="#00C058">
+          <p>00C058</p>
+        </div>
+      </div>
+      <div class="div__color">
+        <label for="stroke">Stroke</label>
+        <div class="sec__input_color">
+          <input type="color" name="stroke" id="stroke" value="#009EC0">
+          <p>009EC0</p>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="template__info_bulle">
+    <h2 class="title__scene">Objet</h2>
+
+    <div class="header__section">
+      <img src="./assets/svg/box.svg" alt="Box icon">
+      <label>Objet</label>
+      <div class="div__tools">
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
+        </button>
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/copy.svg" alt="Copy icon">
+        </button>
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
+        </button>
+      </div>
+    </div>
+
+    <div class="info__div info_bulle">
+      <p class="info__para">Info Bulle 1</p>
+    </div>
+
+    <div class="rename__section"></div>
+    <label class="label__rename" for="rename">Renommez</label>
+    <div class="div__rename">
+      <input class="input__champ" type="text" id="rename" name="rename" placeholder="Renommez" />
+      <button class="button__submit">Valider</button>
+    </div>
+    </div>
+
+    <div class="texte__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/card-text-black.svg" alt="Texte icon">
+        <label>Texte</label>
+      </div>
+
+      <div class="legend__section">
+        <label class="legend__label" for="text_info_bulle">Titre</label>
+        <input class="input__champ text" type="text" name="text_info_bulle" placeholder="Entrez votre titre...">
+      </div>
+      <div class="legend__section">
+        <label class="legend__label" for="text_info_bulle">Description</label>
+        <input class="input__champ text" type="text" name="text_info_bulle" placeholder="Entrez votre description...">
+      </div>
+      <button class="button__submit">Valider</button>
+    </div>
+
+    <div class="position__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
+        <label>Position</label>
+      </div>
+
+      <div class="position__div">
+        <label for="x">x</label>
+        <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+      <div class="position__div">
+        <label for="y">y</label>
+        <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+      <div class="position__div">
+        <label for="z">z</label>
+        <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+    </div>
+
+    <div class="position__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/arrows-angle-expand.svg" alt="Arrows icon">
+        <label>Taille</label>
+      </div>
+
+      <div class="position__div">
+        <label for="w">w</label>
+        <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+      <div class="position__div">
+        <label for="h">h</label>
+        <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+    </div>
+
+    <div class="position__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/palette.svg" alt="Palette icon">
+        <label>Couleurs</label>
+      </div>
+
+      <div class="div__color">
+        <label for="fill">Fill</label>
+        <div class="sec__input_color">
+          <input type="color" name="fill" id="fill" value="#00C058">
+          <p>00C058</p>
+        </div>
+      </div>
+      <div class="div__color">
+        <label for="stroke">Stroke</label>
+        <div class="sec__input_color">
+          <input type="color" name="stroke" id="stroke" value="#009EC0">
+          <p>009EC0</p>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="template__texte">
     <h2 class="title__scene">Objet</h2>
 
     <div class="header__section">
@@ -234,36 +577,110 @@
         </div>
       </div>
     </div>
+  </template>
 
-  </section>
+  <template class="template__photo">
+    <h2 class="title__scene">Objet</h2>
 
-  <a-scene>
-    <a-assets id="assets-container">
-    </a-assets>
+    <div class="header__section">
+      <img src="./assets/svg/box.svg" alt="Box icon">
+      <label>Objet</label>
+      <div class="div__tools">
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
+        </button>
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/copy.svg" alt="Copy icon">
+        </button>
+        <button class="btn__icon">
+          <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
+        </button>
+      </div>
+    </div>
 
-    <a-sky id="image-360" radius="10" src="#img1" material="color: #FFFFFF"></a-sky>
-    <!-- Assets 360 -->
-    <a-entity id="links" layout="type: line; margin: 1.5" position="-1.5 -1 -4">
-      <a-entity template="src: #link" data-src="#img2" data-thumb="#city-thumb"></a-entity>
-      <a-entity template="src: #link" data-src="#img3" data-thumb="#cubes-thumb"></a-entity>
-      <a-entity template="src: #link" data-src="#img4" data-thumb="#sechelt-thumb"></a-entity>
-    </a-entity>
+    <div class="info__div photo">
+      <p class="info__para">Image 1</p>
+    </div>
 
-    <!-- Camera and cursor -->
-    <a-entity id="camera" camera look-controls>
-      <a-cursor id="cursor"
-        animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
-        animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
-        event-set__mouseenter="_event: mouseenter; color: springgreen"
-        event-set__mouseleave="_event: mouseleave; color: black" raycaster="objects: .link, #click-ring" fuse="true"
-        fuse-timeout="1000">
-      </a-cursor>
-    </a-entity>
-  </a-scene>
+    <div class="rename__section"></div>
+    <label class="label__rename" for="rename">Renommez</label>
+    <div class="div__rename">
+      <input class="input__champ" type="text" id="rename" name="rename" placeholder="Renommez" />
+      <button class="button__submit">Valider</button>
+    </div>
+    </div>
+
+    <div class="import__section"></div>
+      <div class="div__section_title">
+        <img src="./assets/svg/folder.svg" alt="Folder icon">
+        <label for="input_file">Photo importé</label>
+      </div>
+
+      <div class="div__import">
+        <label for="file-upload" class="custom-file-upload">
+          add images
+        </label>
+        <input id="file-upload" type="file" />
+
+        <div class="div__tools">
+          <button class="btn__icon">
+            <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
+          </button>
+          <button class="btn__icon">
+            <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="position__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
+        <label>Position</label>
+      </div>
+
+      <div class="position__div">
+        <label for="x">x</label>
+        <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+      <div class="position__div">
+        <label for="y">y</label>
+        <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+      <div class="position__div">
+        <label for="z">z</label>
+        <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+    </div>
+
+    <div class="position__section">
+      <div class="div__section_title">
+        <img src="./assets/svg/arrows-angle-expand.svg" alt="Arrows icon">
+        <label>Taille</label>
+      </div>
+
+      <div class="position__div">
+        <label for="w">w</label>
+        <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+      <div class="position__div">
+        <label for="h">h</label>
+        <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange" />
+        <div class="range__value">0</div>
+      </div>
+    </div>
+  </template>
+  
 </body>
 
 </html>
+
 <script src="script.js"></script>
+
 <script>
   const inputRanges = document.querySelectorAll(".inputRange");
   const divRanges = document.querySelectorAll(".range__value")
@@ -276,7 +693,7 @@
       this.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
       divRanges[i].textContent = Number.parseFloat(inputRanges[i].value).toFixed(0);
     });
-    
+
   }
 
 </script>
