@@ -119,7 +119,7 @@
 
   </section>
 
-  <section class="fixed__section objet" id="fixedSectionObjet"></section>
+  <section id="fixedSectionObjet"></section>
 
   <a-scene  id="a-scene">
     <a-assets id="assets-container">
@@ -392,14 +392,14 @@
   </div>
 
   <div class="info__div texte">
-    <p class="info__para">Texte 1</p>
+    <p class="info__para">{{name}}</p>
   </div>
 
   <div class="rename__section"></div>
   <label class="label__rename" for="rename">Renommez</label>
   <div class="div__rename">
-    <input class="input__champ" type="text" id="rename" name="rename" placeholder="Renommez" />
-    <button class="button__submit">Valider</button>
+    <input class="input__champ" type="text" id="rename" name="rename" placeholder="Renommez" value="{{name}}" />
+    <button class="button__submit" id="RenameButton">Valider</button>
   </div>
   </div>
 

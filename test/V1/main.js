@@ -15,7 +15,7 @@ export default VR ;
 import {addDoor, LoadDoors} from './DoorManager.js';
 import {AddScene, DeleteScene, ChangeSceneName , DuplicateScene , SceneExplorer , AddSceneSelectOption, switchScene} from './SceneManager.js';
 import {LoadFile } from './FileManager.Js';
-import {addText, Loadtext} from './TextManager.js';
+import {addText, Loadtext, } from './TextManager.js';
 
 
 
@@ -40,6 +40,9 @@ AddDoor.addEventListener('click', addDoor);
 
 let AddText = document.getElementById('plus-text');
 AddText.addEventListener('click', addText);
+
+let RenameText = document.getElementById('RenameButton');
+RenameText.addEventListener('click', addText);
 
 
 

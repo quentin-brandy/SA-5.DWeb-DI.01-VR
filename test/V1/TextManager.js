@@ -64,10 +64,16 @@ export function Loadtext() {
 
 
 export function ModifyText(event) {
-    const templateText = document.getElementById('template__texte').innerHTML;
+    let templateText = document.getElementById('template__texte').innerHTML;
     const recipe = document.getElementById('fixedSectionObjet');
 
-    console.log(templateText);
+    templateText = templateText.replaceAll("{{name}}", event.target.innerText);
 
     recipe.innerHTML = templateText;
+    recipe.classList.add('fixed__section', 'objet');
+}
+
+
+export function RenameText(event) {
+    
 }
