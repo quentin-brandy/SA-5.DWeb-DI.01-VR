@@ -15,7 +15,7 @@
     padding: 0 1.5rem;
     border-radius: 8px;
     z-index: 10;
-    /* overflow-y: scroll; */
+     overflow-y: scroll; 
     background-color: white;
 }
 
@@ -199,6 +199,7 @@ input[type="file"] {
     gap: .5rem;
     padding: .5rem;
     border-bottom: 1px solid var(--clr-gray);
+    cursor: pointer;
 }
 
 .porte::before {

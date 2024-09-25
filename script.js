@@ -11,10 +11,120 @@ let VR = {
     }
 };
 
-function addDoor(){
+function addDoor() {
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    var cameraEl = document.querySelector('#camera').object3D;
+    var direction = new THREE.Vector3();
+    cameraEl.getWorldDirection(direction);
 
+    var distance = -5;
+    var position = cameraEl.position.clone().add(direction.multiplyScalar(distance));
+
+    const doorCount = selectedScene.tags.filter(tag => tag.type === 'door').length;
+    const doorName = `door${doorCount + 1}`;
+    selectedScene.tags.push({
+        type: 'door',
+        position: { x: position.x, y: position.y, z: position.z },
+        targetScene: 'scene1',
+        name: doorName
+    });
+
+
+    var newEntity = document.createElement('a-sphere');
+    newEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);
+    newEntity.setAttribute('radius', '1');
+    newEntity.setAttribute('color', '#FF0000');
+    newEntity.setAttribute('class', 'link'); 
+    newEntity.setAttribute('scale', '0.5 0.5 0.5');
+    newEntity.setAttribute('id', doorName);
+    newEntity.addEventListener('click', function (event) { 
+        TakeDoor(event);
+    });
+    document.querySelector('#door-entity').appendChild(newEntity);
+    console.log(VR);
+    AddSceneExplorer(doorName);
+}
+
+function LoadDoors() {
+    const doorEntities = document.querySelector('#door-entity');
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    while (doorEntities.firstChild) {
+        doorEntities.removeChild(doorEntities.firstChild);
+    }
+    selectedScene.tags.forEach(tag => {
+        if (tag.type === 'door') {
+            var newEntity = document.createElement('a-sphere');
+            newEntity.setAttribute('position', tag.position.x + ' ' + tag.position.y + ' ' + tag.position.z);
+            newEntity.setAttribute('radius', '1');
+            newEntity.setAttribute('color', '#FF0000');
+            newEntity.setAttribute('class', 'link'); 
+            newEntity.setAttribute('scale', '0.5 0.5 0.5');
+            newEntity.setAttribute('id', tag.name);
+            newEntity.addEventListener('click', function (event) { 
+                TakeDoor(event);
+            });
+            document.querySelector('#door-entity').appendChild(newEntity);
+        }
+    });
+}
+
+function TakeDoor(e){
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const doorName = e.target.id;
+    selectedScene.tags.forEach(tag => {
+        if (tag.type === 'door' && tag.name === doorName) {
+            var skyElement = document.getElementById('image-360');
+            skyElement.setAttribute('src', VR.scenes[tag.targetScene].image.url); 
+            console.log('Téléportation vers ' + tag.targetScene);
+        }
+    });
+  
 
 }
+
+
+
+function addText() {
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    var cameraEl = document.querySelector('#camera').object3D;
+    var direction = new THREE.Vector3();
+    cameraEl.getWorldDirection(direction);
+
+    var distance = -5;
+    var position = cameraEl.position.clone().add(direction.multiplyScalar(distance));
+
+    const textCount = selectedScene.tags.filter(tag => tag.type === 'text').length;
+    const textName = `text${textCount + 1}`;
+    selectedScene.tags.push({
+        type: 'text',
+        position: { x: position.x, y: position.y, z: position.z },
+        targetScene: 'scene1',
+        name: textName
+    });
+
+    var newEntity = document.createElement('a-text');
+    newEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);
+    newEntity.setAttribute('value', 'Sample Text');
+    newEntity.setAttribute('color', '#FFFFFF');
+    newEntity.setAttribute('align', 'center');
+    newEntity.setAttribute('scale', '5 5 5');
+    newEntity.setAttribute('id', textName);
+
+    // Ensure the text is always facing the camera
+    var rotation = cameraEl.rotation.clone();
+    newEntity.object3D.rotation.set(0, rotation.y, rotation.z);
+
+    document.querySelector('#text-entity').appendChild(newEntity);
+    console.log(VR);
+    AddSceneExplorer(textName);
+}
+
+
+
 
 function AddScene() {
     const selectElement = document.getElementById('selectscene');
@@ -212,6 +322,8 @@ function switchScene() {
     }
     sceneNameInput.value = sceneselect.options[sceneselect.selectedIndex].text;
     LoadFile();
+    LoadDoors();
+    SceneExplorer();
 }
 
 
@@ -228,6 +340,31 @@ function AddSceneSelectOption() {
         option.textContent = scene.name;
         selectElement.appendChild(option);
     });
+}
+
+function SceneExplorer() {
+    const sceneExplorer = document.getElementById('scene-tags');
+    const sceneSelect = document.getElementById('selectscene');
+    const Scenetitle = document.getElementById('scene-title-explorer');
+    Scenetitle.textContent = sceneSelect.value;
+    const selectedScene = VR.scenes[sceneSelect.value];
+    sceneExplorer.innerHTML = '';
+    selectedScene.tags.forEach(tag => {
+        const tagElement = document.createElement('li');
+        tagElement.textContent = tag.name;
+        tagElement.className = 'list__objet';
+        sceneExplorer.appendChild(tagElement);
+    });
+}
+
+function AddSceneExplorer(newtag){
+    console.log(newtag);
+    console.log('test');
+    const sceneExplorer = document.getElementById('scene-tags');
+    const tagElement = document.createElement('li');
+        tagElement.textContent = newtag;
+        tagElement.className = 'list__objet';
+        sceneExplorer.appendChild(tagElement);
 }
 
 
@@ -250,6 +387,13 @@ Duplicatescene.addEventListener('click', DuplicateScene);
 let AddDoor = document.getElementById('plus-door');
 AddDoor.addEventListener('click', addDoor);
 
+let AddText = document.getElementById('plus-text');
+AddText.addEventListener('click', addText);
+
+
+
 AddSceneSelectOption();
 switchScene();
 LoadFile();
+LoadDoors();
+SceneExplorer()

@@ -86,15 +86,15 @@
       </div>
 
       <div class="div__tags">
-        <button class="btn__tag">
-          <img id="plus-door" src="./assets/svg/door-closed.svg" alt="Door icon">
+        <button id="plus-door" class="btn__tag">
+          <img  src="./assets/svg/door-closed.svg" alt="Door icon">
           Porte
         </button>
         <button class="btn__tag">
           <img src="./assets/svg/info-circle.svg" alt="Info Bulle icon">
           Info Bulle
         </button>
-        <button class="btn__tag">
+        <button id="plus-text" class="btn__tag">
           <img src="./assets/svg/card-text.svg" alt="Texte icon">
           Texte
         </button>
@@ -111,13 +111,8 @@
         <label>Explorer</label>
       </div>
       <div class="explorer__div">
-        <p class="title__explorer">Scène</p>
-
-        <ul class="ul__objet">
-          <li class="list__objet porte">Porte 1</li>
-          <li class="list__objet info_bulle">Info Bulle 1</li>
-          <li class="list__objet texte">texte 1</li>
-          <li class="list__objet photo">Photo 1</li>
+        <p id="scene-title-explorer" class="title__explorer">Scène</p>
+        <ul id="scene-tags" class="ul__objet">
         </ul>
       </div>
     </div>
@@ -132,17 +127,18 @@
   <select name="scene" id="selectscene">
   </select> -->
 
-  <a-scene>
+  <a-scene  id="a-scene">
     <a-assets id="assets-container">
     </a-assets>
 
     <a-sky id="image-360" radius="10" src="#img1" material="color: #FFFFFF"></a-sky>
     <!-- Assets 360 -->
-    <a-entity id="links" layout="type: line; margin: 1.5" position="-1.5 -1 -4">
-      <a-entity template="src: #link" data-src="#img2" data-thumb="#city-thumb"></a-entity>
-      <a-entity template="src: #link" data-src="#img3" data-thumb="#cubes-thumb"></a-entity>
-      <a-entity template="src: #link" data-src="#img4" data-thumb="#sechelt-thumb"></a-entity>
-    </a-entity>
+   
+<a-entity id="door-entity"> 
+</a-entity>
+
+<a-entity id="text-entity"> 
+</a-entity>
 
     <!-- Camera and cursor -->
     <a-entity id="camera" camera look-controls>
@@ -150,8 +146,8 @@
         animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
         animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
         event-set__mouseenter="_event: mouseenter; color: springgreen"
-        event-set__mouseleave="_event: mouseleave; color: black" raycaster="objects: .link, #click-ring" fuse="true"
-        fuse-timeout="1000">
+        event-set__mouseleave="_event: mouseleave; color: black" raycaster="objects: .link, #click-ring .intersectable" fuse="true"
+        fuse-timeout="1000" >
       </a-cursor>
     </a-entity>
   </a-scene>
