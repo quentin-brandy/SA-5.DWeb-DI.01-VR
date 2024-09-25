@@ -13,7 +13,8 @@
     padding: 0 1.5rem;
     border-radius: 8px;
     z-index: 10;
-    /* overflow-y: scroll; */
+    background-color: var(--clr-white);
+    overflow-y: scroll;
 }
 
 .scene {
@@ -50,7 +51,7 @@
 
 /* Composant de Scenes */
 
-#scene-select {
+.scene-select {
     width: 100%;
     padding: .25rem;
     border: none;
@@ -90,6 +91,7 @@
 }
 
 .button__submit {
+    width: 61.59px;
     font-size: 15px;
     padding: .5rem .5rem;
     border: none;
@@ -105,7 +107,9 @@
 
 .import__section,
 .tag__section,
-.techtree__section {
+.techtree__section,
+.texte__section,
+.position__section {
     margin-top: 50px;
 }
 
