@@ -123,7 +123,22 @@ export function SceneExplorer() {
     selectedScene.tags.forEach(tag => {
         const tagElement = document.createElement('li');
         tagElement.textContent = tag.name;
+        tagElement.id = tag.name;
         tagElement.className = 'list__objet';
+        
+        // Add class based on tag type
+        if (tag.type === 'door') {
+            tagElement.classList.add('porte');
+            tagElement.addEventListener('click', function (event) {
+                ModifyDoor(event);
+            });
+        } else if (tag.type === 'text') {
+            tagElement.classList.add('texte');
+            tagElement.addEventListener('click', function (event) {
+                ModifyText(event);
+            });
+        }
+
         sceneExplorer.appendChild(tagElement);
     });
 }

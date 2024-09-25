@@ -1,5 +1,5 @@
 import  VR from './main.js';
-import {AddScene, DeleteScene, ChangeSceneName , DuplicateScene , SceneExplorer , AddSceneExplorer , AddSceneSelectOption , switchScene} from './SceneManager.js';
+import { AddSceneExplorer , switchScene} from './SceneManager.js';
 
 
 export function addDoor() {
