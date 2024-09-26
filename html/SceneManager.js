@@ -1,5 +1,5 @@
 import  VR  from './main.js';
-import { LoadFile } from './FileManager.Js';
+import { LoadFile } from './FileManager.js';
 import { LoadDoors , ModifyDoor , RouteSelect } from './DoorManager.js';
 import { Loadtext ,  } from './TextManager.js';
 

@@ -127,7 +127,7 @@
     <a-assets id="assets-container">
     </a-assets>
 
-    <a-sky id="image-360" radius="10" src="#img1" material="color: #FFFFFF"></a-sky>
+    <a-sky id="image-360"  rotation="0 -90 0" src="#img1" material="color: #FFFFFF"></a-sky>
     <!-- Assets 360 -->
    
 <a-entity id="door-entity"> 
@@ -137,7 +137,7 @@
 </a-entity>
 
     <!-- Camera and cursor -->
-    <a-entity id="camera" camera look-controls>
+    <a-entity position="0 1.6 0" id="camera" camera look-controls>
       <a-cursor id="cursor"
         animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
         event-set__mouseenter="_event: mouseenter; color: springgreen"
@@ -574,5 +574,5 @@
 </template>
 
 
-<script type="module" src="main.js"></script>
+<script type="module" src="./main.js"></script>
 

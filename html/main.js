@@ -14,7 +14,7 @@ export default VR ;
 
 import {addDoor, DuplicateDoor, LoadDoors , RouteSelected} from './DoorManager.js';
 import {AddScene, DeleteScene, ChangeSceneName , DuplicateScene , SceneExplorer , AddSceneSelectOption, switchScene} from './SceneManager.js';
-import {LoadFile } from './FileManager.Js';
+import {LoadFile } from './FileManager.js';
 import {addText, Loadtext} from './TextManager.js';
 
 
