@@ -136,15 +136,19 @@
 <a-entity id="text-entity"> 
 </a-entity>
 
-    <!-- Camera and cursor -->
-    <a-entity position="0 1.6 0" id="camera" camera look-controls>
-      <a-cursor id="cursor"
-        animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
-        event-set__mouseenter="_event: mouseenter; color: springgreen"
-        event-set__mouseleave="_event: mouseleave; color: black" raycaster="objects: .link, #click-ring .intersectable"
-      >
-      </a-cursor>
-    </a-entity>
+<!-- Camera and cursor with Oculus Quest 2 controller support -->
+<a-entity position="0 1.6 0" id="camera" camera look-controls>
+  <a-cursor id="cursor"
+    animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
+    event-set__mouseenter="_event: mouseenter; color: springgreen"
+    event-set__mouseleave="_event: mouseleave; color: black" raycaster="objects: .link, #click-ring .intersectable"
+  >
+  </a-cursor>
+</a-entity>
+
+<!-- Oculus Quest 2 controller -->
+<a-entity oculus-touch-controls="hand: left"></a-entity>
+<a-entity oculus-touch-controls="hand: right"></a-entity>
   </a-scene>
 </body>
 
