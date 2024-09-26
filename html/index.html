@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./css/output.css">
+  <link rel="stylesheet" href="./css/input.css">
   <title>Document</title>
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/aframe-blink-controls/dist/aframe-blink-controls.min.js"></script>
@@ -26,7 +26,7 @@
 </head>
 
 <body>
-  <section class="fixed__section scene "> <!-- fixed__section -->
+  <section class="fixed__section scene"> <!-- fixed__section -->
     <h2 class="title__scene">Scène</h2>
 
     <div class="header__section">
@@ -423,18 +423,18 @@
 
     <div class="position__div">
       <label for="x">x</label>
-      <input type="range" name="x" id="x-slider" value="0" min="-10" max="10" step="0.1" class="inputRange position" />
-      <div id="x-value" class="range__value">0</div>
+      <input type="range" name="x" id="x-slider" value="{{rangeValueX}}" min="-10" max="10" step="0.1" class="inputRange position" />
+      <div id="x-value" class="range__value">{{rangeValueX}}</div>
     </div>
     <div class="position__div">
       <label for="y">y</label>
-      <input type="range" name="y" id="y-slider" value="0" min="-10" max="10" step="0.1" class="inputRange position" />
-      <div id="y-value" class="range__value">0</div>
+      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-10" max="10" step="0.1" class="inputRange position" />
+      <div id="y-value" class="range__value">{{rangeValueY}}</div>
     </div>
     <div class="position__div">
       <label for="z">z</label>
-      <input type="range" name="z" id="z-slider" value="0" min="-10" max="10" step="0.1" class="inputRange position" />
-      <div id="z-value" class="range__value">0</div>
+      <input type="range" name="z" id="z-slider" value="{{rangeValueZ}}" min="-10" max="10" step="0.1" class="inputRange position" />
+      <div id="z-value" class="range__value">{{rangeValueZ}}</div>
     </div>
   </div>
 
@@ -446,21 +446,21 @@
 
     <div class="position__div">
       <label for="rx">rx</label>
-      <input type="range" name="rx" id="rx-slider" value="{{x}}" min="-5" max="5" step="0.1"
+      <input type="range" name="rx" id="rx-slider" value="{{rangeValueRx}}" min="-5" max="5" step="0.1"
         class="inputRange rotation" />
-      <div id="rx-value" class="range__value">0</div>
+      <div id="rx-value" class="range__value">{{rangeValueRx}}</div>
     </div>
     <div class="position__div">
       <label for="ry">ry</label>
-      <input type="range" name="ry" id="ry-slider" value="{{y}}" min="-5" max="5" step="0.1"
+      <input type="range" name="ry" id="ry-slider" value="{{rangeValueRy}}" min="-5" max="5" step="0.1"
         class="inputRange rotation" />
-      <div id="ry-value" class="range__value">0</div>
+      <div id="ry-value" class="range__value">{{rangeValueRy}}</div>
     </div>
     <div class="position__div">
       <label for="rz">rz</label>
-      <input type="range" name="rz" id="rz-slider" value="{{z}}" min="-5" max="5" step="0.1"
+      <input type="range" name="rz" id="rz-slider" value="{{rangeValueRz}}" min="-5" max="5" step="0.1"
         class="inputRange rotation" />
-      <div id="rz-value" class="range__value">0</div>
+      <div id="rz-value" class="range__value">{{rangeValueRz}}</div>
     </div>
   </div>
 
@@ -491,8 +491,8 @@
     <div class="div__color">
       <label for="fill">Fill</label>
       <div class="sec__input_color">
-        <input type="color" name="fill" id="fillText" value="#00C058">
-        <p>00C058</p>
+        <input type="color" name="fill" id="fillText" value="{{colorFill}}">
+        <p id="textColorFill">{{colorFill}}</p>
       </div>
     </div>
     <div class="div__color">

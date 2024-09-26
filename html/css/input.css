@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 /* Import */
+@import "./root.css";
 @import "./left_board.css";
 @import "./right_board.css";
-@import "./root.css";
 
 
 /* Reset CSS */
@@ -13,7 +13,9 @@
 *,
 *::before,
 *::after {
-    @apply box-border m-0 p-0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html {

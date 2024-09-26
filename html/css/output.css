@@ -561,9 +561,9 @@ video {
 *,
 *::before,
 *::after {
-  margin: 0px;
   box-sizing: border-box;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
 }
 
 html {

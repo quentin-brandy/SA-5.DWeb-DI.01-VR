@@ -29,7 +29,7 @@ export function addText() {
     });
 
     var newEntity = document.createElement('a-text');
-    newEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);
+    newEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);    
     newEntity.setAttribute('value', textContent);
     newEntity.setAttribute('color', textFill);
     newEntity.setAttribute('align', 'center');
@@ -51,13 +51,13 @@ export function Loadtext() {
     selectedScene.tags.forEach(tag => {
         if (tag.type === 'text') {
             var newEntity = document.createElement('a-text');
-            newEntity.setAttribute('position', tag.position.x + ' ' + tag.position.y + ' ' + tag.position.z);
+            newEntity.setAttribute('position', parseFloat(tag.position.x) + ' ' + parseFloat(tag.position.y) + ' ' + parseFloat(tag.position.z));
             newEntity.setAttribute('value', tag.content);
             newEntity.setAttribute('color', tag.fill);
             newEntity.setAttribute('align', 'center');
             newEntity.setAttribute('scale', '5 5 5');
             newEntity.setAttribute('id', tag.textName);
-            newEntity.object3D.rotation.set(tag.rotation.x, tag.rotation.y, tag.rotation.z);
+            newEntity.object3D.rotation.set(parseFloat(tag.rotation.x), parseFloat(tag.rotation.y), parseFloat(tag.rotation.z));
 
 
 
@@ -72,12 +72,34 @@ function Loadobject(event) {
     const recipe = document.getElementById('tempalte_section');
     templateText = templateText.replaceAll("{{name}}", event.target.innerText);
     recipe.innerHTML = templateText;
-    recipe.classList.add('fixed__section', 'objet');
     
     const textName = document.getElementById('text-name').textContent;
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
-    const text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);   
+    const text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);
+
+    templateText = templateText.replaceAll("{{rangeValueX}}", text.position.x);
+    templateText = templateText.replaceAll("{{rangeValueY}}", text.position.y);
+    templateText = templateText.replaceAll("{{rangeValueZ}}", text.position.z);
+    templateText = templateText.replaceAll("{{rangeValueRx}}", text.rotation.x);
+    templateText = templateText.replaceAll("{{rangeValueRy}}", text.rotation.y);
+    templateText = templateText.replaceAll("{{rangeValueRz}}", text.rotation.z);
+    templateText = templateText.replaceAll("{{colorFill}}", text.fill);
+    recipe.innerHTML = templateText;
+    recipe.classList.add('fixed__section', 'objet');
+
+    let rangeInputs = document.querySelectorAll('.inputRange');
+    rangeInputs.forEach(rgInput => {
+        LoadSlider(rgInput);
+    });
+}
+
+function LoadSlider(e) {
+    const ratio = (e.value - e.min) / (e.max - e.min) * 100;
+    const activeColor = "#00C058";
+    const inactiveColor = "transparent";
+
+    e.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
 }
 
 
@@ -159,13 +181,7 @@ export function TextPositionChange(e) {
             textElement.setAttribute('position', `${text.position.x} ${text.position.y} ${text.position.z}`);
         }
     }
-
-    const ratio = (e.target.value - e.target.min) / (e.target.max - e.target.min) * 100;
-    const activeColor = "#00C058";
-    const inactiveColor = "transparent";
-
-    e.target.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
-
+    LoadSlider(e.target);
     Loadtext();
 }
 
@@ -190,12 +206,7 @@ export function TextRotationChange(e) {
             textElement.setAttribute('rotation', `${text.rotation.x} ${text.rotation.y} ${text.rotation.z}`);
         }
     }
-
-    const ratio = (e.target.value - e.target.min) / (e.target.max - e.target.min) * 100;
-    const activeColor = "#00C058";
-    const inactiveColor = "transparent";
-
-    e.target.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
+    LoadSlider(e.target);
     Loadtext();
 }
 
@@ -203,11 +214,13 @@ export function TextRotationChange(e) {
 export function TextCouleurFillChange(e) {
     const textName = document.getElementById('text-name').textContent;
     const sceneSelect = document.getElementById('selectscene');
+    const colorValue = document.getElementById('textColorFill');
     const selectedScene = VR.scenes[sceneSelect.value];
 
     let text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);
     let inputColor = document.getElementById('fillText').value;
     text.fill = inputColor;
+    colorValue.textContent = inputColor;
     
     Loadtext();
 }

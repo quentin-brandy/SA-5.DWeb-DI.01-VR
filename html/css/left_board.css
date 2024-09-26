@@ -1,5 +1,5 @@
 /* Header */
-/* .div__section_title {
+.div__section_title {
     display: flex;
     align-items: center;
     gap: 5px;
@@ -45,26 +45,26 @@
     background: none;
     border: none;
     cursor: pointer;
-} */
+}
 
 
 
 /* Composant de Scenes */
 
-/* .scene-select {
+.scene-select {
     width: 100%;
     padding: .25rem;
     border: none;
     border-radius: 5px;
     background-color: var(--clr-light-gray);
     color: var(--clr-dark-gray);
-} */
+}
 
 
 
 /* Composant de Rename */
 
-/* .rename__section {
+.rename__section {
     margin: 1rem 0 1rem 0;
 }
 
@@ -100,13 +100,13 @@
     color: var(--clr-white);
     background: var(--linear-gradient);
     cursor: pointer;
-} */
+}
 
 
 
 /* Composant d'Import */
 
-/* .import__section,
+.import__section,
 .tag__section,
 .techtree__section,
 .texte__section,
@@ -133,13 +133,13 @@ input[type="file"] {
     display: inline-block;
     color: var(--clr-gray);
     cursor: pointer;
-} */
+}
 
 
 
 /* Composant de Tag */
 
-/* .div__tags {
+.div__tags {
     width: 250px;
     display: flex;
     flex-wrap: wrap;
@@ -171,13 +171,13 @@ input[type="file"] {
     height: 1.5rem;
     background-color: var(--clr-white);
     border-radius: 20rem;
-} */
+}
 
 
 
 /* Composant Explorer */
 
-/* .title__explorer {
+.title__explorer {
     width: 100%;
     padding: .25rem .25rem .25rem .5rem;
     border-radius: 5px 5px 0 0;
@@ -210,4 +210,4 @@ input[type="file"] {
 }
 .photo::before {
     content: url("../assets/svg/file-image-dark.svg");
-} */
+}
