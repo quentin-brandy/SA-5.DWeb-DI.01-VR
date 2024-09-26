@@ -96,10 +96,10 @@ const skyElement = document.getElementById('image-360');
 const Filename = document.getElementById('name_import');
 li.remove();
 
-VR.scenes[sceneSelect.value].image.url = '/assets/img/sky.jpg';
+VR.scenes[sceneSelect.value].image.url = './assets/img/sky.jpg';
 VR.scenes[sceneSelect.value].image.name = 'sky.jpg';
 
-skyElement.setAttribute('src', '/assets/img/sky.jpg');
+skyElement.setAttribute('src', './assets/img/sky.jpg');
 LoadFile();
 console.log(li);
 

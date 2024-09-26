@@ -94,7 +94,7 @@ export function switchScene() {
     if (selectedScene.image.url) {
         skyElement.setAttribute('src', selectedScene.image.url);
     } else {
-        skyElement.setAttribute('src', '/assets/img/sky.jpg');
+        skyElement.setAttribute('src', './assets/img/sky.jpg');
     }
     let templateSection = document.getElementById('tempalte_section');
     templateSection.className = '';
