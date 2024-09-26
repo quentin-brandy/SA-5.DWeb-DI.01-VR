@@ -59,7 +59,7 @@
     <div class="import__section">
       <div class="div__section_title">
         <img src="./assets/svg/folder.svg" alt="Folder icon">
-        <label >Image 360 importé (1 max)</label>
+        <label>Image 360 importé (1 max)</label>
       </div>
       <ul id="name_import">
 
@@ -87,7 +87,7 @@
 
       <div class="div__tags">
         <button id="plus-door" class="btn__tag">
-          <img  src="./assets/svg/door-closed.svg" alt="Door icon">
+          <img src="./assets/svg/door-closed.svg" alt="Door icon">
           Porte
         </button>
         <button class="btn__tag">
@@ -121,18 +121,18 @@
 
   <section id="fixedSectionObjet"></section>
 
-  <a-scene  id="a-scene">
+  <a-scene id="a-scene">
     <a-assets id="assets-container">
     </a-assets>
 
     <a-sky id="image-360" radius="10" src="#img1" material="color: #FFFFFF"></a-sky>
     <!-- Assets 360 -->
-   
-<a-entity id="door-entity"> 
-</a-entity>
 
-<a-entity id="text-entity"> 
-</a-entity>
+    <a-entity id="door-entity">
+    </a-entity>
+
+    <a-entity id="text-entity">
+    </a-entity>
 
     <!-- Camera and cursor -->
     <a-entity id="camera" camera look-controls>
@@ -140,8 +140,8 @@
         animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
         animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
         event-set__mouseenter="_event: mouseenter; color: springgreen"
-        event-set__mouseleave="_event: mouseleave; color: black" raycaster="objects: .link, #click-ring .intersectable" fuse="true"
-        fuse-timeout="1000" >
+        event-set__mouseleave="_event: mouseleave; color: black" raycaster="objects: .link, #click-ring .intersectable"
+        fuse="true" fuse-timeout="1000">
       </a-cursor>
     </a-entity>
   </a-scene>
@@ -392,7 +392,7 @@
   </div>
 
   <div class="info__div texte">
-    <p class="info__para">{{name}}</p>
+    <p id="text-name" class="info__para">{{name}}</p>
   </div>
 
   <div class="rename__section"></div>
@@ -411,13 +411,12 @@
 
     <div class="legend__section">
       <label class="legend__label" for="text_legend">Légende</label>
-      <textarea id="text_legend" name="text_legend" rows="5" cols="33"
-        placeholder="Entrez votre légende..."></textarea>
-      <button class="button__submit">Valider</button>
+      <textarea id="text_legend" name="text_legend" rows="5" cols="33" placeholder="Entrez votre légende..."></textarea>
+      <button class="button__submit" id="LegendButton">Valider</button>
     </div>
   </div>
 
-  <div class="position__section">
+  <div id="text-position" class="position__section">
     <div class="div__section_title">
       <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
       <label>Position</label>
@@ -425,18 +424,18 @@
 
     <div class="position__div">
       <label for="x">x</label>
-      <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any" class="inputRange" />
-      <div class="range__value">0</div>
+      <input type="range" name="x" id="x-slider" value="0" min="-10" max="10" step="0.1" class="inputRange" />
+      <div id="x-value" class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="y">y</label>
-      <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any" class="inputRange" />
-      <div class="range__value">0</div>
+      <input type="range" name="y" id="y-slider" value="0" min="-10" max="10" step="0.1" class="inputRange" />
+      <div id="y-value" class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="z">z</label>
-      <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any" class="inputRange" />
-      <div class="range__value">0</div>
+      <input type="range" name="z" id="z-slider" value="0" min="-10" max="10" step="0.1" class="inputRange" />
+      <div id="z-value" class="range__value">0</div>
     </div>
   </div>
 
@@ -513,26 +512,26 @@
   </div>
 
   <div class="import__section"></div>
-    <div class="div__section_title">
-      <img src="./assets/svg/folder.svg" alt="Folder icon">
-      <label for="input_file">Photo importé</label>
-    </div>
+  <div class="div__section_title">
+    <img src="./assets/svg/folder.svg" alt="Folder icon">
+    <label for="input_file">Photo importé</label>
+  </div>
 
-    <div class="div__import">
-      <label for="file-upload" class="custom-file-upload">
-        add images
-      </label>
-      <input id="file-upload" type="file" />
+  <div class="div__import">
+    <label for="file-upload" class="custom-file-upload">
+      add images
+    </label>
+    <input id="file-upload" type="file" />
 
-      <div class="div__tools">
-        <button class="btn__icon">
-          <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
-        </button>
-        <button class="btn__icon">
-          <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
-        </button>
-      </div>
+    <div class="div__tools">
+      <button class="btn__icon">
+        <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
+      </button>
+      <button class="btn__icon">
+        <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
+      </button>
     </div>
+  </div>
   </div>
 
   <div class="position__section">
