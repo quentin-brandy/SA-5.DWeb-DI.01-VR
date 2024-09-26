@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import */
+@import "./left_board.css";
+@import "./right_board.css";
+@import "./root.css";
+
+
+/* Reset CSS */
+
+*,
+*::before,
+*::after {
+    @apply box-border m-0 p-0;
+}
+
+html {
+    font-family: Arial, Helvetica, sans-serif;
+}

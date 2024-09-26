@@ -1,7 +1,7 @@
 import  VR  from './main.js';
 import { LoadFile } from './FileManager.js';
 import { LoadDoors , ModifyDoor , RouteSelect } from './DoorManager.js';
-import { Loadtext ,  } from './TextManager.js';
+import { Loadtext , ModifyText } from './TextManager.js';
 
 export function AddScene() {
     const selectElement = document.getElementById('selectscene');
