@@ -1,20 +1,21 @@
-import {addDoor, LoadDoors} from './DoorManager.js';
-import {AddScene, DeleteScene, ChangeSceneName , DuplicateScene , SceneExplorer , AddSceneExplorer , AddSceneSelectOption, switchScene} from './SceneManager.js';
-import {LoadFile } from './FileManager.Js';
-import {addText, Loadtext} from './TextManager.js';
 let VR = {
     scenes: {
         scene1: {
             name: 'scene1',
             tags: [],
             image: {
-                url: '/assets/img/1.jpg',
+                url: './assets/img/1.jpg',
                 name: '1.jpg'
             }
         }
     }
 };
 export default VR ;
+
+import {addDoor, DuplicateDoor, LoadDoors , RouteSelected} from './DoorManager.js';
+import {AddScene, DeleteScene, ChangeSceneName , DuplicateScene , SceneExplorer , AddSceneSelectOption, switchScene} from './SceneManager.js';
+import {LoadFile } from './FileManager.Js';
+import {addText, Loadtext} from './TextManager.js';
 
 
 
@@ -39,7 +40,6 @@ AddDoor.addEventListener('click', addDoor);
 
 let AddText = document.getElementById('plus-text');
 AddText.addEventListener('click', addText);
-
 
 
 AddSceneSelectOption();

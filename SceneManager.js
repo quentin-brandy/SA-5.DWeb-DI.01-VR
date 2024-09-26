@@ -1,7 +1,7 @@
 import  VR  from './main.js';
 import { LoadFile } from './FileManager.Js';
-import { LoadDoors } from './DoorManager.js';
-import { Loadtext } from './TextManager.js';
+import { LoadDoors , ModifyDoor , RouteSelect } from './DoorManager.js';
+import { Loadtext ,  } from './TextManager.js';
 
 export function AddScene() {
     const selectElement = document.getElementById('selectscene');
@@ -12,7 +12,7 @@ VR.scenes[newSceneName] = {
     name: newSceneName,
     tags: [],
     image: {
-        url: '/assets/img/sky.jpg',
+        url: './assets/img/sky.jpg',
         name: 'sky.jpg'
     }
 };
@@ -20,7 +20,6 @@ AddSceneSelectOption();
 selectElement.selectedIndex = sceneCount;
 sceneNameInput.value = newSceneName;
 switchScene();
-
 }
 
 
@@ -30,6 +29,9 @@ export function DeleteScene() {
         alert('Vous ne pouvez pas supprimer la dernière scène');
         return
     }
+    let templateSection = document.getElementById('tempalte_section');
+    templateSection.className = '';
+    templateSection.innerHTML = '';
     let oldscene = selectElement.value;
     delete VR.scenes[oldscene];
     console.log(VR);
@@ -62,6 +64,7 @@ console.log(VR);
     selectElement.options[selectElement.selectedIndex].value = newSceneName;
     selectElement.options[selectElement.selectedIndex].text = newSceneName;
     switchScene();
+    RouteSelect();
 }
 
 export function DuplicateScene() {
@@ -74,7 +77,6 @@ export function DuplicateScene() {
         name: newSceneName,
         image: { ...VR.scenes[SceneName].image } 
     };
-
     AddSceneSelectOption();
     selectElement.value = newSceneName;
     switchScene();
@@ -86,20 +88,24 @@ export function switchScene() {
     const skyElement = document.getElementById('image-360');
     const sceneselect = document.getElementById('selectscene');
     const sceneNameInput = document.getElementById('scene-name');
-    const selectedScene = VR.scenes[sceneselect.value];
     
+    // Mettre à jour l'image de la scène
+    const selectedScene = VR.scenes[sceneselect.value];
     if (selectedScene.image.url) {
         skyElement.setAttribute('src', selectedScene.image.url);
     } else {
         skyElement.setAttribute('src', '/assets/img/sky.jpg');
     }
+    let templateSection = document.getElementById('tempalte_section');
+    templateSection.className = '';
+    templateSection.innerHTML = '';
+    // Charger les nouvelles entités et réinitialiser les événements
     sceneNameInput.value = sceneselect.options[sceneselect.selectedIndex].text;
     LoadFile();
     LoadDoors();
     SceneExplorer();
-    Loadtext()
+    Loadtext();
 }
-
 
 export function AddSceneSelectOption() {
     const selectElement = document.getElementById('selectscene');
@@ -113,7 +119,7 @@ export function AddSceneSelectOption() {
     });
 }
 
-export function SceneExplorer() {
+export function SceneExplorer() {   
     const sceneExplorer = document.getElementById('scene-tags');
     const sceneSelect = document.getElementById('selectscene');
     const Scenetitle = document.getElementById('scene-title-explorer');
@@ -123,18 +129,44 @@ export function SceneExplorer() {
     selectedScene.tags.forEach(tag => {
         const tagElement = document.createElement('li');
         tagElement.textContent = tag.name;
-        tagElement.className = 'list__objet';
+        tagElement.id = tag.name;
+        if (tag.type === 'door') {
+            tagElement.className = 'list__objet porte';
+        
+        } else if (tag.type === 'text') {
+            tagElement.className = 'list__objet texte';
+        }
+
         sceneExplorer.appendChild(tagElement);
     });
 }
 
-export function AddSceneExplorer(newtag){
+export function AddSceneExplorer(newtag , type){
     console.log(newtag);
+    console.log(type);
     console.log('test');
     const sceneExplorer = document.getElementById('scene-tags');
     const tagElement = document.createElement('li');
         tagElement.textContent = newtag;
         tagElement.className = 'list__objet';
         sceneExplorer.appendChild(tagElement);
+        tagElement.id = newtag;
+     if (type === 'door') {
+            tagElement.className = 'list__objet porte';
+            document.addEventListener('click', function (event) {
+                if (event.target.id === newtag) {
+                    ModifyDoor(event);
+                }
+            });
+        
+        } else if (type === 'text') {
+            tagElement.className = 'list__objet texte';
+            document.addEventListener('click', function (event) {
+            if (event.target.id === newtag) {
+                ModifyText(event);
+            }
+           
+        });
+        }
 }
 
