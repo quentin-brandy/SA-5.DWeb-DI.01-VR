@@ -1,16 +1,36 @@
-let VR = {
-    scenes: {
-        scene1: {
-            name: 'scene1',
-            tags: [],
-            image: {
-                url: './assets/img/1.jpg',
-                name: '1.jpg'
+// Function to save VR object to localStorage
+function saveVRToLocalStorage() {
+    localStorage.setItem('VR', JSON.stringify(VR));
+}
+
+// Function to load VR object from localStorage
+function loadVRFromLocalStorage() {
+    const savedVR = localStorage.getItem('VR');
+    if (savedVR) {
+        VR = JSON.parse(savedVR);
+    } else {
+        VR = {
+            scenes: {
+                scene1: {
+                    name: 'scene1',
+                    tags: [],
+                    image: {
+                        url: './assets/img/1.jpg',
+                        name: '1.jpg'
+                    }
+                }
             }
-        }
+        };
     }
-};
-export default VR ;
+}
+
+// Declare VR variable
+let VR;
+
+// Call loadVRFromLocalStorage when the page loads
+loadVRFromLocalStorage();
+
+export default VR;
 
 import {addDoor, LoadDoors} from './DoorManager.js';
 import {AddScene, DeleteScene, ChangeSceneName , DuplicateScene , SceneExplorer , AddSceneSelectOption, switchScene} from './SceneManager.js';
@@ -39,6 +59,10 @@ AddDoor.addEventListener('click', addDoor);
 
 let AddText = document.getElementById('plus-text');
 AddText.addEventListener('click', addText);
+
+// Add event listener to the save button
+let saveButton = document.getElementById('save-button');
+saveButton.addEventListener('click', saveVRToLocalStorage);
 
 
 
