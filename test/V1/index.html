@@ -187,7 +187,7 @@
     </div>
 
     <div class="legend__section">
-      <label class="legend__label" for="text_legend">Vers scène</label>
+      <label class="legend__label" for="scene-select">Vers scène</label>
       <select name="scene-select" id="scene-select" class="scene-select">
         <option value="Scene">Scene</option>
         <option value="Scene">Scene</option>
@@ -204,17 +204,17 @@
 
     <div class="position__div">
       <label for="x">x</label>
-      <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="x" id="xPorte" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="y">y</label>
-      <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="y" id="yPorte" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="z">z</label>
-      <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="z" id="zPorte" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
   </div>
@@ -227,12 +227,12 @@
 
     <div class="position__div">
       <label for="w">w</label>
-      <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="w" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="h">h</label>
-      <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="h" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
   </div>
@@ -316,17 +316,17 @@
 
     <div class="position__div">
       <label for="x">x</label>
-      <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="x" id="xInfo" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="y">y</label>
-      <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="y" id="yInfo" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="z">z</label>
-      <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="z" id="zInfo" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
   </div>
@@ -339,12 +339,12 @@
 
     <div class="position__div">
       <label for="w">w</label>
-      <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="w" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="h">h</label>
-      <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="h" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
   </div>
@@ -424,18 +424,41 @@
 
     <div class="position__div">
       <label for="x">x</label>
-      <input type="range" name="x" id="x-slider" value="0" min="-10" max="10" step="0.1" class="inputRange" />
+      <input type="range" name="x" id="x-slider" value="0" min="-10" max="10" step="0.1" class="inputRange position" />
       <div id="x-value" class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="y">y</label>
-      <input type="range" name="y" id="y-slider" value="0" min="-10" max="10" step="0.1" class="inputRange" />
+      <input type="range" name="y" id="y-slider" value="0" min="-10" max="10" step="0.1" class="inputRange position" />
       <div id="y-value" class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="z">z</label>
-      <input type="range" name="z" id="z-slider" value="0" min="-10" max="10" step="0.1" class="inputRange" />
+      <input type="range" name="z" id="z-slider" value="0" min="-10" max="10" step="0.1" class="inputRange position" />
       <div id="z-value" class="range__value">0</div>
+    </div>
+  </div>
+
+  <div id="text-position" class="position__section">
+    <div class="div__section_title">
+      <img src="./assets/svg/arrow-repeat.svg" alt="Rotation icon">
+      <label>Rotation</label>
+    </div>
+
+    <div class="position__div">
+      <label for="rx">rx</label>
+      <input type="range" name="rx" id="rx-slider" value="{{x}}" min="-5" max="5" step="0.1" class="inputRange rotation" />
+      <div id="rx-value" class="range__value">0</div>
+    </div>
+    <div class="position__div">
+      <label for="ry">ry</label>
+      <input type="range" name="ry" id="ry-slider" value="{{y}}" min="-5" max="5" step="0.1" class="inputRange rotation" />
+      <div id="ry-value" class="range__value">0</div>
+    </div>
+    <div class="position__div">
+      <label for="rz">rz</label>
+      <input type="range" name="rz" id="rz-slider" value="{{z}}" min="-5" max="5" step="0.1" class="inputRange rotation" />
+      <div id="rz-value" class="range__value">0</div>
     </div>
   </div>
 
@@ -447,12 +470,12 @@
 
     <div class="position__div">
       <label for="w">w</label>
-      <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="w" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="h">h</label>
-      <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="h" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
   </div>
@@ -466,14 +489,14 @@
     <div class="div__color">
       <label for="fill">Fill</label>
       <div class="sec__input_color">
-        <input type="color" name="fill" id="fill" value="#00C058">
+        <input type="color" name="fill" id="fillText" value="#00C058">
         <p>00C058</p>
       </div>
     </div>
     <div class="div__color">
       <label for="stroke">Stroke</label>
       <div class="sec__input_color">
-        <input type="color" name="stroke" id="stroke" value="#009EC0">
+        <input type="color" name="stroke" id="strokeText" value="#009EC0">
         <p>009EC0</p>
       </div>
     </div>
@@ -542,17 +565,17 @@
 
     <div class="position__div">
       <label for="x">x</label>
-      <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="x" id="xPhoto" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="y">y</label>
-      <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="y" id="yPhoto" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="z">z</label>
-      <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="z" id="zPhoto" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
   </div>
@@ -565,12 +588,12 @@
 
     <div class="position__div">
       <label for="w">w</label>
-      <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="w" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="h">h</label>
-      <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="h" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
   </div>

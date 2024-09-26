@@ -68,12 +68,22 @@ export function Loadtext() {
 }
 
 
-export function ModifyText(event) {
+function Loadobject() {
     let templateText = document.getElementById('template__texte').innerHTML;
     const recipe = document.getElementById('fixedSectionObjet');
     templateText = templateText.replaceAll("{{name}}", event.target.innerText);
     recipe.innerHTML = templateText;
     recipe.classList.add('fixed__section', 'objet');
+    
+    const textName = document.getElementById('text-name').textContent;
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);   
+}
+
+
+export function ModifyText(event) {
+    Loadobject();
 
     document.getElementById('RenameButton').addEventListener('click', function () {
         renameText(event.target.id);
@@ -82,12 +92,17 @@ export function ModifyText(event) {
         LegendText(event.target.id);
     });
     
-    let inputRanges = document.querySelectorAll('.inputRange')
-    inputRanges.forEach(inputRange => {
+    let inputRangesPosition = document.querySelectorAll('.position')
+    inputRangesPosition.forEach(inputRange => {
         inputRange.addEventListener('input', TextPositionChange);
     });
+
+    let inputRangesRotation = document.querySelectorAll('.rotation')
+    inputRangesRotation.forEach(inputRange => {
+        inputRange.addEventListener('input', TextRotationChange);
+    });
     
-    document.getElementById('fill').addEventListener('input', TextCouleurFillChange);
+    document.getElementById('fillText').addEventListener('input', TextCouleurFillChange);
 }
 
 
@@ -140,9 +155,9 @@ export function TextPositionChange(e) {
     if (text) {
         text.position = { ...text.position, [axis]: textPosition };
 
-        const doorElement = document.querySelector(`#text-entity #${textName}`);
-        if (doorElement) {
-            doorElement.setAttribute('position', `${text.position.x} ${text.position.y} ${text.position.z}`);
+        const textElement = document.querySelector(`#text-entity #${textName}`);
+        if (textElement) {
+            textElement.setAttribute('position', `${text.position.x} ${text.position.y} ${text.position.z}`);
         }
     }
 
@@ -151,6 +166,40 @@ export function TextPositionChange(e) {
     const inactiveColor = "transparent";
 
     e.target.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
+
+    Loadtext();
+}
+
+
+export function TextRotationChange(e) {
+    const textName = document.getElementById('text-name').textContent;
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const axis = e.target.name; // 'x', 'y', or 'z'
+    const textRotation = parseFloat(e.target.value);
+    let axisAlone = axis.slice(1);
+    
+
+    document.querySelector(`#${axis}-value`).textContent = `${textRotation}`;
+
+    const text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);
+    if (text) {
+        text.rotation = { ...text.rotation, [axisAlone]: textRotation };
+
+        const textElement = document.querySelector(`#text-entity #${textName}`);
+        if (textElement) {
+            textElement.setAttribute('rotation', `${text.rotation.x} ${text.rotation.y} ${text.rotation.z}`);
+        }
+    }
+
+    const ratio = (e.target.value - e.target.min) / (e.target.max - e.target.min) * 100;
+    const activeColor = "#00C058";
+    const inactiveColor = "transparent";
+
+    e.target.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
+    console.log(VR.scenes);
+    
+    Loadtext();
 }
 
 
@@ -160,7 +209,7 @@ export function TextCouleurFillChange(e) {
     const selectedScene = VR.scenes[sceneSelect.value];
 
     let text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);
-    let inputColor = document.getElementById('fill').value;
+    let inputColor = document.getElementById('fillText').value;
     text.fill = inputColor;
     
     Loadtext();
