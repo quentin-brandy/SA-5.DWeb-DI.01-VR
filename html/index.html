@@ -13,16 +13,8 @@
   <script src="https://unpkg.com/aframe-layout-component@4.x.x/dist/aframe-layout-component.min.js"></script>
   <script src="https://unpkg.com/aframe-event-set-component@5.x.x/dist/aframe-event-set-component.min.js"></script>
   <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
-  <script id="link" type="text/html">
-    <a-entity class="link"
-      geometry="primitive: plane; height: 1; width: 1"
-      material="shader: flat; src: ${thumb}"
-      sound="on: click; src: #click-sound"
-      event-set__mouseenter="scale: 1.2 1.2 1"
-      event-set__mouseleave="scale: 1 1 1"
-      event-set__click="_target: #image-360; _delay: 300; material.src: ${src}"
-      proxy-event="event: click; to: #image-360; as: fade"></a-entity>
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-blink-controls/dist/aframe-blink-controls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.2.0/dist/aframe-extras.misc.min.js"></script>
 </head>
 
 <body>
@@ -122,34 +114,51 @@
 </section>
 
 <section id="tempalte_section"></section>
+<a-scene id="a-scene">
+  <a-assets id="assets-container">
+  </a-assets>
 
-  <a-scene  id="a-scene">
-    <a-assets id="assets-container">
-    </a-assets>
-
-    <a-sky id="image-360"  rotation="0 -90 0" src="#img1" material="color: #FFFFFF"></a-sky>
-    <!-- Assets 360 -->
+  <a-sky id="image-360" rotation="0 -90 0" src="#img1" material="color: #FFFFFF"></a-sky>
+  <!-- Assets 360 -->
+  <a-box position="0 1.6 -3" rotation="0 45 0" width="1" height="1" depth="1" color="#4CC3D9" 
+       class="clickable" dynamic-body collision-filter="group: box; collidesWith: hand" raycaster="objects: .clickable">
+</a-box>
+  <a-entity id="door-entity">
    
-<a-entity id="door-entity"> 
+  </a-entity>
+
+  <a-entity id="text-entity">
+  </a-entity>
+
+  <!-- Camera and cursor with Oculus Quest 2 controller support -->
+  <a-entity position="0 1.6 0" id="camera" camera look-controls>
+    <a-cursor id="cursor"
+      animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
+      event-set__mouseenter="_event: mouseenter; color: springgreen"
+      event-set__mouseleave="_event: mouseleave; color: black" raycaster="objects: .clickable, #click-ring ">
+    </a-cursor>
+  </a-entity>
+
+  <a-entity id="leftController" oculus-touch-controls="hand: left" raycaster="objects: .clickable , #click-ring; far: 100">
+    <a-entity
+      geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.04"
+      position="0 0 -0.05"
+      material="color: springgreen; shader: flat">
+    </a-entity>
+    <!-- Rayon visible -->
+    <a-entity line="start: 0 0 0; end: 0 0 -1000" material="color: springgreen"></a-entity>
+  </a-entity>
+
+  <a-entity id="cameraRig"  wasd-controls>
+    <a-entity id="rightController" position="0 1.6 0" camera look-controls="reverseMouseDrag: true"></a-entity>
+    <a-entity oculus-touch-controls="hand: right" ></a-entity>
+    <a-entity 
+    laser-controls="hand: right;";
+    raycaster="objects: .clickable"></a-entity>
 </a-entity>
 
-<a-entity id="text-entity"> 
-</a-entity>
-
-<!-- Camera and cursor with Oculus Quest 2 controller support -->
-<a-entity position="0 1.6 0" id="camera" camera look-controls>
-  <a-cursor id="cursor"
-    animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"
-    event-set__mouseenter="_event: mouseenter; color: springgreen"
-    event-set__mouseleave="_event: mouseleave; color: black" raycaster="objects: .link, #click-ring .intersectable"
-  >
-  </a-cursor>
-</a-entity>
-
-<!-- Oculus Quest 2 controller -->
-<a-entity oculus-touch-controls="hand: left"></a-entity>
-<a-entity oculus-touch-controls="hand: right"></a-entity>
-  </a-scene>
+ 
+</a-scene>
 </body>
 
 </html>
@@ -392,14 +401,14 @@
   </div>
 
   <div class="info__div texte">
-    <p class="info__para">Texte 1</p>
+    <p id="text-name" class="info__para">{{name}}</p>
   </div>
 
   <div class="rename__section"></div>
   <label class="label__rename" for="rename">Renommez</label>
   <div class="div__rename">
-    <input class="input__champ" type="text" id="rename" name="rename" placeholder="Renommez" />
-    <button class="button__submit">Valider</button>
+    <input class="input__champ" type="text" id="rename" name="rename" placeholder="Renommez" value="{{name}}" />
+    <button class="button__submit" id="RenameButton">Valider</button>
   </div>
   </div>
 
@@ -411,13 +420,12 @@
 
     <div class="legend__section">
       <label class="legend__label" for="text_legend">Légende</label>
-      <textarea id="text_legend" name="text_legend" rows="5" cols="33"
-        placeholder="Entrez votre légende..."></textarea>
-      <button class="button__submit">Valider</button>
+      <textarea id="text_legend" name="text_legend" rows="5" cols="33" placeholder="Entrez votre légende..."></textarea>
+      <button class="button__submit" id="LegendButton">Valider</button>
     </div>
   </div>
 
-  <div class="position__section">
+  <div id="text-position" class="position__section">
     <div class="div__section_title">
       <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
       <label>Position</label>
@@ -425,18 +433,41 @@
 
     <div class="position__div">
       <label for="x">x</label>
-      <input type="range" name="x" id="x-slider" value="0" min="-10" max="10" step="0.1" class="inputRange" />
+      <input type="range" name="x" id="x-slider" value="0" min="-10" max="10" step="0.1" class="inputRange position" />
       <div id="x-value" class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="y">y</label>
-      <input type="range" name="y" id="y-slider" value="0" min="-10" max="10" step="0.1" class="inputRange" />
+      <input type="range" name="y" id="y-slider" value="0" min="-10" max="10" step="0.1" class="inputRange position" />
       <div id="y-value" class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="z">z</label>
-      <input type="range" name="z" id="z-slider" value="0" min="-10" max="10" step="0.1" class="inputRange" />
+      <input type="range" name="z" id="z-slider" value="0" min="-10" max="10" step="0.1" class="inputRange position" />
       <div id="z-value" class="range__value">0</div>
+    </div>
+  </div>
+
+  <div id="text-position" class="position__section">
+    <div class="div__section_title">
+      <img src="./assets/svg/arrow-repeat.svg" alt="Rotation icon">
+      <label>Rotation</label>
+    </div>
+
+    <div class="position__div">
+      <label for="rx">rx</label>
+      <input type="range" name="rx" id="rx-slider" value="{{x}}" min="-5" max="5" step="0.1" class="inputRange rotation" />
+      <div id="rx-value" class="range__value">0</div>
+    </div>
+    <div class="position__div">
+      <label for="ry">ry</label>
+      <input type="range" name="ry" id="ry-slider" value="{{y}}" min="-5" max="5" step="0.1" class="inputRange rotation" />
+      <div id="ry-value" class="range__value">0</div>
+    </div>
+    <div class="position__div">
+      <label for="rz">rz</label>
+      <input type="range" name="rz" id="rz-slider" value="{{z}}" min="-5" max="5" step="0.1" class="inputRange rotation" />
+      <div id="rz-value" class="range__value">0</div>
     </div>
   </div>
 
@@ -448,12 +479,12 @@
 
     <div class="position__div">
       <label for="w">w</label>
-      <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="w" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
     <div class="position__div">
       <label for="h">h</label>
-      <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange" />
+      <input type="range" name="h" value="0" min="-100" max="100" step="any" class="inputRange" />
       <div class="range__value">0</div>
     </div>
   </div>
@@ -467,14 +498,14 @@
     <div class="div__color">
       <label for="fill">Fill</label>
       <div class="sec__input_color">
-        <input type="color" name="fill" id="fill" value="#00C058">
+        <input type="color" name="fill" id="fillText" value="#00C058">
         <p>00C058</p>
       </div>
     </div>
     <div class="div__color">
       <label for="stroke">Stroke</label>
       <div class="sec__input_color">
-        <input type="color" name="stroke" id="stroke" value="#009EC0">
+        <input type="color" name="stroke" id="strokeText" value="#009EC0">
         <p>009EC0</p>
       </div>
     </div>
@@ -579,4 +610,3 @@
 
 
 <script type="module" src="./main.js"></script>
-

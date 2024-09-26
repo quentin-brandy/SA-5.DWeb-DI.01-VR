@@ -12,10 +12,10 @@ let VR = {
 };
 export default VR ;
 
-import {addDoor, DuplicateDoor, LoadDoors , RouteSelected} from './DoorManager.js';
+import {addDoor, LoadDoors} from './DoorManager.js';
 import {AddScene, DeleteScene, ChangeSceneName , DuplicateScene , SceneExplorer , AddSceneSelectOption, switchScene} from './SceneManager.js';
 import {LoadFile } from './FileManager.js';
-import {addText, Loadtext} from './TextManager.js';
+import {addText, Loadtext, LegendText } from './TextManager.js';
 
 
 
@@ -34,12 +34,12 @@ SceneName.addEventListener('click', ChangeSceneName);
 let Duplicatescene = document.getElementById('duplicate-scene');
 Duplicatescene.addEventListener('click', DuplicateScene);
 
-
 let AddDoor = document.getElementById('plus-door');
 AddDoor.addEventListener('click', addDoor);
 
 let AddText = document.getElementById('plus-text');
 AddText.addEventListener('click', addText);
+
 
 
 AddSceneSelectOption();

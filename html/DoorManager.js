@@ -21,12 +21,11 @@ export function addDoor() {
         name: doorName
     });
 
-
     var newEntity = document.createElement('a-sphere');
     newEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);
     newEntity.setAttribute('radius', '1');
     newEntity.setAttribute('color', '#FF0000');
-    newEntity.setAttribute('class', 'link'); 
+    newEntity.setAttribute('class', 'link clickable'); 
     newEntity.setAttribute('scale', '0.5 0.5 0.5');
     newEntity.setAttribute('id', doorName);
     newEntity.addEventListener('click', function (event) { 
@@ -52,14 +51,20 @@ export function LoadDoors() {
             newEntity.setAttribute('position', tag.position.x + ' ' + tag.position.y + ' ' + tag.position.z);
             newEntity.setAttribute('radius', '1');
             newEntity.setAttribute('color', '#FF0000');
-            newEntity.setAttribute('class', 'link'); 
+            newEntity.setAttribute('class', 'link clickable'); 
             newEntity.setAttribute('scale', '0.5 0.5 0.5');
             newEntity.setAttribute('id', tag.name);
             newEntity.addEventListener('click', function (event) { 
                 TakeDoor(event);
+            })
+            document.querySelector('#rightController').addEventListener('triggerdown', function (event) {
+                if (event.target === newEntity) {
+                    TakeDoor(event);
+                }
             });
             document.querySelector('#door-entity').appendChild(newEntity);
         }
+        
     });
 }
 
@@ -107,6 +112,15 @@ export function ModifyDoor(e) {
             document.getElementById('x-value').textContent = tag.position.x.toFixed(1);
             document.getElementById('y-value').textContent = tag.position.y.toFixed(1);
             document.getElementById('z-value').textContent = tag.position.z.toFixed(1);
+
+            // Update the gradient for each slider
+            ['x', 'y', 'z'].forEach(axis => {
+                const slider = document.getElementById(`${axis}-slider`);
+                const ratio = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+                const activeColor = "#00C058";
+                const inactiveColor = "transparent";
+                slider.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
+            });
         }
     });
 
@@ -238,7 +252,7 @@ export function DoorPositionChange(e) {
         door.position = { ...door.position, [axis]: doorPosition };
         
         const doorElement = document.querySelector(`#door-entity #${doorName}`);
-        console.log(doorElement);
+        if (doorElement) {
         doorElement.setAttribute('position', `${door.position.x} ${door.position.y} ${door.position.z}`);
     }
 
@@ -250,4 +264,6 @@ export function DoorPositionChange(e) {
     e.target.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
     
     console.log(VR);
+    LoadDoors();
+}
 }
