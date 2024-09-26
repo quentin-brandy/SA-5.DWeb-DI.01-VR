@@ -103,7 +103,7 @@ export function switchScene() {
     sceneNameInput.value = sceneselect.options[sceneselect.selectedIndex].text;
     LoadFile();
     LoadDoors();
-    SceneExplorer();
+    LoadSceneExplorer()
     Loadtext();
 }
 
@@ -168,5 +168,31 @@ export function AddSceneExplorer(newtag , type){
            
         });
         }
+}
+
+export function LoadSceneExplorer() {
+    const sceneExplorer = document.getElementById('scene-tags');
+    const sceneSelect = document.getElementById('selectscene');
+    const Scenetitle = document.getElementById('scene-title-explorer');
+    Scenetitle.textContent = sceneSelect.value;
+    const selectedScene = VR.scenes[sceneSelect.value];
+    sceneExplorer.innerHTML = '';
+    selectedScene.tags.forEach(tag => {
+        const tagElement = document.createElement('li');
+        tagElement.textContent = tag.name;
+        tagElement.id = tag.name;
+        if (tag.type === 'door') {
+            tagElement.className = 'list__objet porte';
+            tagElement.addEventListener('click', function (event) {
+                ModifyDoor(event);
+            });
+        } else if (tag.type === 'text') {
+            tagElement.className = 'list__objet texte';
+            tagElement.addEventListener('click', function (event) {
+                ModifyText(event);
+            });
+        }
+        sceneExplorer.appendChild(tagElement);
+    });
 }
 

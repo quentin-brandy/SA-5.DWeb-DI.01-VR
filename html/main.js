@@ -68,7 +68,4 @@ saveButton.addEventListener('click', saveVRToLocalStorage);
 
 AddSceneSelectOption();
 switchScene();
-LoadFile();
-LoadDoors();
-SceneExplorer();
-Loadtext();
+

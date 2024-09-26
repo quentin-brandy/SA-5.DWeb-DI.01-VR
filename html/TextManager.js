@@ -116,6 +116,14 @@ function Loadobject() {
          slider.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
      });
 
+     let CopyText = document.getElementById('duplicate-text');
+        CopyText.addEventListener('click', DuplicateText);
+
+
+
+     let DeleteText = document.getElementById('delete-text');
+     DeleteText.addEventListener('click', deleteText);
+
 
  } 
 
@@ -143,6 +151,64 @@ export function ModifyText(event) {
     document.getElementById('fillText').addEventListener('input', TextCouleurFillChange);
     
 }
+
+
+
+export function DuplicateText() {
+    let textName = document.getElementById('text-name').textContent;
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const originalText = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);
+
+    if (originalText) {
+        const newTextName = `${textName}_copy`;
+        console.log(newTextName);
+        const newTextPosition = { ...originalText.position, x: originalText.position.x + 1 }; 
+        const newTextRotation = { ...originalText.rotation, x: originalText.rotation.x + 1 };
+        selectedScene.tags.push({
+            ...originalText,
+            position: newTextPosition,
+            rotation: newTextRotation,
+            name: newTextName,
+        });
+
+        var newEntity = document.createElement('a-text');
+    newEntity.setAttribute('position', newTextPosition.x + ' ' + newTextPosition.y + ' ' + newTextPosition.z);
+    newEntity.setAttribute('rotation', newTextRotation.x + ' ' + originalText.rotation.y + ' ' + originalText.rotation.z);
+    newEntity.setAttribute('value', originalText.content);
+    newEntity.setAttribute('color', originalText.textFill);
+    newEntity.setAttribute('align', 'center');
+    newEntity.setAttribute('scale', '5 5 5');
+    newEntity.setAttribute('id', newTextName);
+
+    document.querySelector('#text-entity').appendChild(newEntity);
+    console.log(VR);
+    AddSceneExplorer(newTextName, 'text');
+    }
+}
+
+
+
+
+
+export function deleteText(){
+    let textName = document.getElementById('text-name').textContent;
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);
+    const textElement = document.getElementById(textName);
+    console.log(textElement);
+    const index = selectedScene.tags.indexOf(text);
+    selectedScene.tags.splice(index, 1);
+    textElement.remove();
+    console.log(VR);
+    let templateSection = document.getElementById('tempalte_section');
+    templateSection.className = '';
+    templateSection.innerHTML = '';
+    }
+    
+
+
 
 
 function renameText(nom) {
