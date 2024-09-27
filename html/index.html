@@ -13,7 +13,7 @@
   <script src="https://unpkg.com/aframe-layout-component@4.x.x/dist/aframe-layout-component.min.js"></script>
   <script src="https://unpkg.com/aframe-event-set-component@5.x.x/dist/aframe-event-set-component.min.js"></script>
   <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
-  
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -45,7 +45,9 @@
 </head>
 
 <body class="font-['Arial, Helvetica, sans-serif']">
-  <section class="fixed h-[97%] border-2 border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg left-2.5 top-2.5"> <!-- fixed__section -->
+  <section
+    class="fixed h-[97%] border-2 border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg left-2.5 top-2.5">
+    <!-- fixed__section -->
     <h2 class="text-center mx-0 my-4 text-[25px]">Scènes</h2>
 
     <div class="flex items-center gap-2 mt-10 mb-0 mx-0">
@@ -64,14 +66,18 @@
       </div>
     </div>
 
-    <select name="scene" id="selectscene" class="w-full border-none text-custom-dark-gray bg-custom-light-gray p-[5px] rounded-[5px]">
+    <select name="scene" id="selectscene"
+      class="w-full border-none text-custom-dark-gray bg-custom-light-gray p-[5px] rounded-[5px]">
     </select>
 
     <div class="mx-0 my-4">
       <label class="text-[15px] text-custom-dark-gray" for="rename">Renommez</label>
       <div class="flex justify-between gap-3">
-        <input id="scene-name" class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid placeholder:text-custom-light-gray" type="text" id="rename" name="rename" placeholder="Renommez" />
-        <button id="switchscenename" class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
+        <input id="scene-name"
+          class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid placeholder:text-custom-light-gray"
+          type="text" id="rename" name="rename" placeholder="Renommez" />
+        <button id="switchscenename"
+          class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
       </div>
     </div>
 
@@ -105,19 +111,23 @@
       </div>
 
       <div class="w-[250px] flex flex-wrap gap-2">
-        <button id="plus-door" class="relative flex items-center gap-[5px] text-[15px] text-custom-white cursor-pointer pl-9 pr-3 py-2 rounded-[20rem] border-[none] bg-gradient-to-r from-custom-green to-custom-blue before:content-[url('./assets/svg/plus-lg-light.svg')] before:flex before:justify-center before:items-center before:absolute before:w-6 before:h-6 before:bg-custom-white before:rounded-[20rem] before:left-[7px] before:top-[7px]">
+        <button id="plus-door"
+          class="relative flex items-center gap-[5px] text-[15px] text-custom-white cursor-pointer pl-9 pr-3 py-2 rounded-[20rem] border-[none] bg-gradient-to-r from-custom-green to-custom-blue before:content-[url('./assets/svg/plus-lg-light.svg')] before:flex before:justify-center before:items-center before:absolute before:w-6 before:h-6 before:bg-custom-white before:rounded-[20rem] before:left-[7px] before:top-[7px]">
           <img src="./assets/svg/door-closed.svg" alt="Door icon">
           Porte
         </button>
-        <button class="relative flex items-center gap-[5px] text-[15px] text-custom-white cursor-pointer pl-9 pr-3 py-2 rounded-[20rem] border-[none] bg-gradient-to-r from-custom-green to-custom-blue before:content-[url('./assets/svg/plus-lg-light.svg')] before:flex before:justify-center before:items-center before:absolute before:w-6 before:h-6 before:bg-custom-white before:rounded-[20rem] before:left-[7px] before:top-[7px]">
+        <button
+          class="relative flex items-center gap-[5px] text-[15px] text-custom-white cursor-pointer pl-9 pr-3 py-2 rounded-[20rem] border-[none] bg-gradient-to-r from-custom-green to-custom-blue before:content-[url('./assets/svg/plus-lg-light.svg')] before:flex before:justify-center before:items-center before:absolute before:w-6 before:h-6 before:bg-custom-white before:rounded-[20rem] before:left-[7px] before:top-[7px]">
           <img src="./assets/svg/info-circle.svg" alt="Info Bulle icon">
           Info Bulle
         </button>
-        <button id="plus-text" class="relative flex items-center gap-[5px] text-[15px] text-custom-white cursor-pointer pl-9 pr-3 py-2 rounded-[20rem] border-[none] bg-gradient-to-r from-custom-green to-custom-blue before:content-[url('./assets/svg/plus-lg-light.svg')] before:flex before:justify-center before:items-center before:absolute before:w-6 before:h-6 before:bg-custom-white before:rounded-[20rem] before:left-[7px] before:top-[7px]">
+        <button id="plus-text"
+          class="relative flex items-center gap-[5px] text-[15px] text-custom-white cursor-pointer pl-9 pr-3 py-2 rounded-[20rem] border-[none] bg-gradient-to-r from-custom-green to-custom-blue before:content-[url('./assets/svg/plus-lg-light.svg')] before:flex before:justify-center before:items-center before:absolute before:w-6 before:h-6 before:bg-custom-white before:rounded-[20rem] before:left-[7px] before:top-[7px]">
           <img src="./assets/svg/card-text.svg" alt="Texte icon">
           Texte
         </button>
-        <button class="relative flex items-center gap-[5px] text-[15px] text-custom-white cursor-pointer pl-9 pr-3 py-2 rounded-[20rem] border-[none] bg-gradient-to-r from-custom-green to-custom-blue before:content-[url('./assets/svg/plus-lg-light.svg')] before:flex before:justify-center before:items-center before:absolute before:w-6 before:h-6 before:bg-custom-white before:rounded-[20rem] before:left-[7px] before:top-[7px]">
+        <button
+          class="relative flex items-center gap-[5px] text-[15px] text-custom-white cursor-pointer pl-9 pr-3 py-2 rounded-[20rem] border-[none] bg-gradient-to-r from-custom-green to-custom-blue before:content-[url('./assets/svg/plus-lg-light.svg')] before:flex before:justify-center before:items-center before:absolute before:w-6 before:h-6 before:bg-custom-white before:rounded-[20rem] before:left-[7px] before:top-[7px]">
           <img src="./assets/svg/file-image.svg" alt="Photo icon">
           Photo
         </button>
@@ -130,7 +140,9 @@
         <label>Explorer</label>
       </div>
       <div class="explorer__div">
-        <p id="scene-title-explorer" class="w-full font-[bold] text-custom-dark-gray bg-custom-light-gray pl-2 pr-1 py-1 rounded-[5px_5px_0_0]">Scène</p>
+        <p id="scene-title-explorer"
+          class="w-full font-[bold] text-custom-dark-gray bg-custom-light-gray pl-2 pr-1 py-1 rounded-[5px_5px_0_0]">
+          Scène</p>
         <ul id="scene-tags" class="list-none pl-6">
 
         </ul>
@@ -189,15 +201,18 @@
     </div>
   </div>
 
-  <div class="flex items-center gap-[5px] w-full bg-custom-light-gray mt-[5px] mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/door-closed-dark.svg')]">
+  <div
+    class="flex items-center gap-[5px] w-full bg-custom-light-gray mt-[5px] mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/door-closed-dark.svg')]">
     <p id="door-name" class="text-custom-dark-gray"></p>
   </div>
 
   <div class="mx-0 my-4"></div>
   <label class="text-[15px] text-custom-dark-gray" for="rename">Renommez</label>
   <div class="flex justify-between gap-3">
-    <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid" type="text" id="rename" name="rename" placeholder="Renommez" />
-    <button class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
+    <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid" type="text" id="rename"
+      name="rename" placeholder="Renommez" />
+    <button
+      class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
   </div>
   </div>
 
@@ -209,7 +224,8 @@
 
     <div class="flex flex-col mt-3">
       <label class="text-[15px] text-custom-dark-gray" for="text_legend">Vers scène</label>
-      <select name="scene-route-select" id="scene-route-select" class="w-full bg-custom-light-gray text-custom-dark-gray p-1 rounded-[5px] border-[none]">
+      <select name="scene-route-select" id="scene-route-select"
+        class="w-full bg-custom-light-gray text-custom-dark-gray p-1 rounded-[5px] border-[none]">
 
       </select>
     </div>
@@ -223,18 +239,30 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="x">x</label>
-      <input type="range" name="x" id="x-slider" value="0" min="-10" max="10" step="0.1" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div id="x-value" class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="x" id="x-slider" value="0" min="-10" max="10" step="0.1"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div id="x-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="y">y</label>
-      <input type="range" name="y" id="y-slider" value="0" min="-10" max="10" step="0.1" class=" inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div id="y-value" class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="y" id="y-slider" value="0" min="-10" max="10" step="0.1"
+        class=" inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div id="y-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="z">z</label>
-      <input type="range" name="z" id="z-slider" value="0" min="-10" max="10" step="0.1" class=" inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div id="z-value" class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="z" id="z-slider" value="0" min="-10" max="10" step="0.1"
+        class=" inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div id="z-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p></p>
+      </div>
     </div>
   </div>
 
@@ -246,13 +274,21 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="w">w</label>
-      <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid " />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid " />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="h">h</label>
-      <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
   </div>
 
@@ -265,14 +301,16 @@
     <div class="flex flex-col mx-0 my-3">
       <label class="text-[15px] text-custom-dark-gray" for="fill">Fill</label>
       <div class="flex items-center w-min gap-[5px] border border-custom-gray p-1 rounded-[5px] border-solid">
-        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="fill" id="fill" value="#00C058">
+        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="fill" id="fill"
+          value="#00C058">
         <p class="text-[15px] text-custom-dark-gray">00C058</p>
       </div>
     </div>
     <div class="flex flex-col mx-0 my-3">
       <label class="text-[15px] text-custom-dark-gray" for="stroke">Stroke</label>
       <div class="flex items-center w-min gap-[5px] border border-custom-gray p-1 rounded-[5px] border-solid">
-        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="stroke" id="stroke" value="#009EC0">
+        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="stroke"
+          id="stroke" value="#009EC0">
         <p class="text-[15px] text-custom-dark-gray">009EC0</p>
       </div>
     </div>
@@ -298,15 +336,18 @@
     </div>
   </div>
 
-  <div class="flex items-center gap-[5px] w-full bg-custom-light-gray mt-[5px] mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/info-circle-dark.svg')]">
+  <div
+    class="flex items-center gap-[5px] w-full bg-custom-light-gray mt-[5px] mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/info-circle-dark.svg')]">
     <p class="text-custom-dark-gray">Info Bulle 1</p>
   </div>
 
   <div class="mx-0 my-4"></div>
   <label class="text-[15px] text-custom-dark-gray" for="rename">Renommez</label>
   <div class="flex justify-between gap-3">
-    <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid" type="text" id="rename" name="rename" placeholder="Renommez" />
-    <button class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
+    <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid" type="text" id="rename"
+      name="rename" placeholder="Renommez" />
+    <button
+      class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
   </div>
   </div>
 
@@ -318,13 +359,16 @@
 
     <div class="flex flex-col mt-3">
       <label class="text-[15px] text-custom-dark-gray" for="text_info_bulle">Titre</label>
-      <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid text" type="text" name="text_info_bulle" placeholder="Entrez votre titre...">
+      <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid text" type="text"
+        name="text_info_bulle" placeholder="Entrez votre titre...">
     </div>
     <div class="flex flex-col mt-3">
       <label class="text-[15px] text-custom-dark-gray" for="text_info_bulle">Description</label>
-      <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid text" type="text" name="text_info_bulle" placeholder="Entrez votre description...">
+      <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid text" type="text"
+        name="text_info_bulle" placeholder="Entrez votre description...">
     </div>
-    <button class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
+    <button
+      class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
   </div>
 
   <div class="mt-[50px]">
@@ -335,18 +379,30 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="x">x</label>
-      <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="y">y</label>
-      <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="z">z</label>
-      <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
   </div>
 
@@ -358,13 +414,21 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="w">w</label>
-      <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="h">h</label>
-      <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
   </div>
 
@@ -377,14 +441,16 @@
     <div class="flex flex-col mx-0 my-3">
       <label class="text-[15px] text-custom-dark-gray" for="fill">Fill</label>
       <div class="flex items-center w-min gap-[5px] border border-custom-gray p-1 rounded-[5px] border-solid">
-        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="fill" id="fill" value="#00C058">
+        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="fill" id="fill"
+          value="#00C058">
         <p class="text-[15px] text-custom-dark-gray">00C058</p>
       </div>
     </div>
     <div class="flex flex-col mx-0 my-3">
       <label class="text-[15px] text-custom-dark-gray" for="stroke">Stroke</label>
       <div class="flex items-center w-min gap-[5px] border border-custom-gray p-1 rounded-[5px] border-solid">
-        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="stroke" id="stroke" value="#009EC0">
+        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="stroke"
+          id="stroke" value="#009EC0">
         <p class="text-[15px] text-custom-dark-gray">009EC0</p>
       </div>
     </div>
@@ -410,15 +476,19 @@
     </div>
   </div>
 
-  <div class="flex items-center gap-[5px] w-full bg-custom-light-gray mt-[5px] mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/card-text-dark.svg')]">
+  <div
+    class="flex items-center gap-[5px] w-full bg-custom-light-gray mt-[5px] mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/card-text-dark.svg')]">
     <p id="text-name" class="text-custom-dark-gray">{{name}}</p>
   </div>
 
   <div class="mx-0 my-4"></div>
   <label class="text-[15px] text-custom-dark-gray" for="rename">Renommez</label>
   <div class="flex justify-between gap-3">
-    <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid" type="text" id="rename" name="rename" placeholder="Renommez" value="{{name}}" />
-    <button class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue" id="RenameButton">Valider</button>
+    <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid" type="text" id="rename"
+      name="rename" placeholder="Renommez" value="{{name}}" />
+    <button
+      class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue"
+      id="RenameButton">Valider</button>
   </div>
   </div>
 
@@ -430,8 +500,11 @@
 
     <div class="flex flex-col mt-3">
       <label class="text-[15px] text-custom-dark-gray" for="text_legend">Légende</label>
-      <textarea id="text_legend" class="border border-custom-gray mx-0 my-2 p-1 rounded-[5px] border-solid" name="text_legend" rows="5" cols="33" placeholder="Entrez votre légende..."></textarea>
-      <button class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue" id="LegendButton">Valider</button>
+      <textarea id="text_legend" class="border border-custom-gray mx-0 my-2 p-1 rounded-[5px] border-solid"
+        name="text_legend" rows="5" cols="33" placeholder="Entrez votre légende..."></textarea>
+      <button
+        class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue"
+        id="LegendButton">Valider</button>
     </div>
   </div>
 
@@ -443,18 +516,30 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="x">x</label>
-      <input type="range" name="x" id="x-slider" value="{{rangeValueX}}" min="-10" max="10" step="0.1" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid position" />
-      <div id="x-value" class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">{{rangeValueX}}</div>
+      <input type="range" name="x" id="x-slider" value="{{rangeValueX}}" min="-10" max="10" step="0.1"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid position" />
+      <div id="x-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>{{rangeValueX}}</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="y">y</label>
-      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-10" max="10" step="0.1" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid position" />
-      <div id="y-value" class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">{{rangeValueY}}</div>
+      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-10" max="10" step="0.1"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid position" />
+      <div id="y-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>{{rangeValueY}}</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="z">z</label>
-      <input type="range" name="z" id="z-slider" value="{{rangeValueZ}}" min="-10" max="10" step="0.1" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid position" />
-      <div id="z-value" class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">{{rangeValueZ}}</div>
+      <input type="range" name="z" id="z-slider" value="{{rangeValueZ}}" min="-10" max="10" step="0.1"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid position" />
+      <div id="z-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>{{rangeValueZ}}</p>
+      </div>
     </div>
   </div>
 
@@ -468,19 +553,28 @@
       <label for="rx">rx</label>
       <input type="range" name="rx" id="rx-slider" value="{{rangeValueRx}}" min="-5" max="5" step="0.1"
         class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid rotation" />
-      <div id="rx-value" class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">{{rangeValueRx}}</div>
+      <div id="rx-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>{{rangeValueRx}}</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="ry">ry</label>
       <input type="range" name="ry" id="ry-slider" value="{{rangeValueRy}}" min="-5" max="5" step="0.1"
         class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid rotation" />
-      <div id="ry-value" class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">{{rangeValueRy}}</div>
+      <div id="ry-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>{{rangeValueRy}}</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="rz">rz</label>
       <input type="range" name="rz" id="rz-slider" value="{{rangeValueRz}}" min="-5" max="5" step="0.1"
         class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid rotation" />
-      <div id="rz-value" class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">{{rangeValueRz}}</div>
+      <div id="rz-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>{{rangeValueRz}}</p>
+      </div>
     </div>
   </div>
 
@@ -492,13 +586,21 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="w">w</label>
-      <input type="range" name="w" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="w" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="h">h</label>
-      <input type="range" name="h" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="h" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
   </div>
 
@@ -511,14 +613,16 @@
     <div class="flex flex-col mx-0 my-3">
       <label class="text-[15px] text-custom-dark-gray" for="fill">Fill</label>
       <div class="flex items-center w-min gap-[5px] border border-custom-gray p-1 rounded-[5px] border-solid">
-        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="fill" id="fillText" value="{{colorFill}}">
+        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="fill"
+          id="fillText" value="{{colorFill}}">
         <p class="text-[15px] text-custom-dark-gray" id="textColorFill">{{colorFill}}</p>
       </div>
     </div>
     <div class="flex flex-col mx-0 my-3">
       <label class="text-[15px] text-custom-dark-gray" for="stroke">Stroke</label>
       <div class="flex items-center w-min gap-[5px] border border-custom-gray p-1 rounded-[5px] border-solid">
-        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="stroke" id="strokeText" value="#009EC0">
+        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="stroke"
+          id="strokeText" value="#009EC0">
         <p class="text-[15px] text-custom-dark-gray">#009EC0</p>
       </div>
     </div>
@@ -544,15 +648,18 @@
     </div>
   </div>
 
-  <div class="flex items-center gap-[5px] w-full bg-custom-light-gray mt-[5px] mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/file-image-dark.svg')]">
+  <div
+    class="flex items-center gap-[5px] w-full bg-custom-light-gray mt-[5px] mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/file-image-dark.svg')]">
     <p class="text-custom-dark-gray">Image 1</p>
   </div>
 
   <div class="mx-0 my-4"></div>
   <label class="text-[15px] text-custom-dark-gray" for="rename">Renommez</label>
   <div class="flex justify-between gap-3">
-    <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid" type="text" id="rename" name="rename" placeholder="Renommez" />
-    <button class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
+    <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid" type="text" id="rename"
+      name="rename" placeholder="Renommez" />
+    <button
+      class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
   </div>
   </div>
 
@@ -587,18 +694,30 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="x">x</label>
-      <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="y">y</label>
-      <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="z">z</label>
-      <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
   </div>
 
@@ -610,13 +729,21 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="w">w</label>
-      <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="h">h</label>
-      <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
-      <div class="w-[50px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">0</div>
+      <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any"
+        class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full border-solid" />
+      <div
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>0</p>
+      </div>
     </div>
   </div>
 </template>
