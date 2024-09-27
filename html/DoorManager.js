@@ -189,7 +189,7 @@ let doorName = document.getElementById('door-name').textContent;
 const sceneSelect = document.getElementById('selectscene');
 const selectedScene = VR.scenes[sceneSelect.value];
 const door = selectedScene.tags.find(tag => tag.type === 'door' && tag.name === doorName);
-const doorElement = document.getElementById(doorName);
+const doorElement = document.getElementById(`#door-entity #${doorName}`);
 console.log(doorElement);
 const index = selectedScene.tags.indexOf(door);
 selectedScene.tags.splice(index, 1);

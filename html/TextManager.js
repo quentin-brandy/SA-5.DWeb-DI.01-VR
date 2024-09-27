@@ -1,3 +1,4 @@
+import { LoadSceneExplorer } from '../SceneManager.js';
 import VR from './main.js';
 import { AddSceneExplorer } from './SceneManager.js';
 import { SceneExplorer } from './SceneManager.js';
@@ -196,7 +197,7 @@ export function deleteText(){
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
     const text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);
-    const textElement = document.getElementById(textName);
+    const textElement = document.getElementById(`#text-entity #${textName}`);
     console.log(textElement);
     const index = selectedScene.tags.indexOf(text);
     selectedScene.tags.splice(index, 1);
@@ -205,6 +206,7 @@ export function deleteText(){
     let templateSection = document.getElementById('tempalte_section');
     templateSection.className = '';
     templateSection.innerHTML = '';
+    LoadSceneExplorer();
     }
     
 
