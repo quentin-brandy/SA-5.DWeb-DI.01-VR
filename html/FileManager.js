@@ -33,7 +33,7 @@ export function AddFile() {
                 VR.scenes[Scene].image.name = file.name;
             
                 const AddFileName = document.createElement('li');
-                AddFileName.className = 'imported_file_name';
+                AddFileName.className = 'imported_file_name flex items-center gap-2';
                 AddFileName.textContent = file.name;
                 Filename.appendChild(AddFileName);
                 
@@ -71,7 +71,7 @@ export function LoadFile() {
         
         const AddFileName = document.createElement('li');
         AddFileName.textContent = selectedScene.image.name;
-        AddFileName.className = 'imported_file_name';
+        AddFileName.className = 'imported_file_name flex items-center gap-2';
         Filename.appendChild(AddFileName);
         if(selectedScene.image.name === 'sky.jpg') {
             return;

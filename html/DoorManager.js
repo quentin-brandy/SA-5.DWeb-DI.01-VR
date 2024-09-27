@@ -94,7 +94,7 @@ export function ModifyDoor(e) {
         if (tag.type === 'door' && tag.name === doorName) {
             const template = document.getElementById('template__porte');
             let templatesection = document.querySelector('#tempalte_section');
-            templatesection.className = 'fixed__section objet';
+            templatesection.className = 'fixed h-[97%] border-solid border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2.5 top-2.5 border-2 border-custom-blue';
             const clone = document.importNode(template.content, true);
             templatesection.appendChild(clone);
 

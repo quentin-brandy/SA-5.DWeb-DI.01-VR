@@ -131,10 +131,10 @@ export function SceneExplorer() {
         tagElement.textContent = tag.name;
         tagElement.id = tag.name;
         if (tag.type === 'door') {
-            tagElement.className = 'list__objet porte';
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/door-closed-dark.svg")]';
         
         } else if (tag.type === 'text') {
-            tagElement.className = 'list__objet texte';
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/card-text-dark.svg")]';
         }
 
         sceneExplorer.appendChild(tagElement);
@@ -148,11 +148,11 @@ export function AddSceneExplorer(newtag , type){
     const sceneExplorer = document.getElementById('scene-tags');
     const tagElement = document.createElement('li');
         tagElement.textContent = newtag;
-        tagElement.className = 'list__objet';
+        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
         sceneExplorer.appendChild(tagElement);
         tagElement.id = newtag;
      if (type === 'door') {
-            tagElement.className = 'list__objet porte';
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/door-closed-dark.svg")]';
             document.addEventListener('click', function (event) {
                 if (event.target.id === newtag) {
                     ModifyDoor(event);
@@ -160,7 +160,7 @@ export function AddSceneExplorer(newtag , type){
             });
         
         } else if (type === 'text') {
-            tagElement.className = 'list__objet texte';
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/card-text-dark.svg")]';
             document.addEventListener('click', function (event) {
             if (event.target.id === newtag) {
                 ModifyText(event);

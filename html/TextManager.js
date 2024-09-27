@@ -86,7 +86,7 @@ function Loadobject(event) {
     templateText = templateText.replaceAll("{{rangeValueRz}}", text.rotation.z);
     templateText = templateText.replaceAll("{{colorFill}}", text.fill);
     recipe.innerHTML = templateText;
-    recipe.classList.add('fixed__section', 'objet');
+    recipe.className = 'fixed h-[97%] border-solid border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2.5 top-2.5 border-2 border-custom-blue';
 
     let rangeInputs = document.querySelectorAll('.inputRange');
     rangeInputs.forEach(rgInput => {
