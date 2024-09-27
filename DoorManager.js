@@ -1,5 +1,5 @@
 import  VR from './main.js';
-import { AddSceneExplorer , switchScene } from './SceneManager.js';
+import { AddSceneExplorer , LoadSceneExplorer, switchScene } from './SceneManager.js';
 
 
 export function addDoor() {
@@ -179,20 +179,21 @@ export function DuplicateDoor() {
     }
 }
 
-export function deleteDoor(){
-let doorName = document.getElementById('door-name').textContent;
-const sceneSelect = document.getElementById('selectscene');
-const selectedScene = VR.scenes[sceneSelect.value];
-const door = selectedScene.tags.find(tag => tag.type === 'door' && tag.name === doorName);
-const doorElement = document.getElementById(doorName);
-console.log(doorElement);
-const index = selectedScene.tags.indexOf(door);
-selectedScene.tags.splice(index, 1);
-doorElement.remove();
-console.log(VR);
-let templateSection = document.getElementById('tempalte_section');
-templateSection.className = '';
-templateSection.innerHTML = '';
+export function deleteDoor() {
+    let doorName = document.getElementById('door-name').textContent;
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const door = selectedScene.tags.find(tag => tag.type === 'door' && tag.name === doorName);
+    const doorElement = document.querySelector(`#door-entity #${doorName}`);
+    console.log(doorElement);
+    const index = selectedScene.tags.indexOf(door);
+    selectedScene.tags.splice(index, 1);
+    doorElement.remove();
+    console.log(VR);
+    let templateSection = document.getElementById('tempalte_section');
+    templateSection.className = '';
+    templateSection.innerHTML = '';
+    LoadSceneExplorer();
 }
 
 
