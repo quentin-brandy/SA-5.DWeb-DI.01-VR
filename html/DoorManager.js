@@ -25,7 +25,7 @@ export function addDoor() {
     newEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);
     newEntity.setAttribute('radius', '1');
     newEntity.setAttribute('color', '#FF0000');
-    newEntity.setAttribute('class', 'link clickable'); 
+    newEntity.setAttribute('class', 'link clickable movableBox'); 
     newEntity.setAttribute('scale', '0.5 0.5 0.5');
     newEntity.setAttribute('id', doorName);
     newEntity.addEventListener('click', function (event) { 
@@ -275,38 +275,75 @@ export function DoorPositionChange(e) {
 
 
 export function MoveDoor(e) {
-    let isMoving = false;   
-    let selectedDoor = null;
-
-    e.target.addEventListener('gripdown', function (event) {
-        isMoving = true;
-        selectedDoor = event.target;
-    });
-
-    e.target.addEventListener('gripup', function (event) {
-        isMoving = false;
-        if (selectedDoor) {
-            const doorName = selectedDoor.id;
-            const sceneSelect = document.getElementById('selectscene');
-            const selectedScene = VR.scenes[sceneSelect.value];
-            const door = selectedScene.tags.find(tag => tag.type === 'door' && tag.name === doorName);
-            if (door) {
-                const position = selectedDoor.getAttribute('position');
-                door.position = { x: position.x, y: position.y, z: position.z };
-                console.log(`Door ${doorName} moved to new position:`, door.position);
-            }
-            selectedDoor = null;
-        }
-    });
-
-    document.addEventListener('thumbstickmoved', function (event) {
-        if (isMoving && selectedDoor) {
-            const cameraEl = document.querySelector('#camera').object3D;
-            const direction = new THREE.Vector3();
-            cameraEl.getWorldDirection(direction);
-            const distance = -1;
-            const newPosition = cameraEl.position.clone().add(direction.multiplyScalar(distance));
-            selectedDoor.setAttribute('position', `${newPosition.x} ${newPosition.y} ${newPosition.z}`);
-        }
-    });
+    // AFRAME.registerComponent('grab-and-move', {
+    //     init: function () {
+    //       const controller = this.el;
+    //       const raycaster = controller.components.raycaster;
+    //       const movableBox = document.querySelector(e.target.id);
+    //       let isGrabbing = false;
+      
+      
+    //       // Lorsque le bouton grip est enfoncé
+    //       controller.addEventListener('gripdown', function () {
+    //         const intersections = raycaster.intersections;
+    //         if (intersections.length > 0) {
+    //           const intersection = intersections[0];
+              
+    //           // Si le raycaster touche l'objet, commence à bouger
+    //           if (intersection.object.el === movableBox) {
+    //             isGrabbing = true;
+    //           }
+    //         }
+    //       });
+      
+    //       // Lorsque le bouton grip est relâché
+    //       controller.addEventListener('gripup', function () {
+    //         if (isGrabbing) {
+    //           isGrabbing = false;
+      
+    //           // Obtenir la position du raycaster
+    //           const cameraEl = document.querySelector('#camera').object3D;
+    //           const direction = new THREE.Vector3();
+    //           cameraEl.getWorldDirection(direction);
+              
+    //           // Positionner le cube devant la caméra à une certaine distance
+    //           const distance = -3; // Distance fixe devant la caméra
+    //           const newPosition = cameraEl.position.clone().add(direction.multiplyScalar(distance));
+      
+    //           // Déplacer le cube à la nouvelle position tout en conservant la position Z initiale
+    //           movableBox.setAttribute('position', {
+    //             x: newPosition.x,
+    //             y: newPosition.y,
+    //             z: newPosition.z
+    //           });
+      
+    //           console.log(`Cube relâché à la position : ${newPosition.x}, ${newPosition.y}, ${initialZ}`);
+    //         }
+    //       });
+      
+    //       // Mise à jour de la position du cube lorsque le bouton grip est maintenu
+    //       this.el.sceneEl.addEventListener('tick', () => {
+    //         if (isGrabbing) {
+    //           // Obtenir la position du raycaster
+    //           const cameraEl = document.querySelector('#camera').object3D;
+    //           const direction = new THREE.Vector3();
+    //           cameraEl.getWorldDirection(direction);
+      
+    //           // Positionner le cube devant la caméra à une certaine distance
+    //           const distance = -3; // Distance fixe devant la caméra
+    //           const newPosition = cameraEl.position.clone().add(direction.multiplyScalar(distance));
+      
+    //           // Déplacer le cube tout en gardant la position Z constante
+    //           movableBox.setAttribute('position', {
+    //             x: newPosition.x,
+    //             y: newPosition.y,
+    //             z: newPosition.z
+    //           });
+    //         }
+    //       });
+    //     }
+    //   });
+      
+      // Ajouter le composant au contrôleur
+      document.querySelector('#rightController').setAttribute('grab-and-move', '');
 }

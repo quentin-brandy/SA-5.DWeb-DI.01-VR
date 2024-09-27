@@ -117,7 +117,7 @@
 
   <a-sky id="image-360" rotation="0 -90 0" src="#img1" material="color: #FFFFFF"></a-sky>
   <!-- Assets 360 -->
-  <a-box id="movableBox" position="0 1.6 -3" class="clickable" width="1" height="1" depth="1" color="#4CC3D9" grabbable></a-box>
+  <a-box id="movableBox"  position="0 1.6 -3" class="clickable " width="1" height="1" depth="1" color="#4CC3D9" grabbable></a-box>
 
   <a-entity id="door-entity">
    
@@ -161,12 +161,12 @@
 </body>
 
 </html>
-<script>
+<!-- <script> fonction de déplacemetn d'objet en vr
 AFRAME.registerComponent('grab-and-move', {
   init: function () {
     const controller = this.el;
     const raycaster = controller.components.raycaster;
-    const movableBox = document.querySelector('#movableBox');
+    const movableBox = document.querySelector('#door-entity');
     let isGrabbing = false;
 
 
@@ -233,7 +233,7 @@ AFRAME.registerComponent('grab-and-move', {
 
 // Ajouter le composant au contrôleur
 document.querySelector('#rightController').setAttribute('grab-and-move', '');
-</script>
+</script> -->
 <template id="template__porte">
   <h2 class="title__scene">Objet</h2>
 
