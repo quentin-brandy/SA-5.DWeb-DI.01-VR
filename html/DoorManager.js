@@ -31,6 +31,11 @@ export function addDoor() {
     newEntity.addEventListener('click', function (event) { 
         TakeDoor(event);
     });
+    document.querySelector('#rightController').addEventListener('grip-down', function (event) {
+        if (event.target === newEntity) {
+            MoveDoor(event);
+        }
+    });
     document.querySelector('#door-entity').appendChild(newEntity);
     console.log(VR);
     AddSceneExplorer(doorName , 'door');
@@ -266,4 +271,42 @@ export function DoorPositionChange(e) {
     console.log(VR);
     LoadDoors();
 }
+}
+
+
+export function MoveDoor(e) {
+    let isMoving = false;   
+    let selectedDoor = null;
+
+    e.target.addEventListener('gripdown', function (event) {
+        isMoving = true;
+        selectedDoor = event.target;
+    });
+
+    e.target.addEventListener('gripup', function (event) {
+        isMoving = false;
+        if (selectedDoor) {
+            const doorName = selectedDoor.id;
+            const sceneSelect = document.getElementById('selectscene');
+            const selectedScene = VR.scenes[sceneSelect.value];
+            const door = selectedScene.tags.find(tag => tag.type === 'door' && tag.name === doorName);
+            if (door) {
+                const position = selectedDoor.getAttribute('position');
+                door.position = { x: position.x, y: position.y, z: position.z };
+                console.log(`Door ${doorName} moved to new position:`, door.position);
+            }
+            selectedDoor = null;
+        }
+    });
+
+    document.addEventListener('thumbstickmoved', function (event) {
+        if (isMoving && selectedDoor) {
+            const cameraEl = document.querySelector('#camera').object3D;
+            const direction = new THREE.Vector3();
+            cameraEl.getWorldDirection(direction);
+            const distance = -1;
+            const newPosition = cameraEl.position.clone().add(direction.multiplyScalar(distance));
+            selectedDoor.setAttribute('position', `${newPosition.x} ${newPosition.y} ${newPosition.z}`);
+        }
+    });
 }
