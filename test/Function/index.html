@@ -52,6 +52,17 @@
   <a-assets id="assets-container">
   </a-assets>
 
+  <a-sphere id="sphère-test" position="0 1.25 -3" radius="0.5" color="#EF2D5E"></a-sphere>
+  
+  <!-- Information Panel -->
+  <a-entity id="info-panel" position="0 1 -3" visible="false">
+    <a-plane color="#FFF" height="1" width="2">
+      <a-text id="info-text" value="Information Panel" color="#000" position="0.5 0 0" opacity="0"></a-text>
+      <a-text value="This is a sphere." color="#000" position="-0.8 -0.1 0"></a-text>
+    </a-plane>
+  </a-entity>
+
+
   <a-sky id="image-360" radius="10" src="#img1" material="color: #FFFFFF"></a-sky>
     <!-- Assets 360 -->
     <a-entity id="links" layout="type: line; margin: 1.5" position="-1.5 -1 -4">
@@ -67,7 +78,7 @@
                   animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500"
                   event-set__mouseenter="_event: mouseenter; color: springgreen"
                   event-set__mouseleave="_event: mouseleave; color: black"
-                  raycaster="objects: .link, #click-ring"
+                  raycaster="objects: .link, #click-ring, #sphère-test"
                   fuse="true" 
                   fuse-timeout="1000">
         </a-cursor>
@@ -76,3 +87,30 @@
 </body>
 </html>
 <script src="script.js"></script>
+
+
+<script>
+   document.querySelector('#sphère-test').addEventListener('click', function () {
+    var panel = document.querySelector('#info-panel');
+    var text = document.querySelector('#info-text');
+    var sphere = document.querySelector('#sphère-test');
+
+   
+    var isVisible = panel.getAttribute('visible');
+    panel.setAttribute('visible', !isVisible);
+
+   
+    if (!isVisible) {
+
+      
+     
+      sphere.setAttribute('animation', 'property: radius; to: 0.2; dur: 1000');
+      sphere.setAttribute('animation__pos', 'property: position; to: 1 1.5 -3; dur: 1000');
+    } else {
+   
+      text.setAttribute('animation', 'property: opacity; to: 0; dur: 500');
+      sphere.setAttribute('animation', 'property: radius; to: 0.5; dur: 1000');
+      sphere.setAttribute('animation__pos', 'property: position; to: 0 1.25 -3; dur: 1000');
+    }
+  });
+  </script>
