@@ -48,16 +48,17 @@ export function Loadtext() {
     while (textEntities.firstChild) {
         textEntities.removeChild(textEntities.firstChild);
     }
+    console.log(selectedScene.tags);
     selectedScene.tags.forEach(tag => {
         if (tag.type === 'text') {
             var newEntity = document.createElement('a-text');
-            newEntity.setAttribute('position', parseFloat(tag.position.x) + ' ' + parseFloat(tag.position.y) + ' ' + parseFloat(tag.position.z));
+            newEntity.setAttribute('position', tag.position.x + ' ' + tag.position.y + ' ' + tag.position.z);
             newEntity.setAttribute('value', tag.content);
             newEntity.setAttribute('color', tag.fill);
             newEntity.setAttribute('align', 'center');
             newEntity.setAttribute('scale', '5 5 5');
-            newEntity.setAttribute('id', tag.textName);
-            newEntity.object3D.rotation.set(parseFloat(tag.rotation.x), parseFloat(tag.rotation.y), parseFloat(tag.rotation.z));
+            newEntity.setAttribute('id', tag.name);
+            newEntity.object3D.rotation.set(tag.rotation.x, tag.rotation.y, tag.rotation.z);
 
 
 
@@ -77,7 +78,9 @@ function Loadobject(event) {
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
     const text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);
-
+    console.log(text.name);
+    
+    templateText = templateText.replaceAll("{{name}}", text.name);
     templateText = templateText.replaceAll("{{rangeValueX}}", text.position.x);
     templateText = templateText.replaceAll("{{rangeValueY}}", text.position.y);
     templateText = templateText.replaceAll("{{rangeValueZ}}", text.position.z);
@@ -106,11 +109,19 @@ function LoadSlider(e) {
 export function ModifyText(event) {
     Loadobject(event);
 
-    document.getElementById('RenameButton').addEventListener('click', function () {
+    /* document.getElementById('RenameButton').addEventListener('click', function () {
         renameText(event.target.id);
-    });
+    }); */
     document.getElementById('LegendButton').addEventListener('click', function () {
         LegendText(event.target.id);
+    });
+
+    /* document.getElementById('dupliButton').addEventListener('click', function () {
+        duplicateText(event.target.id);
+    }); */
+
+    document.getElementById('TrashButton').addEventListener('click', function () {
+        deleteText();
     });
     
     let inputRangesPosition = document.querySelectorAll('.position')
@@ -127,7 +138,7 @@ export function ModifyText(event) {
 }
 
 
-function renameText(nom) {
+/* function renameText(nom) {
     let sceneName = document.getElementById('selectscene').value;
     let scene = VR.scenes[sceneName];
     let tags = scene.tags;
@@ -143,7 +154,23 @@ function renameText(nom) {
     }
 
     SceneExplorer();
-}
+} */
+
+
+/* function duplicateText(nom) {
+    const textName = document.getElementById('text-name').textContent;
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    let text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);
+
+    let cloneText = JSON.parse(JSON.stringify(text));
+    cloneText.name = `${cloneText.name}_copy`;
+    selectedScene.tags.push(cloneText);
+
+    console.log(nom);
+    SceneExplorer();
+    Loadtext();
+} */
 
 
 export function LegendText(nom) {
