@@ -12,6 +12,76 @@
   <script src="https://unpkg.com/aframe-layout-component@4.x.x/dist/aframe-layout-component.min.js"></script>
   <script src="https://unpkg.com/aframe-event-set-component@5.x.x/dist/aframe-event-set-component.min.js"></script>
   <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
+  <script>
+   AFRAME.registerComponent('grab-actions', {
+  init: function () {
+    const controller = this.el;
+    const raycaster = controller.components.raycaster;
+    const movableBox = document.querySelector('#movableBox');	
+    let isGrabbing = false;
+
+    // Lorsque le bouton grip est enfoncé
+    controller.addEventListener('gripdown', function () {
+      const intersections = raycaster.intersections;
+      if (intersections.length > 0) {
+        const intersection = intersections[0];
+        
+        // Si le raycaster touche l'objet, commence à bouger
+        if (intersection.object.el === movableBox) {
+          isGrabbing = true;
+          // Émettre l'événement pour déclencher la mise à jour de la position en temps réel
+          movableBox.emit('start-move');
+        }
+      }
+    });
+
+    // Lorsque le bouton grip est relâché
+    controller.addEventListener('gripup', function () {
+      if (isGrabbing) {
+        isGrabbing = false;
+        // Émettre l'événement pour arrêter la mise à jour de la position en temps réel
+        movableBox.emit('stop-move');
+      }
+    });
+  }
+});
+
+
+    AFRAME.registerComponent('move-on-tick', {
+  init: function () {
+    this.isMoving = false;
+    const movableBox = this.el;
+
+    // Écouter les événements pour démarrer ou arrêter le mouvement
+    movableBox.addEventListener('start-move', () => {
+      this.isMoving = true;
+    });
+
+    movableBox.addEventListener('stop-move', () => {
+      this.isMoving = false;
+    });
+  },
+
+  tick: function () {
+    if (this.isMoving) {
+      const rightControllerEl = document.querySelector('#rightController').object3D;
+      const direction = new THREE.Vector3();
+      rightControllerEl.getWorldDirection(direction);
+
+      // Positionner l'objet selon la direction du contrôleur avec un décalage en Z
+      const distance = -3;
+      const newPosition = rightControllerEl.position.clone().add(direction.multiplyScalar(distance));
+
+      // Déplacer le cube tout en conservant le décalage Y et le Z fixe
+      this.el.setAttribute('position', {
+        x: newPosition.x,
+        y: newPosition.y - 1.6,
+        z: newPosition.z,
+      });
+    }
+  }
+});
+    </script> 
 </head>
 
 <body>
@@ -111,13 +181,13 @@
 </section>
 
 <section id="tempalte_section"></section>
-<a-scene id="a-scene" obb-collider="showColliders: true">
+<a-scene id="a-scene">
   <a-assets id="assets-container">
   </a-assets>
 
   <a-sky id="image-360" rotation="0 -90 0" src="#img1" material="color: #FFFFFF"></a-sky>
   <!-- Assets 360 -->
-  <a-box id="movableBox"  position="0 1.6 -3" class="clickable " width="1" height="1" depth="1" color="#4CC3D9" grabbable></a-box>
+  <a-box id="movableBox"  position="0 1.6 -3" class="clickable " width="1" height="1" depth="1" color="#4CC3D9" grabbable  grab-actions move-on-tick></a-box>
 
   <a-entity id="door-entity">
    
@@ -136,13 +206,6 @@
   </a-entity>
 
   <a-entity id="leftController" oculus-touch-controls="hand: left" raycaster="objects: .clickable , #click-ring; far: 100" hand-tracking-grab-controls="hand: left" >
-    <a-entity
-      geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.04"
-      position="0 0 -0.05"
-      material="color: springgreen; shader: flat">
-    </a-entity>
-    <!-- Rayon visible -->
-    <a-entity line="start: 0 0 0; end: 0 0 -1000" material="color: springgreen"></a-entity>
   </a-entity>
 
   <a-entity id="rightController" 
@@ -150,7 +213,7 @@
   super-hands
   raycaster="objects: .clickable; far: 100; showLine: true" 
   laser-controls="hand: right" 
-  hand-tracking-controls 
+  hand-tracking-controls  grab-and-move  grab-actions move-on-tick
   position="0 1.6 -0.3">
 </a-entity>
 
@@ -160,79 +223,6 @@
 
 </html>
  <!-- fonction de déplacemetn d'objet en vr -->
-  <script>
-AFRAME.registerComponent('grab-and-move', {
-  init: function () {
-    const controller = this.el;
-    const raycaster = controller.components.raycaster;
-    const movableBox = document.querySelector(`{#door-entity #door1}`);	
-    let isGrabbing = false;
-
-
-    // Lorsque le bouton grip est enfoncé
-    controller.addEventListener('gripdown', function () {
-      const intersections = raycaster.intersections;
-      if (intersections.length > 0) {
-        const intersection = intersections[0];
-        
-        // Si le raycaster touche l'objet, commence à bouger
-        if (intersection.object.el === movableBox) {
-          isGrabbing = true;
-        }
-      }
-    });
-
-    // Lorsque le bouton grip est relâché
-    controller.addEventListener('gripup', function () {
-      if (isGrabbing) {
-        isGrabbing = false;
-
-        // Obtenir la position du raycaster
-        const cameraEl = document.querySelector('#camera').object3D;
-        const direction = new THREE.Vector3();
-        cameraEl.getWorldDirection(direction);
-        
-        // Positionner le cube devant la caméra à une certaine distance
-        const distance = -3; // Distance fixe devant la caméra
-        const newPosition = cameraEl.position.clone().add(direction.multiplyScalar(distance));
-
-        // Déplacer le cube à la nouvelle position tout en conservant la position Z initiale
-        movableBox.setAttribute('position', {
-          x: newPosition.x,
-          y: newPosition.y,
-          z: newPosition.z
-        });
-
-        console.log(`Cube relâché à la position : ${newPosition.x}, ${newPosition.y}, ${initialZ}`);
-      }
-    });
-
-    // Mise à jour de la position du cube lorsque le bouton grip est maintenu
-    this.el.sceneEl.addEventListener('tick', () => {
-      if (isGrabbing) {
-        // Obtenir la position du raycaster
-        const cameraEl = document.querySelector('#camera').object3D;
-        const direction = new THREE.Vector3();
-        cameraEl.getWorldDirection(direction);
-
-        // Positionner le cube devant la caméra à une certaine distance
-        const distance = -3; // Distance fixe devant la caméra
-        const newPosition = cameraEl.position.clone().add(direction.multiplyScalar(distance));
-
-        // Déplacer le cube tout en gardant la position Z constante
-        movableBox.setAttribute('position', {
-          x: newPosition.x,
-          y: newPosition.y,
-          z: newPosition.z
-        });
-      }
-    });
-  }
-});
-
-// Ajouter le composant au contrôleur
-document.querySelector('#rightController').setAttribute('grab-and-move', '');
-</script> 
 <template id="template__porte">
   <h2 class="title__scene">Objet</h2>
 
