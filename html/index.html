@@ -152,8 +152,6 @@
   laser-controls="hand: right" 
   hand-tracking-controls 
   position="0 1.6 -0.3">
-  
-
 </a-entity>
 
  
@@ -161,12 +159,13 @@
 </body>
 
 </html>
-<!-- <script> fonction de déplacemetn d'objet en vr
+ <!-- fonction de déplacemetn d'objet en vr -->
+  <script>
 AFRAME.registerComponent('grab-and-move', {
   init: function () {
     const controller = this.el;
     const raycaster = controller.components.raycaster;
-    const movableBox = document.querySelector('#door-entity');
+    const movableBox = document.querySelector(`{#door-entity #door1}`);	
     let isGrabbing = false;
 
 
@@ -233,7 +232,7 @@ AFRAME.registerComponent('grab-and-move', {
 
 // Ajouter le composant au contrôleur
 document.querySelector('#rightController').setAttribute('grab-and-move', '');
-</script> -->
+</script> 
 <template id="template__porte">
   <h2 class="title__scene">Objet</h2>
 
