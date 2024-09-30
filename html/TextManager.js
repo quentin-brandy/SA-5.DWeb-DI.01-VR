@@ -1,7 +1,10 @@
 import { LoadSceneExplorer } from '../SceneManager.js';
 import VR from './main.js';
 import { AddSceneExplorer } from './SceneManager.js';
-import { SceneExplorer } from './SceneManager.js';
+import { SceneExplorer , handleMove } from './SceneManager.js';
+
+
+let isMoving = false; // Variable pour suivre savoir si le déplacement est activé
 
 export function addText() {
     const sceneSelect = document.getElementById('selectscene');
@@ -125,6 +128,15 @@ function Loadobject() {
      let DeleteText = document.getElementById('delete-text');
      DeleteText.addEventListener('click', deleteText);
 
+     const moveButton = document.getElementById('button_move');
+     if (moveButton) {
+         moveButton.addEventListener('click', function() {
+             // Si vous avez besoin de désactiver un précédent listener, vous pouvez le faire ici
+             toggleMove(textName); // Remplacez cela par la fonction de déplacement
+         });
+     }
+     document.getElementById('fillText').addEventListener('input', TextCouleurFillChange);
+     
 
  } 
 
@@ -148,9 +160,6 @@ export function ModifyText(event) {
     inputRangesRotation.forEach(inputRange => {
         inputRange.addEventListener('input', TextRotationChange);
     });
-    
-    document.getElementById('fillText').addEventListener('input', TextCouleurFillChange);
-    
 }
 
 
@@ -320,4 +329,30 @@ export function TextCouleurFillChange(e) {
     text.fill = inputColor;
     
     Loadtext();
+}
+
+function toggleMove(textName) {
+    const sceneEl = document.querySelector('a-scene'); // Assurez-vous que la scène est correctement sélectionnée
+    const Name = textName;
+    const Type = 'text';
+
+    function handleSceneClick(event) {
+        handleMove(event, Name, Type);
+        // Désactiver le mouvement après un clic
+        isMoving = false;
+        sceneEl.removeEventListener('click', handleSceneClick);
+    }
+
+    // Si nous venons d'activer le mouvement
+    if (!isMoving) {
+        isMoving = true; // Marquer comme en mouvement
+
+        // Ajouter un listener pour le clic sur la scène
+        sceneEl.addEventListener('click', handleSceneClick);
+    } else {
+        isMoving = false; // Désactiver le mouvement
+
+        // Supprimer le listener lorsque le mouvement est désactivé
+        sceneEl.removeEventListener('click', handleSceneClick);
+    }
 }

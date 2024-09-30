@@ -225,39 +225,7 @@
 
 </html>
 <script>
-AFRAME.registerComponent('place-on-screen-click', {
-  init: function () {
-    const sceneEl = this.el.sceneEl;
-    const cameraEl = document.querySelector('[camera]'); // Sélectionner la caméra A-Frame
-    const box = document.querySelector('#movableBox');
 
-    // Écouter l'événement de clic global sur la scène
-    sceneEl.addEventListener('click', function (event) {
-      // Obtenir la position du clic en coordonnées écran
-      const screenPosition = new THREE.Vector2();
-      screenPosition.x = (event.clientX / window.innerWidth) * 2 - 1; // Normaliser X
-      screenPosition.y = - (event.clientY / window.innerHeight) * 2 + 1; // Normaliser Y
-
-      // Créer un rayon à partir de la caméra dans la direction du clic
-      const raycaster = new THREE.Raycaster();
-      raycaster.setFromCamera(screenPosition, cameraEl.getObject3D('camera')); // Utiliser l'objet caméra
-
-      // Calculer l'intersection avec un plan qui représente le champ de vision de la caméra
-      const distance = 3; // Distance à laquelle vous souhaitez placer la boîte
-      const intersectionPoint = new THREE.Vector3();
-      raycaster.ray.at(distance, intersectionPoint); // Obtenir le point sur le rayon à la distance spécifiée
-
-      // Déplacer la boîte à l'endroit où le clic a été détecté
-      box.setAttribute('position', {
-        x: intersectionPoint.x,
-        y: intersectionPoint.y,
-        z: intersectionPoint.z,
-      });
-
-      console.log(`Boîte déplacée à la position : ${intersectionPoint.x}, ${intersectionPoint.y}, ${intersectionPoint.z}`);
-    });
-  }
-});
 </script>
 <template id="template__porte">
   <h2 class="title__scene">Objet</h2>
@@ -305,6 +273,7 @@ AFRAME.registerComponent('place-on-screen-click', {
     <div class="div__section_title">
       <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
       <label>Position</label>
+      <button id="button_move">test déplacement</button>
     </div>
    
     <div class="position__div">
@@ -417,6 +386,7 @@ AFRAME.registerComponent('place-on-screen-click', {
     <div class="div__section_title">
       <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
       <label>Position</label>
+      <button id="button_move">test déplacement</button>
     </div>
 
     <div class="position__div">
@@ -525,6 +495,7 @@ AFRAME.registerComponent('place-on-screen-click', {
     <div class="div__section_title">
       <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
       <label>Position</label>
+      <button id="button_move">test déplacement</button>
     </div>
 
     <div class="position__div">
@@ -666,6 +637,7 @@ AFRAME.registerComponent('place-on-screen-click', {
     <div class="div__section_title">
       <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
       <label>Position</label>
+      <button id="button_move">test déplacement</button>
     </div>
 
     <div class="position__div">

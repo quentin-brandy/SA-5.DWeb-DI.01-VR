@@ -196,3 +196,64 @@ export function LoadSceneExplorer() {
     });
 }
 
+
+
+export function handleMove(event , Name , Type) {
+    console.log(Name);
+    const cameraEl = document.querySelector('[camera]'); // Sélectionner la caméra A-Frame 
+    const currentTag = Name;
+    const screenPosition = new THREE.Vector2();
+    screenPosition.x = (event.clientX / window.innerWidth) * 2 - 1; // Normaliser X
+    screenPosition.y = - (event.clientY / window.innerHeight) * 2 + 1; // Normaliser Y
+
+    // Créer un rayon à partir de la caméra dans la direction du clic
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(screenPosition, cameraEl.getObject3D('camera')); // Utiliser l'objet caméra
+
+    // Calculer l'intersection avec un plan qui représente le champ de vision de la caméra
+    const distance = 3; // Distance à laquelle vous souhaitez placer la boîte
+    const intersectionPoint = new THREE.Vector3();
+    raycaster.ray.at(distance, intersectionPoint); // Obtenir le point sur le rayon à la distance spécifiée
+
+    // Déplacer la porte actuelle à l'endroit où le clic a été détecté
+    const door = document.querySelector(`#${Type}-entity #${currentTag}`);
+    if (door) {
+        door.setAttribute('position', {
+            x: intersectionPoint.x,
+            y: intersectionPoint.y,
+            z: intersectionPoint.z,
+        });
+
+        // Mettre à jour la position dans le tableau de la scène
+        const sceneSelect = document.getElementById('selectscene');
+        const selectedScene = VR.scenes[sceneSelect.value];
+        const doorTag = selectedScene.tags.find(tag =>  tag.name === currentTag);
+        if (doorTag) {
+            doorTag.position = {
+                x: intersectionPoint.x,
+                y: intersectionPoint.y,
+                z: intersectionPoint.z,
+            };
+        }
+
+        document.getElementById('x-slider').value = doorTag.position.x.toFixed(1);
+        document.getElementById('y-slider').value = doorTag.position.y.toFixed(1);
+        document.getElementById('z-slider').value = doorTag.position.z.toFixed(1);
+
+        // Update the text content for the slider values
+        document.getElementById('x-value').textContent = doorTag.position.x.toFixed(1);
+        document.getElementById('y-value').textContent = doorTag.position.y.toFixed(1);
+        document.getElementById('z-value').textContent = doorTag.position.z.toFixed(1);
+
+        // Update the gradient for each slider
+        ['x', 'y', 'z'].forEach(axis => {
+            const slider = document.getElementById(`${axis}-slider`);
+            const ratio = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+            const activeColor = "#00C058";
+            const inactiveColor = "transparent";
+            slider.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
+        });
+
+        console.log(`Porte déplacée à la position : ${intersectionPoint.x}, ${intersectionPoint.y}, ${intersectionPoint.z}`);
+    }
+}

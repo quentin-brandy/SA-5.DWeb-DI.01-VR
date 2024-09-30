@@ -1,5 +1,8 @@
-import  VR from './main.js';
-import { AddSceneExplorer , switchScene } from './SceneManager.js';
+import  VR  from './main.js';
+import { AddSceneExplorer , switchScene , LoadSceneExplorer , handleMove } from './SceneManager.js';
+
+
+let isMoving = false; // Variable pour suivre savoir si le déplacement est activé
 
 
 export function addDoor() {
@@ -147,7 +150,13 @@ export function ModifyDoor(e) {
         DoorPosition.addEventListener('change', function (e) {
             DoorPositionChange(e);
         });
-
+        const moveButton = document.getElementById('button_move');
+        if (moveButton) {
+            moveButton.addEventListener('click', function() {
+                // Si vous avez besoin de désactiver un précédent listener, vous pouvez le faire ici
+                toggleMove(doorName); // Remplacez cela par la fonction de déplacement
+            });
+        }
         RouteSelect();
     }
 }
@@ -185,19 +194,20 @@ export function DuplicateDoor() {
 }
 
 export function deleteDoor(){
-let doorName = document.getElementById('door-name').textContent;
-const sceneSelect = document.getElementById('selectscene');
-const selectedScene = VR.scenes[sceneSelect.value];
-const door = selectedScene.tags.find(tag => tag.type === 'door' && tag.name === doorName);
-const doorElement = document.getElementById(`#door-entity #${doorName}`);
-console.log(doorElement);
-const index = selectedScene.tags.indexOf(door);
-selectedScene.tags.splice(index, 1);
-doorElement.remove();
-console.log(VR);
-let templateSection = document.getElementById('tempalte_section');
-templateSection.className = '';
-templateSection.innerHTML = '';
+    let doorName = document.getElementById('door-name').textContent;
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const door = selectedScene.tags.find(tag => tag.type === 'door' && tag.name === doorName);
+    const doorElement = document.querySelector(`#door-entity #${doorName}`);
+    console.log(doorElement);
+    const index = selectedScene.tags.indexOf(door);
+    selectedScene.tags.splice(index, 1);
+    doorElement.remove();
+    console.log(VR);
+    let templateSection = document.getElementById('tempalte_section');
+    templateSection.className = '';
+    templateSection.innerHTML = '';
+    LoadSceneExplorer();
 }
 
 
@@ -274,76 +284,29 @@ export function DoorPositionChange(e) {
 }
 
 
-export function MoveDoor(e) {
-    // AFRAME.registerComponent('grab-and-move', {
-    //     init: function () {
-    //       const controller = this.el;
-    //       const raycaster = controller.components.raycaster;
-    //       const movableBox = document.querySelector(e.target.id);
-    //       let isGrabbing = false;
-      
-      
-    //       // Lorsque le bouton grip est enfoncé
-    //       controller.addEventListener('gripdown', function () {
-    //         const intersections = raycaster.intersections;
-    //         if (intersections.length > 0) {
-    //           const intersection = intersections[0];
-              
-    //           // Si le raycaster touche l'objet, commence à bouger
-    //           if (intersection.object.el === movableBox) {
-    //             isGrabbing = true;
-    //           }
-    //         }
-    //       });
-      
-    //       // Lorsque le bouton grip est relâché
-    //       controller.addEventListener('gripup', function () {
-    //         if (isGrabbing) {
-    //           isGrabbing = false;
-      
-    //           // Obtenir la position du raycaster
-    //           const cameraEl = document.querySelector('#camera').object3D;
-    //           const direction = new THREE.Vector3();
-    //           cameraEl.getWorldDirection(direction);
-              
-    //           // Positionner le cube devant la caméra à une certaine distance
-    //           const distance = -3; // Distance fixe devant la caméra
-    //           const newPosition = cameraEl.position.clone().add(direction.multiplyScalar(distance));
-      
-    //           // Déplacer le cube à la nouvelle position tout en conservant la position Z initiale
-    //           movableBox.setAttribute('position', {
-    //             x: newPosition.x,
-    //             y: newPosition.y,
-    //             z: newPosition.z
-    //           });
-      
-    //           console.log(`Cube relâché à la position : ${newPosition.x}, ${newPosition.y}, ${initialZ}`);
-    //         }
-    //       });
-      
-    //       // Mise à jour de la position du cube lorsque le bouton grip est maintenu
-    //       this.el.sceneEl.addEventListener('tick', () => {
-    //         if (isGrabbing) {
-    //           // Obtenir la position du raycaster
-    //           const cameraEl = document.querySelector('#camera').object3D;
-    //           const direction = new THREE.Vector3();
-    //           cameraEl.getWorldDirection(direction);
-      
-    //           // Positionner le cube devant la caméra à une certaine distance
-    //           const distance = -3; // Distance fixe devant la caméra
-    //           const newPosition = cameraEl.position.clone().add(direction.multiplyScalar(distance));
-      
-    //           // Déplacer le cube tout en gardant la position Z constante
-    //           movableBox.setAttribute('position', {
-    //             x: newPosition.x,
-    //             y: newPosition.y,
-    //             z: newPosition.z
-    //           });
-    //         }
-    //       });
-    //     }
-    //   });
-      
-      // Ajouter le composant au contrôleur
-      document.querySelector('#rightController').setAttribute('grab-and-move', '');
+
+function toggleMove(doorName) {
+    const sceneEl = document.querySelector('a-scene'); // Assurez-vous que la scène est correctement sélectionnée
+    const Name = doorName;
+    const Type = 'text';
+
+    function handleSceneClick(event) {
+        handleMove(event, Name, Type);
+        // Désactiver le mouvement après un clic
+        isMoving = false;
+        sceneEl.removeEventListener('click', handleSceneClick);
+    }
+
+    // Si nous venons d'activer le mouvement
+    if (!isMoving) {
+        isMoving = true; // Marquer comme en mouvement
+
+        // Ajouter un listener pour le clic sur la scène
+        sceneEl.addEventListener('click', handleSceneClick);
+    } else {
+        isMoving = false; // Désactiver le mouvement
+
+        // Supprimer le listener lorsque le mouvement est désactivé
+        sceneEl.removeEventListener('click', handleSceneClick);
+    }
 }
