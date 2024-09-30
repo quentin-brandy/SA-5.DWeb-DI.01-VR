@@ -29,7 +29,7 @@ export function addText() {
     });
 
     var newEntity = document.createElement('a-text');
-    newEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);    
+    newEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);
     newEntity.setAttribute('value', textContent);
     newEntity.setAttribute('color', textFill);
     newEntity.setAttribute('align', 'center');
@@ -48,7 +48,7 @@ export function Loadtext() {
     while (textEntities.firstChild) {
         textEntities.removeChild(textEntities.firstChild);
     }
-    console.log(selectedScene.tags);
+
     selectedScene.tags.forEach(tag => {
         if (tag.type === 'text') {
             var newEntity = document.createElement('a-text');
@@ -73,13 +73,12 @@ function Loadobject(event) {
     const recipe = document.getElementById('tempalte_section');
     templateText = templateText.replaceAll("{{name}}", event.target.innerText);
     recipe.innerHTML = templateText;
-    
-    const textName = document.getElementById('text-name').textContent;
+
+    const textName = event.target.innerText;
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
     const text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);
-    console.log(text.name);
-    
+
     templateText = templateText.replaceAll("{{name}}", text.name);
     templateText = templateText.replaceAll("{{rangeValueX}}", text.position.x);
     templateText = templateText.replaceAll("{{rangeValueY}}", text.position.y);
@@ -109,21 +108,21 @@ function LoadSlider(e) {
 export function ModifyText(event) {
     Loadobject(event);
 
-    /* document.getElementById('RenameButton').addEventListener('click', function () {
+    document.getElementById('RenameButton').addEventListener('click', function () {
         renameText(event.target.id);
-    }); */
+    });
     document.getElementById('LegendButton').addEventListener('click', function () {
         LegendText(event.target.id);
     });
 
-    /* document.getElementById('dupliButton').addEventListener('click', function () {
-        duplicateText(event.target.id);
-    }); */
+    document.getElementById('dupliButton').addEventListener('click', function () {
+        duplicateText();
+    });
 
     document.getElementById('TrashButton').addEventListener('click', function () {
         deleteText();
     });
-    
+
     let inputRangesPosition = document.querySelectorAll('.position')
     inputRangesPosition.forEach(inputRange => {
         inputRange.addEventListener('input', TextPositionChange);
@@ -133,44 +132,71 @@ export function ModifyText(event) {
     inputRangesRotation.forEach(inputRange => {
         inputRange.addEventListener('input', TextRotationChange);
     });
-    
+
     document.getElementById('fillText').addEventListener('input', TextCouleurFillChange);
 }
 
 
-/* function renameText(nom) {
-    let sceneName = document.getElementById('selectscene').value;
-    let scene = VR.scenes[sceneName];
-    let tags = scene.tags;
-    let tag = tags.find(isGoodText);
+function renameText(nom) {
+    const sceneName = document.getElementById('selectscene').value;
+    const scene = VR.scenes[sceneName];
+    const inputRename = document.getElementById('rename').value;
+    const spanError = document.getElementById('span__error');
 
+    if (scene.tags.some(tag => tag.name === inputRename)) {
+        spanError.innerHTML = "Ce nom existe déjà !";
+        return;
+    }
+
+    spanError.innerHTML = "";
+
+    const tag = scene.tags.find(tag => tag.name === nom);
     if (tag) {
-        let inputRename = document.getElementById('rename').value;
         tag.name = inputRename;
+        AddSceneExplorer(tag.name, 'text');
+        SceneExplorer();
+        Loadtext();
+        Loadobject();
     }
-
-    function isGoodText(text) {
-        return text.name === nom;
-    }
-
-    SceneExplorer();
-} */
+}
 
 
-/* function duplicateText(nom) {
+function duplicateText() {
     const textName = document.getElementById('text-name').textContent;
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
     let text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);
 
+    const textCount = selectedScene.tags.filter(tag => tag.type === 'text').length;
+
     let cloneText = JSON.parse(JSON.stringify(text));
-    cloneText.name = `${cloneText.name}_copy`;
+    cloneText.name = `${cloneText.name}_copy${textCount+1}`;
     selectedScene.tags.push(cloneText);
 
-    console.log(nom);
-    SceneExplorer();
+    AddSceneExplorer(cloneText.name, 'text');
     Loadtext();
-} */
+}
+
+
+function deleteText() {
+    const textName = document.getElementById('text-name').textContent;
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+
+    const textIndex = selectedScene.tags.findIndex(tag => tag.type === 'text' && tag.name === textName);
+
+    if (textIndex !== -1) {
+        selectedScene.tags.splice(textIndex, 1);
+
+        console.log(`Tag supprimé à l'index ${textIndex}`);
+        console.log(selectedScene.tags);
+
+        SceneExplorer();
+        Loadtext();
+    } else {
+        console.log("Tag non trouvé");
+    }
+}
 
 
 export function LegendText(nom) {
@@ -220,7 +246,7 @@ export function TextRotationChange(e) {
     const axis = e.target.name; // 'x', 'y', or 'z'
     const textRotation = parseFloat(e.target.value);
     let axisAlone = axis.slice(1);
-    
+
 
     document.querySelector(`#${axis}-value`).textContent = `${textRotation}`;
 
@@ -248,6 +274,6 @@ export function TextCouleurFillChange(e) {
     let inputColor = document.getElementById('fillText').value;
     text.fill = inputColor;
     colorValue.textContent = inputColor;
-    
+
     Loadtext();
 }

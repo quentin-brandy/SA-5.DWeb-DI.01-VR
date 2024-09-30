@@ -522,7 +522,7 @@
 
   <div class="flex items-center gap-2 mt-10 mb-0 mx-0">
     <img src="./assets/svg/box.svg" alt="Box icon">
-    <label>Objet</label>
+    <label id="text-name">{{name}}</label>
     <div class="flex items-center ml-2">
       <button id="dupliButton" class="flex items-center cursor-pointer p-[5px] border-[none]">
         <img class="icon__scene" src="./assets/svg/copy.svg" alt="Copy icon">
@@ -533,32 +533,25 @@
     </div>
   </div>
 
-  <div
+  <!-- <div
     class="flex items-center gap-[5px] w-full bg-custom-light-gray mt-[5px] mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/card-text-dark.svg')]">
     <p id="text-name" class="text-custom-dark-gray">{{name}}</p>
-  </div>
+  </div> -->
 
-  <div class="mx-0 my-4"></div>
-  <label class="text-[15px] text-custom-dark-gray" for="rename">Renommez</label>
   <div class="flex justify-between gap-3">
-    <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid" type="text" id="rename"
+    <input class="flex items-center gap-[5px] w-full bg-custom-light-gray mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/card-text-dark.svg')]" type="text" id="rename"
       name="rename" placeholder="Renommez" value="{{name}}" />
     <button
-      class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue"
+      class="w-[61.59px] h-auto text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue"
       id="RenameButton">Valider</button>
   </div>
+  <span id="span__error" class="text-red-500"></span>
   </div>
 
-  <div class="mt-[50px]">
-    <div class="flex items-center gap-[5px] mb-[5px]">
-      <img src="./assets/svg/card-text-black.svg" alt="Card Text icon">
-      <label>Texte</label>
-    </div>
-
-    <div class="flex flex-col mt-3">
-      <label class="text-[15px] text-custom-dark-gray" for="text_legend">Légende</label>
-      <textarea id="text_legend" class="border border-custom-gray mx-0 my-2 p-1 rounded-[5px] border-solid"
-        name="text_legend" rows="5" cols="33" placeholder="Entrez votre légende..."></textarea>
+  <div class="mt-[25px]">
+    <div class="flex flex-col">
+      <textarea id="text_legend" class="border border-custom-gray mx-0 mb-2 p-1 rounded-[5px] border-solid"
+        name="text_legend" rows="5" cols="33" placeholder="Message Text..."></textarea>
       <button
         class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue"
         id="LegendButton">Valider</button>
