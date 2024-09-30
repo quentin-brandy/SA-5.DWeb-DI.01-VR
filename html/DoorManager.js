@@ -288,7 +288,7 @@ export function DoorPositionChange(e) {
 function toggleMove(doorName) {
     const sceneEl = document.querySelector('a-scene'); // Assurez-vous que la scène est correctement sélectionnée
     const Name = doorName;
-    const Type = 'text';
+    const Type = 'door';
 
     function handleSceneClick(event) {
         handleMove(event, Name, Type);
