@@ -61,7 +61,7 @@ export function LoadDoors() {
             newEntity.setAttribute('color', '#FF0000');
             newEntity.setAttribute('class', 'link clickable'); 
             newEntity.setAttribute('scale', '0.5 0.5 0.5');
-            newEntity.setAttribute('id', tag.name);
+            newEntity.setAttribute('id',   tag.name , 'movableBox');
             newEntity.addEventListener('click', function (event) { 
                 TakeDoor(event);
             })
