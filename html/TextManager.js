@@ -68,26 +68,28 @@ export function Loadtext() {
 }
 
 
-function Loadobject(event) {
+function LoadobjectByName(textName) {
     let templateText = document.getElementById('template__texte').innerHTML;
-    const recipe = document.getElementById('tempalte_section');
-    templateText = templateText.replaceAll("{{name}}", event.target.innerText);
-    recipe.innerHTML = templateText;
+    const recipe = document.getElementById('template_section');
+    recipe.innerHTML = "";
 
-    const textName = event.target.innerText;
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
     const text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);
+    console.log(text);
 
-    templateText = templateText.replaceAll("{{name}}", text.name);
-    templateText = templateText.replaceAll("{{rangeValueX}}", text.position.x);
-    templateText = templateText.replaceAll("{{rangeValueY}}", text.position.y);
-    templateText = templateText.replaceAll("{{rangeValueZ}}", text.position.z);
-    templateText = templateText.replaceAll("{{rangeValueRx}}", text.rotation.x);
-    templateText = templateText.replaceAll("{{rangeValueRy}}", text.rotation.y);
-    templateText = templateText.replaceAll("{{rangeValueRz}}", text.rotation.z);
-    templateText = templateText.replaceAll("{{colorFill}}", text.fill);
-    recipe.innerHTML = templateText;
+    if (text) {
+        templateText = templateText.replaceAll("{{name}}", text.name);
+        templateText = templateText.replaceAll("{{rangeValueX}}", text.position.x);
+        templateText = templateText.replaceAll("{{rangeValueY}}", text.position.y);
+        templateText = templateText.replaceAll("{{rangeValueZ}}", text.position.z);
+        templateText = templateText.replaceAll("{{rangeValueRx}}", text.rotation.x);
+        templateText = templateText.replaceAll("{{rangeValueRy}}", text.rotation.y);
+        templateText = templateText.replaceAll("{{rangeValueRz}}", text.rotation.z);
+        templateText = templateText.replaceAll("{{colorFill}}", text.fill);
+        recipe.innerHTML = templateText;
+    }
+
     recipe.className = 'fixed h-[97%] border-solid border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2.5 top-2.5 border-2 border-custom-blue';
 
     let rangeInputs = document.querySelectorAll('.inputRange');
@@ -106,7 +108,7 @@ function LoadSlider(e) {
 
 
 export function ModifyText(event) {
-    Loadobject(event);
+    LoadobjectByName(event.target.id);
 
     document.getElementById('RenameButton').addEventListener('click', function () {
         renameText(event.target.id);
@@ -142,21 +144,19 @@ function renameText(nom) {
     const scene = VR.scenes[sceneName];
     const inputRename = document.getElementById('rename').value;
     const spanError = document.getElementById('span__error');
-
     if (scene.tags.some(tag => tag.name === inputRename)) {
         spanError.innerHTML = "Ce nom existe déjà !";
         return;
     }
 
     spanError.innerHTML = "";
-
     const tag = scene.tags.find(tag => tag.name === nom);
+
     if (tag) {
         tag.name = inputRename;
         AddSceneExplorer(tag.name, 'text');
-        SceneExplorer();
-        Loadtext();
-        Loadobject();
+        SceneExplorer();    
+        LoadobjectByName(tag.name);
     }
 }
 
@@ -170,7 +170,7 @@ function duplicateText() {
     const textCount = selectedScene.tags.filter(tag => tag.type === 'text').length;
 
     let cloneText = JSON.parse(JSON.stringify(text));
-    cloneText.name = `${cloneText.name}_copy${textCount+1}`;
+    cloneText.name = `${cloneText.name}_copy${textCount + 1}`;
     selectedScene.tags.push(cloneText);
 
     AddSceneExplorer(cloneText.name, 'text');
@@ -187,14 +187,10 @@ function deleteText() {
 
     if (textIndex !== -1) {
         selectedScene.tags.splice(textIndex, 1);
-
-        console.log(`Tag supprimé à l'index ${textIndex}`);
-        console.log(selectedScene.tags);
-
+        const recipe = document.getElementById('template_section');
+        recipe.className = '';
         SceneExplorer();
         Loadtext();
-    } else {
-        console.log("Tag non trouvé");
     }
 }
 

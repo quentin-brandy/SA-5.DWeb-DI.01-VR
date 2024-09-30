@@ -29,7 +29,7 @@ export function DeleteScene() {
         alert('Vous ne pouvez pas supprimer la dernière scène');
         return
     }
-    let templateSection = document.getElementById('tempalte_section');
+    let templateSection = document.getElementById('template_section');
     templateSection.className = '';
     templateSection.innerHTML = '';
     let oldscene = selectElement.value;
@@ -95,7 +95,7 @@ export function switchScene() {
     } else {
         skyElement.setAttribute('src', './assets/img/sky.jpg');
     }
-    let templateSection = document.getElementById('tempalte_section');
+    let templateSection = document.getElementById('template_section');
     templateSection.className = '';
     templateSection.innerHTML = '';
     // Charger les nouvelles entités et réinitialiser les événements

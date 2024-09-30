@@ -87,13 +87,13 @@ export function ModifyDoor(e) {
     const selectedScene = VR.scenes[sceneSelect.value];
     const doorName = e.target.id;
     console.log(doorName);
-    const templateSection = document.getElementById('tempalte_section');
+    const templateSection = document.getElementById('template_section');
     templateSection.className = '';
     templateSection.innerHTML = '';
     selectedScene.tags.forEach(tag => {
         if (tag.type === 'door' && tag.name === doorName) {
             const template = document.getElementById('template__porte');
-            let templatesection = document.querySelector('#tempalte_section');
+            let templatesection = document.querySelector('#template_section');
             templatesection.className = 'fixed h-[97%] border-solid border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2.5 top-2.5 border-2 border-custom-blue';
             const clone = document.importNode(template.content, true);
             templatesection.appendChild(clone);
@@ -176,7 +176,7 @@ const index = selectedScene.tags.indexOf(door);
 selectedScene.tags.splice(index, 1);
 doorElement.remove();
 console.log(VR);
-let templateSection = document.getElementById('tempalte_section');
+let templateSection = document.getElementById('template_section');
 templateSection.className = '';
 templateSection.innerHTML = '';
 }
