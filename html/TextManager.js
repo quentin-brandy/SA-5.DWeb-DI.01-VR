@@ -151,12 +151,17 @@ function renameText(nom) {
 
     spanError.innerHTML = "";
     const tag = scene.tags.find(tag => tag.name === nom);
+    let textScene = document.querySelector(`#text-entity #${nom}`);
+    console.log(nom);
 
+    
     if (tag) {
         tag.name = inputRename;
+        const fakeEvent = {target: { id: tag.name}}
+        textScene.setAttribute('id', tag.name);
         AddSceneExplorer(tag.name, 'text');
-        SceneExplorer();    
-        LoadobjectByName(tag.name);
+        SceneExplorer();
+        ModifyText(fakeEvent);
     }
 }
 
