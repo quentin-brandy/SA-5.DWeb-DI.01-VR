@@ -76,7 +76,6 @@ function LoadobjectByName(textName) {
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
     const text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === textName);
-    console.log(text);
 
     if (text) {
         templateText = templateText.replaceAll("{{name}}", text.name);
@@ -109,6 +108,7 @@ function LoadSlider(e) {
 
 export function ModifyText(event) {
     LoadobjectByName(event.target.id);
+    PositionCamInObj(event.target.id)
 
     document.getElementById('RenameButton').addEventListener('click', function () {
         renameText(event.target.id);
@@ -154,10 +154,10 @@ function renameText(nom) {
     let textScene = document.querySelector(`#text-entity #${nom}`);
     console.log(nom);
 
-    
+
     if (tag) {
         tag.name = inputRename;
-        const fakeEvent = {target: { id: tag.name}}
+        const fakeEvent = { target: { id: tag.name } }
         textScene.setAttribute('id', tag.name);
         AddSceneExplorer(tag.name, 'text');
         SceneExplorer();
@@ -277,4 +277,24 @@ export function TextCouleurFillChange(e) {
     colorValue.textContent = inputColor;
 
     Loadtext();
+}
+
+
+export function PositionCamInObj(nom) {
+    var cameraEl = document.querySelector('#camera').object3D;
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    let text = selectedScene.tags.find(tag => tag.type === 'text' && tag.name === nom);
+    let realText = document.querySelector(`#${text.name}`);
+
+    if (text) {
+        var textPosition = text.position;
+        
+        console.log(cameraEl);
+        
+
+        console.log('La caméra regarde maintenant le texte à la position :', textPosition);
+    } else {
+        console.error('Élément texte non trouvé');
+    }
 }
