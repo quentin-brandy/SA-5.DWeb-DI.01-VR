@@ -15,9 +15,12 @@ export function addInfoBulle() {
 
     const infoBulleCount = selectedScene.tags.filter(tag => tag.type === 'infoBulle').length;
     const infoBulleName = `infoBulle${infoBulleCount + 1}`;
+    var rotation = cameraEl.rotation.clone();
+
     selectedScene.tags.push({
         type: 'infoBulle',
         position: { x: position.x, y: position.y, z: position.z },
+        rotation: { x: 0, y: rotation.y, z: rotation.z },
         name: infoBulleName
     });
 
@@ -27,11 +30,12 @@ export function addInfoBulle() {
     sphereEntity.setAttribute('color', '#EF2D5E');
     sphereEntity.setAttribute('class', 'link');
     sphereEntity.setAttribute('id', `${infoBulleName}-sphere`);
+    sphereEntity.object3D.rotation.set(0, rotation.y, rotation.z);
 
     var infoPanelEntity = document.createElement('a-entity');
     infoPanelEntity.setAttribute('id', `${infoBulleName}-info-panel`);
     infoPanelEntity.setAttribute('position', '0 1 -3');
-    infoPanelEntity.setAttribute('visible', 'false');
+    // infoPanelEntity.setAttribute('visible', 'false');
 
     var infoPlane = document.createElement('a-plane');
     infoPlane.setAttribute('color', '#FFF');
@@ -41,8 +45,8 @@ export function addInfoBulle() {
     var infoTextTitle = document.createElement('a-text');
     infoTextTitle.setAttribute('value', 'Information Panel');
     infoTextTitle.setAttribute('color', '#000');
-    infoTextTitle.setAttribute('position', '0.5 0 0');
-    infoTextTitle.setAttribute('opacity', '0');
+    infoTextTitle.setAttribute('position', '0.5 0 10');
+    // infoTextTitle.setAttribute('opacity', '1');
 
     var infoTextDescription = document.createElement('a-text');
     infoTextDescription.setAttribute('value', 'This is a sphere.');
