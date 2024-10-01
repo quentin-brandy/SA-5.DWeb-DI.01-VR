@@ -108,7 +108,7 @@ function LoadSlider(e) {
 
 export function ModifyText(event) {
     LoadobjectByName(event.target.id);
-    PositionCamInObj(event.target.id)
+    // PositionCamInObj(event.target.id);
 
     document.getElementById('RenameButton').addEventListener('click', function () {
         renameText(event.target.id);
@@ -280,7 +280,7 @@ export function TextCouleurFillChange(e) {
 }
 
 
-export function PositionCamInObj(nom) {
+/* export function PositionCamInObj(nom) {
     var cameraEl = document.querySelector('#camera').object3D;
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
@@ -297,4 +297,4 @@ export function PositionCamInObj(nom) {
     } else {
         console.error('Élément texte non trouvé');
     }
-}
+} */
