@@ -1,0 +1,5 @@
+video 360 
+réglage du son
+rotation a sky de l'img
+info bulles très important
+ajout de scène par sélécteur
