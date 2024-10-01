@@ -2,6 +2,7 @@ import  VR  from './main.js';
 import { LoadFile } from './FileManager.js';
 import { LoadDoors , ModifyDoor , RouteSelect } from './DoorManager.js';
 import { Loadtext , ModifyText } from './TextManager.js';
+import { ModifyInfoBulle } from './InfoBulleManager.js';
 
 export function AddScene() {
     const selectElement = document.getElementById('selectscene');
@@ -134,6 +135,8 @@ export function SceneExplorer() {
         
         } else if (tag.type === 'text') {
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/card-text-dark.svg")]';
+        } else if (tag.type === 'infbulle') {
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/info-circle-dark.svg")]';
         }
 
         sceneExplorer.appendChild(tagElement);
@@ -163,6 +166,14 @@ export function AddSceneExplorer(newtag , type){
             document.addEventListener('click', function (event) {
             if (event.target.id === newtag) {
                 ModifyText(event);
+            }
+           
+        });
+        } else if (type === 'infbulle') {
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/info-circle-dark.svg")]';
+            document.addEventListener('click', function (event) {
+            if (event.target.id === newtag) {
+                ModifyInfoBulle(event);
             }
            
         });

@@ -1,6 +1,7 @@
 import VR from './main.js';
 import { AddSceneExplorer } from './SceneManager.js';
 import { SceneExplorer } from './SceneManager.js';
+import { LoadSlider } from "./main.js";
 
 export function addText() {
     const sceneSelect = document.getElementById('selectscene');
@@ -95,14 +96,6 @@ function LoadobjectByName(textName) {
     rangeInputs.forEach(rgInput => {
         LoadSlider(rgInput);
     });
-}
-
-function LoadSlider(e) {
-    const ratio = (e.value - e.min) / (e.max - e.min) * 100;
-    const activeColor = "#00C058";
-    const inactiveColor = "transparent";
-
-    e.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
 }
 
 

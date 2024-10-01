@@ -12,10 +12,11 @@ let VR = {
 };
 export default VR ;
 
-import {addDoor, DuplicateDoor, LoadDoors , RouteSelected} from './DoorManager.js';
+import {addDoor, LoadDoors } from './DoorManager.js';
 import {AddScene, DeleteScene, ChangeSceneName , DuplicateScene , SceneExplorer , AddSceneSelectOption, switchScene} from './SceneManager.js';
 import {LoadFile } from './FileManager.js';
 import {addText, Loadtext} from './TextManager.js';
+import { addInfoBulle } from "./InfoBulleManager.js";
 
 
 
@@ -41,10 +42,22 @@ AddDoor.addEventListener('click', addDoor);
 let AddText = document.getElementById('plus-text');
 AddText.addEventListener('click', addText);
 
+let AddInfoBulle = document.getElementById('plus-infbulle');
+AddInfoBulle.addEventListener('click', addInfoBulle);
+
+
+export function LoadSlider(e) {
+    const ratio = (e.value - e.min) / (e.max - e.min) * 100;
+    const activeColor = "#00C058";
+    const inactiveColor = "transparent";
+
+    e.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
+}
+
 
 AddSceneSelectOption();
 switchScene();
 LoadFile();
 LoadDoors();
-SceneExplorer();
 Loadtext();
+SceneExplorer();
