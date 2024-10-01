@@ -40,24 +40,26 @@ export function addInfoBulle() {
     infoPanelEntity.setAttribute('id', `${infoBulleName}-info-panel`);
     infoPanelEntity.setAttribute('position', '0 1 -3');
     // infoPanelEntity.setAttribute('visible', 'false');
-    
+
     var infoPlane = document.createElement('a-plane');
     infoPlane.setAttribute('color', '#FFF');
     infoPlane.setAttribute('height', '1');
     infoPlane.setAttribute('width', '2');
-    
+
     var infoTextTitle = document.createElement('a-text');
     infoTextTitle.setAttribute('id', `${infoBulleName}-title`);
     infoTextTitle.setAttribute('value', infoBulleTitle);
     infoTextTitle.setAttribute('color', '#000');
-    infoTextTitle.setAttribute('position', '0.5 0 10');
+    infoTextTitle.setAttribute('position', position.x + 0.5 + ' ' + position.y + ' ' + position.z);
+    // infoTextTitle.setAttribute('position', '0.5 0 10');
     // infoTextTitle.setAttribute('opacity', '1');
-    
+
     var infoTextDescription = document.createElement('a-text');
     infoTextDescription.setAttribute('id', `${infoBulleName}-description`);
     infoTextDescription.setAttribute('value', infoBulleDesc);
     infoTextDescription.setAttribute('color', '#000');
-    infoTextDescription.setAttribute('position', '-0.8 -0.1 0');
+    infoTextDescription.setAttribute('position', position.x + ' ' + position.y - 1 + ' ' + position.z + 0.1);
+    // infoTextDescription.setAttribute('position', '-0.8 -0.1 0');
 
     infoPlane.appendChild(infoTextTitle);
     infoPlane.appendChild(infoTextDescription);
@@ -111,38 +113,36 @@ export function loadInfoBulle() {
 
     selectedScene.tags.forEach(tag => {
         if (tag.type === 'infoBulle') {
+            console.log(tag.position);
             var sphereEntity = document.createElement('a-sphere');
             sphereEntity.setAttribute('position', tag.position.x + ' ' + tag.position.y + ' ' + tag.position.z);
             sphereEntity.setAttribute('radius', '0.5');
             sphereEntity.setAttribute('color', '#EF2D5E');
             sphereEntity.setAttribute('class', 'link');
             sphereEntity.setAttribute('id', `${tag.name}-sphere`);
-            sphereEntity.addEventListener('click', function (event) {
-                switchAnimInfoBulle(event);
-            });
 
             var infoPanelEntity = document.createElement('a-entity');
             infoPanelEntity.setAttribute('id', `${tag.name}-info-panel`);
             infoPanelEntity.setAttribute('position', tag.position.x + ' ' + tag.position.y + ' ' + tag.position.z);
             infoPanelEntity.setAttribute('visible', 'false');
-            
+
             var infoPlane = document.createElement('a-plane');
             infoPlane.setAttribute('color', '#FFF');
             infoPlane.setAttribute('height', '1');
             infoPlane.setAttribute('width', '2');
-            
+
             var infoTextTitle = document.createElement('a-text');
             infoTextTitle.setAttribute('id', `${tag.name}-title`);
             infoTextTitle.setAttribute('value', tag.title);
             infoTextTitle.setAttribute('color', '#000');
-            infoTextTitle.setAttribute('position', (tag.position.x + 0.5) + ' ' + tag.position.y + ' ' + tag.position.z);
-            infoTextTitle.setAttribute('opacity', '0');
-            
+            infoTextTitle.setAttribute('position', tag.position.x - 1.75 + ' ' + tag.position.y + 2 + ' ' + tag.position.z + 2);
+            // infoTextTitle.setAttribute('opacity', '0');
+
             var infoTextDescription = document.createElement('a-text');
             infoTextDescription.setAttribute('id', `${tag.name}-description`);
             infoTextDescription.setAttribute('value', tag.desc);
             infoTextDescription.setAttribute('color', '#000');
-            infoTextDescription.setAttribute('position', tag.position.x + ' ' + (tag.position.y - 1) + ' ' + (tag.position.z + 0.1)); // -0.8 -0.1 0
+            infoTextDescription.setAttribute('position', tag.position.x + ' ' + tag.position.y - 1 + ' ' + tag.position.z + 0.1); // -0.8 -0.1 0
 
             infoPlane.appendChild(infoTextTitle);
             infoPlane.appendChild(infoTextDescription);
@@ -153,8 +153,7 @@ export function loadInfoBulle() {
             infoBulleEntities.appendChild(infoPanelEntity);
 
             sphereEntity.addEventListener('click', function (event) {
-                const isVisible = infoPanelEntity.getAttribute('visible');
-                infoPanelEntity.setAttribute('visible', !isVisible);
+                switchAnimInfoBulle(event);
             });
         }
     });
@@ -166,17 +165,27 @@ function switchAnimInfoBulle(ev) {
 
     var panel = document.querySelector(`#${baseId}-info-panel`);
     var sphere = document.querySelector(`#${baseId}-sphere`);
+    var title = document.querySelector(`#${baseId}-title`);
+    var desc = document.querySelector(`#${baseId}-description`);
 
     var isVisible = panel.getAttribute('visible');
     panel.setAttribute('visible', !isVisible);
 
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const infBulle = selectedScene.tags.find(tag => tag.type === "infoBulle" && tag.name === baseId);
+
     if (!isVisible) {
+        title.setAttribute('animation', 'property: opacity; to: 1; dur: 500');
+        desc.setAttribute('animation', 'property: opacity; to: 1; dur: 500');
         sphere.setAttribute('animation', 'property: radius; to: 0.2; dur: 1000');
-        sphere.setAttribute('animation__pos', 'property: position; to: 1 1.5 -3; dur: 1000');
+        sphere.setAttribute('animation__pos', `property: position; to: ${infBulle.position.x + 1} ${infBulle.position.y + 0.5} ${infBulle.position.z}; dur: 1000`); //1 1.5 -3
     } else {
-        // text.setAttribute('animation', 'property: opacity; to: 0; dur: 500');
+
+        title.setAttribute('animation', 'property: opacity; to: 0; dur: 500');
+        desc.setAttribute('animation', 'property: opacity; to: 0; dur: 500');
         sphere.setAttribute('animation', 'property: radius; to: 0.5; dur: 1000');
-        sphere.setAttribute('animation__pos', 'property: position; to: 0 1.25 -3; dur: 1000');
+        sphere.setAttribute('animation__pos', `property: position; to: ${infBulle.position.x} ${infBulle.position.y} ${infBulle.position.z}; dur: 1000`); //0 1.25 -3
     }
 }
 
@@ -250,5 +259,4 @@ export function InfBulleRotationChange(e) {
     }
     LoadSlider(e.target);
     loadInfoBulle();
-    console.log(VR.scenes);
 }
