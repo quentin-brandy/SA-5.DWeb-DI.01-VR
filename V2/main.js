@@ -31,7 +31,7 @@ let VR;
 loadVRFromLocalStorage();
 
 // Set an interval to call saveVRToLocalStorage every second (10000 milliseconds)
-setInterval(saveVRToLocalStorage, 10000);
+setInterval(saveVRToLocalStorage, 120000);
 
 export default VR;
 
@@ -64,11 +64,15 @@ let AddText = document.getElementById('plus-text');
 AddText.addEventListener('click', addText);
 
 // Add event listener to the save button
-let saveButton = document.getElementById('save-button');
-saveButton.addEventListener('click', saveVRToJSON);
+let exportButton = document.getElementById('export-button');
+exportButton.addEventListener('click', saveVRToJSON);
 
 let resetButton = document.getElementById('delete-save');
 resetButton.addEventListener('click', ResetAll);
+
+let SaveButton = document.getElementById('save-button');
+SaveButton.addEventListener('click', saveVRToLocalStorage);
+
 
 function saveVRToJSON() {
     let VRString = JSON.stringify(VR);

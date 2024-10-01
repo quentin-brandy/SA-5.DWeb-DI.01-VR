@@ -1,48 +1,67 @@
 import  VR  from './main.js';
 import { AddSceneExplorer , switchScene , LoadSceneExplorer ,  handleMove , AddSceneSelectOption } from './SceneManager.js';
-import { ModifyText } from './TextManager.js';
+import { renameTag , TagPositionChange , Door , duplicateTag } from './TagManager.js';
 
 
 let isMoving = false; // Variable pour suivre savoir si le déplacement est activé
 
 
 export function addDoor() {
+    // Sélection de la scène actuelle
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
-    var cameraEl = document.querySelector('#camera').object3D;
-    var direction = new THREE.Vector3();
+
+    if (!selectedScene) {
+        console.error('Scène non trouvée');
+        return;
+    }
+
+    // Instancier Door pour gérer les portes
+    const doorManager = new Door(selectedScene);
+
+    // Obtenir la caméra et la direction
+    const cameraEl = document.querySelector('#camera').object3D;
+    const direction = new THREE.Vector3();
     cameraEl.getWorldDirection(direction);
 
-    var distance = -1;
-    var position = cameraEl.position.clone().add(direction.multiplyScalar(distance));
+    // Calculer la position en fonction de la caméra
+    const distance = -1;
+    const position = cameraEl.position.clone().add(direction.multiplyScalar(distance));
 
+    // Créer un nom unique pour la porte
     const doorCount = selectedScene.tags.filter(tag => tag.type === 'door').length;
     const doorName = `door${doorCount + 1}`;
-    selectedScene.tags.push({
-        type: 'door',
-        position: { x: position.x, y: position.y, z: position.z },
-        targetScene: "no scene",
-        name: doorName
-    });
 
-    var newEntity = document.createElement('a-sphere');
-    newEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);
+    // Ajouter la porte via Door
+    doorManager.addDoorTag(doorName, { x: position.x, y: position.y, z: position.z });
+
+    // Créer l'entité pour la porte
+    const newEntity = document.createElement('a-sphere');
+    newEntity.setAttribute('position', `${position.x} ${position.y} ${position.z}`);
     newEntity.setAttribute('radius', '1');
     newEntity.setAttribute('color', '#FF0000');
-    newEntity.setAttribute('class', 'link clickable movableBox'); 
+    newEntity.setAttribute('class', 'link clickable movableBox');
     newEntity.setAttribute('scale', '0.5 0.5 0.5');
     newEntity.setAttribute('id', doorName);
-    newEntity.addEventListener('click', function (event) { 
+    
+    // Ajouter des événements de clic et de déplacement
+    newEntity.addEventListener('click', function (event) {
         TakeDoor(event);
     });
+    
     document.querySelector('#rightController').addEventListener('grip-down', function (event) {
         if (event.target === newEntity) {
             MoveDoor(event);
         }
     });
+
+    // Ajouter l'entité à la scène
     document.querySelector('#door-entity').appendChild(newEntity);
+
+    // Ajouter la porte à l'explorateur de scène
+    AddSceneExplorer(doorName, 'door');
+
     console.log(VR);
-    AddSceneExplorer(doorName , 'door');
 }
 
 
@@ -128,21 +147,21 @@ export function ModifyDoor(e) {
         Name.textContent = doorName;
 
         let CopyDoor = document.getElementById('dupliButton');
-        CopyDoor.addEventListener('click', DuplicateDoor);
+        CopyDoor.addEventListener('click', duplicateTag('door'));
 
-        let RenameDoor = document.getElementById('RenameButton');
-        RenameDoor.addEventListener('click', function() {
-            renameDoor(doorName);
+        document.getElementById('RenameButton').addEventListener('click', function () {
+            renameTag('door', e.target.id);
         });
+
         let DeleteDoor = document.getElementById('TrashButton');
         DeleteDoor.addEventListener('click', deleteDoor);
 
         let Route = document.getElementById('scene-route-select');
         Route.addEventListener('change', RouteSelected);
 
-        let inputRangesPosition = document.querySelectorAll('.position')
+        let inputRangesPosition = document.querySelectorAll('.position');
         inputRangesPosition.forEach(inputRange => {
-            inputRange.addEventListener('input', DoorPositionChange);
+            inputRange.addEventListener('input', (event) => TagPositionChange(event, 'door'));
         });
 
         const moveButton = document.getElementById('button_move');
@@ -166,10 +185,6 @@ function LoadSlider(e) {
     e.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
 
 }
-
-
-
-
 
 export function DuplicateDoor() {
     let doorName = document.getElementById('door-name').textContent;
@@ -220,32 +235,6 @@ export function deleteDoor(){
     LoadSceneExplorer();
 }
 
-
-function renameDoor(nom) {
-    const sceneName = document.getElementById('selectscene').value;
-    const scene = VR.scenes[sceneName];
-    const inputRename = document.getElementById('rename').value;
-    const spanError = document.getElementById('span__error');
-    if (scene.tags.some(tag => tag.name === inputRename)) {
-        spanError.innerHTML = "Ce nom existe déjà !";
-        return;
-    }
-
-    spanError.innerHTML = "";
-    const tag = scene.tags.find(tag => tag.name === nom);
-    let doorScene = document.querySelector(`#door-entity #${nom}`);
-    console.log(nom);
-
-    
-    if (tag) {
-        tag.name = inputRename;
-        const fakeEvent = {target: { id: tag.name}}
-        doorScene.setAttribute('id', tag.name);
-        AddSceneExplorer(tag.name, 'door');
-        LoadSceneExplorer();
-        ModifyDoor(fakeEvent);
-    }
-}
 
 
 function AddSelectScene(){
@@ -302,41 +291,6 @@ export function RouteSelected(){
         }
     });
 }
-
-export function DoorPositionChange(e) {
-    const doorName = document.getElementById('door-name').textContent;
-    const sceneSelect = document.getElementById('selectscene');
-    const selectedScene = VR.scenes[sceneSelect.value];
-    const axis = e.target.name; // 'x', 'y', or 'z'
-    const doorPosition = parseFloat(e.target.value);
-    
-    // Mise à jour du texte de la valeur du slider
-    document.querySelector(`#${axis}-value`).textContent = `${doorPosition}`;
-
-    // Mise à jour de la position de la porte dans la scène VR
-    const door = selectedScene.tags.find(tag => tag.type === 'door' && tag.name === doorName);
-    if (door) {
-        door.position = { ...door.position, [axis]: doorPosition };
-        
-        const doorElement = document.querySelector(`#door-entity #${doorName}`);
-        if (doorElement) {
-        doorElement.setAttribute('position', `${door.position.x} ${door.position.y} ${door.position.z}`);
-    }
-
-    // Mise à jour du dégradé linéaire du slider
-    const ratio = (e.target.value - e.target.min) / (e.target.max - e.target.min) * 100;
-    const activeColor = "#00C058";
-    const inactiveColor = "transparent";
-    
-    e.target.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
-    
-    console.log(VR);
-    LoadDoors();
-    LoadSlider(e.target);
-}
-}
-
-
 
 function toggleMove(doorName) {
     const sceneEl = document.querySelector('a-scene'); // Assurez-vous que la scène est correctement sélectionnée

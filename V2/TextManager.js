@@ -2,47 +2,62 @@ import { LoadSceneExplorer } from '../SceneManager.js';
 import VR from './main.js';
 import { AddSceneExplorer } from './SceneManager.js';
 import { SceneExplorer , handleMove ,  } from './SceneManager.js';
-
+import { TagManager , TagPositionChange , renameTag , Text } from './TagManager.js';
 
 let isMoving = false; // Variable pour suivre savoir si le déplacement est activé
 
+
+
 export function addText() {
+    // Sélection de la scène actuelle
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
-    var cameraEl = document.querySelector('#camera').object3D;
-    var direction = new THREE.Vector3();
+
+    if (!selectedScene) {
+        console.error('Scène non trouvée');
+        return;
+    }
+
+    // Instancier la classe Text pour gérer les tags
+    const textManager = new Text(selectedScene);
+
+    // Obtenir la caméra et la direction
+    const cameraEl = document.querySelector('#camera').object3D;
+    const direction = new THREE.Vector3();
     cameraEl.getWorldDirection(direction);
 
-    var distance = -5;
-    var position = cameraEl.position.clone().add(direction.multiplyScalar(distance));
+    // Calculer la position en fonction de la caméra
+    const distance = -5;
+    const position = cameraEl.position.clone().add(direction.multiplyScalar(distance));
 
+    // Créer un nom unique pour le texte
     const textCount = selectedScene.tags.filter(tag => tag.type === 'text').length;
     const textName = `text${textCount + 1}`;
 
-    const textContent = 'Sample Text';
-    const textFill = '#00C058';
-    var rotation = cameraEl.rotation.clone();
+    // Ajouter le texte via TextManager
+    textManager.addTextTag(
+        textName,
+        { x: position.x, y: position.y, z: position.z },
+        { x: 0, y: cameraEl.rotation.y, z: cameraEl.rotation.z },
+        '#00C058'
+    );
 
-    selectedScene.tags.push({
-        type: 'text',
-        position: { x: position.x, y: position.y, z: position.z },
-        rotation: { x: 0, y: rotation.y, z: rotation.z },
-        content: textContent,
-        fill: textFill,
-        name: textName
-    });
-
-    var newEntity = document.createElement('a-text');
-    newEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);
-    newEntity.setAttribute('value', textContent);
-    newEntity.setAttribute('color', textFill);
+    // Créer l'entité pour le texte
+    const newEntity = document.createElement('a-text');
+    newEntity.setAttribute('position', `${position.x} ${position.y} ${position.z}`);
+    newEntity.setAttribute('value', 'Sample Text');
+    newEntity.setAttribute('color', '#00C058');
     newEntity.setAttribute('align', 'center');
     newEntity.setAttribute('scale', '5 5 5');
     newEntity.setAttribute('id', textName);
-    newEntity.object3D.rotation.set(0, rotation.y, rotation.z);
+    newEntity.object3D.rotation.set(0, cameraEl.rotation.y, cameraEl.rotation.z);
 
+    // Ajouter l'entité à la scène
     document.querySelector('#text-entity').appendChild(newEntity);
+
+    // Ajouter le texte à l'explorateur de scène
     AddSceneExplorer(textName, 'text');
+    console.log(VR);
 }
 
 export function Loadtext() {
@@ -124,7 +139,7 @@ export function ModifyText(event) {
     Loadobject(event);
 
     document.getElementById('RenameButton').addEventListener('click', function () {
-        renameText(event.target.id);
+        renameTag('text', event.target.id);
     });
 
     document.getElementById('LegendButton').addEventListener('click', function () {
@@ -141,7 +156,7 @@ export function ModifyText(event) {
 
     let inputRangesPosition = document.querySelectorAll('.position')
     inputRangesPosition.forEach(inputRange => {
-        inputRange.addEventListener('input', TextPositionChange);
+        inputRange.addEventListener('input', (event) => TagPositionChange(event, 'text'))
     });
 
     let inputRangesRotation = document.querySelectorAll('.rotation')
@@ -152,29 +167,6 @@ export function ModifyText(event) {
     document.getElementById('fillText').addEventListener('input', TextCouleurFillChange);
 }
 
-function renameText(nom) {
-    const sceneName = document.getElementById('selectscene').value;
-    const scene = VR.scenes[sceneName];
-    const inputRename = document.getElementById('rename').value;
-    const spanError = document.getElementById('span__error');
-    if (scene.tags.some(tag => tag.name === inputRename)) {
-        spanError.innerHTML = "Ce nom existe déjà !";
-        return;
-    }
-
-    spanError.innerHTML = "";
-    const tag = scene.tags.find(tag => tag.name === nom);
-    let textScene = document.querySelector(`#text-entity #${nom}`);
-    console.log(nom);
-    if (tag) {
-        tag.name = inputRename;
-        const fakeEvent = {target: { id: tag.name}}
-        textScene.setAttribute('id', tag.name);
-        AddSceneExplorer(tag.name, 'text');
-        LoadSceneExplorer();
-        ModifyText(fakeEvent);
-    }
-}
 
 
 
