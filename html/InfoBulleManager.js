@@ -18,11 +18,13 @@ export function addInfoBulle() {
     const infoBulleTitle = 'Sample Title';
     const infoBulleDesc = 'Sample Description';
     var rotation = cameraEl.rotation.clone();
+    var Visibility = false;
 
     selectedScene.tags.push({
         type: 'infoBulle',
         title: infoBulleTitle,
         desc: infoBulleDesc,
+        isVisible: Visibility,
         position: { x: position.x, y: position.y, z: position.z },
         rotation: { x: 0, y: rotation.y, z: rotation.z },
         name: infoBulleName
@@ -39,7 +41,7 @@ export function addInfoBulle() {
     var infoPanelEntity = document.createElement('a-entity');
     infoPanelEntity.setAttribute('id', `${infoBulleName}-info-panel`);
     infoPanelEntity.setAttribute('position', '0 1 -3');
-    // infoPanelEntity.setAttribute('visible', 'false');
+    infoPanelEntity.setAttribute('visible', Visibility);
 
     var infoPlane = document.createElement('a-plane');
     infoPlane.setAttribute('color', '#FFF');
@@ -51,15 +53,13 @@ export function addInfoBulle() {
     infoTextTitle.setAttribute('value', infoBulleTitle);
     infoTextTitle.setAttribute('color', '#000');
     infoTextTitle.setAttribute('position', position.x + 0.5 + ' ' + position.y + ' ' + position.z);
-    // infoTextTitle.setAttribute('position', '0.5 0 10');
-    // infoTextTitle.setAttribute('opacity', '1');
+    infoTextTitle.setAttribute('opacity', '0');
 
     var infoTextDescription = document.createElement('a-text');
     infoTextDescription.setAttribute('id', `${infoBulleName}-description`);
     infoTextDescription.setAttribute('value', infoBulleDesc);
     infoTextDescription.setAttribute('color', '#000');
     infoTextDescription.setAttribute('position', position.x + ' ' + position.y - 1 + ' ' + position.z + 0.1);
-    // infoTextDescription.setAttribute('position', '-0.8 -0.1 0');
 
     infoPlane.appendChild(infoTextTitle);
     infoPlane.appendChild(infoTextDescription);
@@ -68,11 +68,6 @@ export function addInfoBulle() {
 
     document.querySelector('#info-bulle-entity').appendChild(sphereEntity);
     document.querySelector('#info-bulle-entity').appendChild(infoPanelEntity);
-
-    sphereEntity.addEventListener('click', function (event) {
-        const isVisible = infoPanelEntity.getAttribute('visible');
-        infoPanelEntity.setAttribute('visible', !isVisible);
-    });
     AddSceneExplorer(infoBulleName, 'infbulle');
 }
 
@@ -84,9 +79,18 @@ function templatageInfoBulle(event) {
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
     const infBulle = selectedScene.tags.find(tag => tag.type === "infoBulle" && tag.name === event.target.id);
-    console.log(infBulle);
 
     if (infBulle) {
+
+        let valueVisible;
+        if (infBulle.isVisible) {
+            valueVisible = 'checked';
+        } else {
+            valueVisible = '';
+        }
+        console.log(infBulle);
+        console.log(valueVisible);
+        
         temp = temp.replaceAll("{{name}}", infBulle.name);
         temp = temp.replaceAll("{{title}}", infBulle.title);
         temp = temp.replaceAll("{{description}}", infBulle.desc);
@@ -96,6 +100,7 @@ function templatageInfoBulle(event) {
         temp = temp.replaceAll("{{rangeValueRx}}", infBulle.rotation.x);
         temp = temp.replaceAll("{{rangeValueRy}}", infBulle.rotation.y);
         temp = temp.replaceAll("{{rangeValueRz}}", infBulle.rotation.z);
+        temp = temp.replaceAll("{{checkedOrNot}}", valueVisible);
         recipe.innerHTML = temp;
         recipe.className = "fixed h-[97%] border-solid border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2.5 top-2.5 border-2 border-custom-blue";
     }
@@ -113,7 +118,6 @@ export function loadInfoBulle() {
 
     selectedScene.tags.forEach(tag => {
         if (tag.type === 'infoBulle') {
-            console.log(tag.position);
             var sphereEntity = document.createElement('a-sphere');
             sphereEntity.setAttribute('position', tag.position.x + ' ' + tag.position.y + ' ' + tag.position.z);
             sphereEntity.setAttribute('radius', '0.5');
@@ -124,7 +128,7 @@ export function loadInfoBulle() {
             var infoPanelEntity = document.createElement('a-entity');
             infoPanelEntity.setAttribute('id', `${tag.name}-info-panel`);
             infoPanelEntity.setAttribute('position', tag.position.x + ' ' + tag.position.y + ' ' + tag.position.z);
-            infoPanelEntity.setAttribute('visible', 'false');
+            infoPanelEntity.setAttribute('visible', tag.isVisible);
 
             var infoPlane = document.createElement('a-plane');
             infoPlane.setAttribute('color', '#FFF');
@@ -135,14 +139,13 @@ export function loadInfoBulle() {
             infoTextTitle.setAttribute('id', `${tag.name}-title`);
             infoTextTitle.setAttribute('value', tag.title);
             infoTextTitle.setAttribute('color', '#000');
-            infoTextTitle.setAttribute('position', tag.position.x - 1.75 + ' ' + tag.position.y + 2 + ' ' + tag.position.z + 2);
-            // infoTextTitle.setAttribute('opacity', '0');
+            infoTextTitle.setAttribute('position', '-1 0.25 0.01');
 
             var infoTextDescription = document.createElement('a-text');
             infoTextDescription.setAttribute('id', `${tag.name}-description`);
             infoTextDescription.setAttribute('value', tag.desc);
             infoTextDescription.setAttribute('color', '#000');
-            infoTextDescription.setAttribute('position', tag.position.x + ' ' + tag.position.y - 1 + ' ' + tag.position.z + 0.1); // -0.8 -0.1 0
+            infoTextDescription.setAttribute('position', '-1 -0.25 0.01');
 
             infoPlane.appendChild(infoTextTitle);
             infoPlane.appendChild(infoTextDescription);
@@ -162,7 +165,6 @@ export function loadInfoBulle() {
 
 function switchAnimInfoBulle(ev) {
     let baseId = ev.target.id.split('-')[0];
-
     var panel = document.querySelector(`#${baseId}-info-panel`);
     var sphere = document.querySelector(`#${baseId}-sphere`);
     var title = document.querySelector(`#${baseId}-title`);
@@ -174,7 +176,7 @@ function switchAnimInfoBulle(ev) {
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
     const infBulle = selectedScene.tags.find(tag => tag.type === "infoBulle" && tag.name === baseId);
-
+    
     if (!isVisible) {
         title.setAttribute('animation', 'property: opacity; to: 1; dur: 500');
         desc.setAttribute('animation', 'property: opacity; to: 1; dur: 500');
@@ -193,6 +195,11 @@ function switchAnimInfoBulle(ev) {
 export function ModifyInfoBulle(e) {
     loadInfoBulle();
     templatageInfoBulle(e);
+
+    let CheckboxOpen = document.getElementById('checkboxOpen');
+    CheckboxOpen.addEventListener('click', function () {
+        switchAnimInfoBulle(e);
+    });
 
     let inputRangesPosition = document.querySelectorAll('.position')
     inputRangesPosition.forEach(inputRange => {
@@ -258,5 +265,17 @@ export function InfBulleRotationChange(e) {
         }
     }
     LoadSlider(e.target);
+    loadInfoBulle();
+}
+
+
+function InfBulleVisibleOrNot(e) {
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const infBulle = selectedScene.tags.find(tag => tag.type === "infoBulle" && tag.name === e.target.id);
+    let InputChecked = document.getElementById('checkboxOpen').checked;
+
+    infBulle.isVisible = InputChecked;
+
     loadInfoBulle();
 }
