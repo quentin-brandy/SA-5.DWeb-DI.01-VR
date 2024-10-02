@@ -1,7 +1,8 @@
 import  VR  from './main.js';
 import { LoadFile } from './FileManager.js';
-import { LoadDoors , ModifyDoor , RouteSelect } from './DoorManager.js';
-import { Loadtext , ModifyText  } from './TextManager.js';
+import {  ModifyDoor , RouteSelect } from './DoorManager.js';
+import {  ModifyText  } from './TextManager.js';
+import { loadTag } from './TagManager.js';
 
 export function AddScene() {
     const selectElement = document.getElementById('selectscene');
@@ -101,9 +102,9 @@ export function switchScene() {
     // Charger les nouvelles entités et réinitialiser les événements
     sceneNameInput.value = sceneselect.options[sceneselect.selectedIndex].text;
     LoadFile();
-    LoadDoors();
+    loadTag();
     LoadSceneExplorer()
-    Loadtext();
+   
 }
 
 export function AddSceneSelectOption() {
@@ -140,33 +141,44 @@ export function SceneExplorer() {
     });
 }
 
-export function AddSceneExplorer(newtag , type){
+export function AddSceneExplorer(newtag, type) {
     console.log(newtag);
     console.log(type);
     console.log('test');
     const sceneExplorer = document.getElementById('scene-tags');
     const tagElement = document.createElement('li');
-        tagElement.textContent = newtag;
-        tagElement.className = 'list__objet';
-        sceneExplorer.appendChild(tagElement);
-        tagElement.id = newtag;
-     if (type === 'door') {
-            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/door-closed-dark.svg")]';
-            document.addEventListener('click', function (event) {
-                if (event.target.id === newtag) {
-                    ModifyDoor(event);
-                }
-            });
-        
-        } else if (type === 'text') {
-            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/card-text-dark.svg")]';
-            document.addEventListener('click', function (event) {
+    tagElement.textContent = newtag;
+    tagElement.className = 'list__objet';
+    sceneExplorer.appendChild(tagElement);
+    tagElement.id = newtag;
+    if (type === 'door') {
+        tagElement.setAttribute('data-type', 'door');
+        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/door-closed-dark.svg")]';
+        document.addEventListener('click', function (event) {
+            if (event.target.id === newtag) {
+                ModifyDoor(event);
+            }
+        });
+    } else if (type === 'text') {
+        tagElement.setAttribute('data-type', 'text');
+        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/card-text-dark.svg")]';
+        document.addEventListener('click', function (event) {
             if (event.target.id === newtag) {
                 ModifyText(event);
             }
-           
         });
-        }
+    }
+    updateSelectedTag(tagElement);
+}
+
+export function updateSelectedTag(selectedElement) {
+    console.log(selectedElement);
+    const sceneExplorer = document.getElementById('scene-tags');
+    const tags = sceneExplorer.getElementsByTagName('li');
+    for (let tag of tags) {
+        tag.style.backgroundColor = ''; // Reset background color for all tags
+    }
+    selectedElement.style.backgroundColor = '#d3d3d3'; // Set background color for selected tag
 }
 
 export function LoadSceneExplorer() {
@@ -181,90 +193,20 @@ export function LoadSceneExplorer() {
         tagElement.textContent = tag.name;
         tagElement.id = tag.name;
         if (tag.type === 'door') {
+            tagElement.setAttribute('data-type', 'door');
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/door-closed-dark.svg")]';
             tagElement.addEventListener('click', function (event) {
                 ModifyDoor(event);
+                updateSelectedTag(event.target);
             });
         } else if (tag.type === 'text') {
+            tagElement.setAttribute('data-type', 'text');
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/card-text-dark.svg")]';
             tagElement.addEventListener('click', function (event) {
                 ModifyText(event);
+                updateSelectedTag(event.target);
             });
         }
         sceneExplorer.appendChild(tagElement);
     });
-}
-
-
-
-export function handleMove(event , Name , Type) {
-    console.log(Name);
-    const cameraEl = document.querySelector('[camera]'); // Sélectionner la caméra A-Frame 
-    const currentTag = Name;
-    const screenPosition = new THREE.Vector2();
-    screenPosition.x = (event.clientX / window.innerWidth) * 2 - 1; // Normaliser X
-    screenPosition.y = - (event.clientY / window.innerHeight) * 2 + 1; // Normaliser Y
-
-    // Créer un rayon à partir de la caméra dans la direction du clic
-    const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(screenPosition, cameraEl.getObject3D('camera')); // Utiliser l'objet caméra
-
-    // Calculer l'intersection avec un plan qui représente le champ de vision de la caméra
-    const distance = 3; // Distance à laquelle vous souhaitez placer la boîte
-    const intersectionPoint = new THREE.Vector3();
-    raycaster.ray.at(distance, intersectionPoint); // Obtenir le point sur le rayon à la distance spécifiée
-
-    // Déplacer la porte actuelle à l'endroit où le clic a été détecté
-    const door = document.querySelector(`#${Type}-entity #${currentTag}`);
-    if (door) {
-        door.setAttribute('position', {
-            x: intersectionPoint.x,
-            y: intersectionPoint.y,
-            z: intersectionPoint.z,
-        });
-
-        // Mettre à jour la position dans le tableau de la scène
-        const sceneSelect = document.getElementById('selectscene');
-        const selectedScene = VR.scenes[sceneSelect.value];
-        const doorTag = selectedScene.tags.find(tag => tag.name === currentTag);
-        if (doorTag) {
-            doorTag.position = {
-                x: intersectionPoint.x,
-                y: intersectionPoint.y,
-                z: intersectionPoint.z,
-            };
-        }
-
-        // Mettre à jour la position dans la porte de la scène
-        if (Type === 'door') {
-            const doorEntity = selectedScene.tags.find(door => door.name === currentTag);
-            if (doorEntity) {
-                doorEntity.position = {
-                    x: intersectionPoint.x,
-                    y: intersectionPoint.y,
-                    z: intersectionPoint.z,
-                };
-            }
-        }
-
-        document.getElementById('x-slider').value = doorTag.position.x.toFixed(1);
-        document.getElementById('y-slider').value = doorTag.position.y.toFixed(1);
-        document.getElementById('z-slider').value = doorTag.position.z.toFixed(1);
-
-        // Update the text content for the slider values
-        document.getElementById('x-value').textContent = doorTag.position.x.toFixed(1);
-        document.getElementById('y-value').textContent = doorTag.position.y.toFixed(1);
-        document.getElementById('z-value').textContent = doorTag.position.z.toFixed(1);
-
-        // Update the gradient for each slider
-        ['x', 'y', 'z'].forEach(axis => {
-            const slider = document.getElementById(`${axis}-slider`);
-            const ratio = (slider.value - slider.min) / (slider.max - slider.min) * 100;
-            const activeColor = "#00C058";
-            const inactiveColor = "transparent";
-            slider.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
-        });
-
-        console.log(`Porte déplacée à la position : ${intersectionPoint.x}, ${intersectionPoint.y}, ${intersectionPoint.z}`);
-    }
 }

@@ -35,10 +35,10 @@ setInterval(saveVRToLocalStorage, 120000);
 
 export default VR;
 
-import {addDoor, LoadDoors} from './DoorManager.js';
+import {addDoor } from './DoorManager.js';
 import {AddScene, DeleteScene, ChangeSceneName , DuplicateScene , SceneExplorer , AddSceneSelectOption, switchScene} from './SceneManager.js';
 import {LoadFile } from './FileManager.js';
-import {addText, Loadtext, LegendText } from './TextManager.js';
+import {addText,  LegendText } from './TextManager.js';
 
 
 
