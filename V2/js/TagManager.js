@@ -187,17 +187,12 @@ function createEntity(tag) {
         newEntity = document.createElement('a-sphere');
         newEntity.setAttribute('position', `${tag.position.x} ${tag.position.y} ${tag.position.z}`);
         newEntity.setAttribute('radius', '1');
-        newEntity.setAttribute('color', '#FF0000');
+        newEntity.setAttribute('color', tag.fill);
         newEntity.setAttribute('class', 'link clickable');
         newEntity.setAttribute('scale', '0.5 0.5 0.5');
         newEntity.setAttribute('id', tag.name);
         newEntity.addEventListener('click', function (event) {
             TakeDoor(event);
-        });
-        document.querySelector('#rightController').addEventListener('triggerdown', function (event) {
-            if (event.target === newEntity) {
-                TakeDoor(event);
-            }
         });
     } else if (tag.type === 'text') {
         newEntity = document.createElement('a-text');
@@ -207,21 +202,15 @@ function createEntity(tag) {
         newEntity.setAttribute('align', 'center');
         newEntity.setAttribute('scale', '5 5 5');
         newEntity.setAttribute('id', tag.name);
-        newEntity.object3D.rotation.set(tag.rotation.x, tag.rotation.y, tag.rotation.z);
+        newEntity.object3D.rotation.set(tag.rotation.rx, tag.rotation.ry, tag.rotation.rz);
     }
     if(tag.type === 'photo') {
         newEntity = document.createElement('a-image');
         newEntity.setAttribute('position', `${tag.position.x} ${tag.position.y} ${tag.position.z}`);
-        newEntity.setAttribute('src', './assets/img/sky.jpg');
+        newEntity.setAttribute('src', '../assets/img/sky.jpg');
         newEntity.setAttribute('scale', '1 1 1');
         newEntity.setAttribute('id', tag.name);
-        newEntity.object3D.rotation.set(0, tag.rotation.y, tag.rotation.z);
-        document.querySelector('#rightController').addEventListener('grip-down', function (event) {
-            if (event.target === newEntity) {
-                // Logique pour déplacer la photo
-                console.log(`Photo ${tag.name} moved`);
-            }
-        });
+        newEntity.object3D.rotation.set(tag.rotation.rx, tag.rotation.ry, tag.rotation.rz);
     }
 
     return newEntity;
@@ -425,4 +414,27 @@ export function tagRotationChange(e, tagType) {
         LoadSlider(e.target);
     }
     console.log(VR);
+}
+
+
+export function TagColorFillChange(tagType) {
+    const tagName = document.getElementById(`${tagType}-name`).textContent;
+    const sceneSelect = document.getElementById('selectscene');
+    const colorValue = document.getElementById("textColorFill");
+    const selectedScene = VR.scenes[sceneSelect.value];
+console.log(colorValue);
+    const tagManager = new TagManager(selectedScene);
+
+    let inputColor = document.getElementById(`fill`).value;
+console.log(inputColor);
+    const updatedTag = tagManager.updateTagFill(tagName, inputColor);   
+    if (updatedTag) {
+        const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+        if (tagElement) {
+            colorValue.textContent = inputColor;
+            tagElement.setAttribute('color', inputColor);
+        }
+    } else {
+        console.error(`Tag ${tagName} non trouvé ou mise à jour échouée.`);
+    }
 }

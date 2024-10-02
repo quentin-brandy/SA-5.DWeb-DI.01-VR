@@ -43,6 +43,14 @@ export class TagManager {
             tag.name = newName;
         }
     }
+
+    updateTagFill(name, fill) {
+        const tag = this.getTag(name);
+        if (tag) {
+            tag.fill = fill;
+            return tag;
+        }
+    }
     deleteTag(name) {
         const index = this.tags.findIndex(t => t.name === name);
         if (index !== -1) {
@@ -75,10 +83,9 @@ export class TagManager {
 }
 
 export class Door extends TagManager {
-    addDoorTag(name, position, targetScene = 'no scene') {
-        return this.addTag('door', name, position, {}, { targetScene });
+    addDoorTag(name, position, targetScene = 'no scene', fill = '#FFFFFF') {
+        return this.addTag('door', name, position, {}, { targetScene, fill });
     }
-    
 }
 
 export class Text extends TagManager {
@@ -89,7 +96,7 @@ export class Text extends TagManager {
 }
 
 export class Photo extends TagManager {
-    addPhotoTag(name, position, rotation = {}, src = './assets/img/sky.jpg') {
+    addPhotoTag(name, position, rotation = {}, src = '../assets/img/sky.jpg') {
         return this.addTag('photo', name, position, rotation, { src });
     }
     

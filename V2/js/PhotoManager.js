@@ -41,7 +41,7 @@ export function addPhoto() {
     // Créer l'entité pour la photo
     const newEntity = document.createElement('a-image');
     newEntity.setAttribute('position', `${position.x} ${position.y} ${position.z}`);
-    newEntity.setAttribute('src', './assets/img/sky.jpg');
+    newEntity.setAttribute('src', '../assets/img/sky.jpg');
   
     newEntity.setAttribute('scale', '1 1 1');
     newEntity.setAttribute('id', photoName);
@@ -86,7 +86,7 @@ export function ModifyPhoto(event) {
     templatePhoto = templatePhoto.replaceAll("{{rangeValueRy}}", photo.rotation.ry);
     templatePhoto = templatePhoto.replaceAll("{{rangeValueRz}}", photo.rotation.rz);
     recipe.innerHTML = templatePhoto;
-    recipe.className = 'fixed h-[97%] border-solid border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2.5 top-2.5 border-2 border-custom-blue';
+    recipe.className = "fixed h-[97%] border-4 border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2 top-2";
     let Explorer = document.getElementById(photoName);
     updateSelectedTag(Explorer);
     const moveButton = document.getElementById('button_move');
@@ -131,4 +131,5 @@ export function ModifyPhoto(event) {
     inputRangesRotation.forEach(inputRange => {
         inputRange.addEventListener('input', (event) => tagRotationChange(event, 'photo'));
     });
+
 }
