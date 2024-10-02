@@ -25,6 +25,14 @@ export class TagManager {
         return null;
     }
 
+    rotateTag(name, newRotation) {
+        const tag = this.tags.find(t => t.name === name);
+        if (tag) {
+            tag.rotation = { ...newRotation };
+            return tag;
+        }
+        return null;
+    }
     getTag(name) {
         return this.tags.find(t => t.name === name);
     }
@@ -76,6 +84,13 @@ export class Door extends TagManager {
 export class Text extends TagManager {
     addTextTag(name, position, rotation = {}, content = "Sample Text", fill = '#FFFFFF') {
         return this.addTag('text', name, position, rotation, { content, fill });
+    }
+    
+}
+
+export class Photo extends TagManager {
+    addPhotoTag(name, position, rotation = {}, src = './assets/img/sky.jpg') {
+        return this.addTag('photo', name, position, rotation, { src });
     }
     
 }

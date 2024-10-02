@@ -2,8 +2,8 @@ import  VR  from './main.js';
 import { AddSceneExplorer, LoadSceneExplorer  } from './SceneManager.js';
 import { ModifyDoor , TakeDoor } from './DoorManager.js';
 import { ModifyText } from './TextManager.js';
-import { TagManager , Door, Text } from './Tagclass.js';
-
+import { TagManager , Door, Text , Photo } from './Tagclass.js';
+import { ModifyPhoto } from './PhotoManager.js';
 
 export function LoadSlider(e) {
     const ratio = (e.value - e.min) / (e.max - e.min) * 100;
@@ -53,13 +53,7 @@ export function TagPositionChange(e, tagType) {
         }
 
         // Mise à jour du dégradé linéaire du slider
-        const ratio = (e.target.value - e.target.min) / (e.target.max - e.target.min) * 100;
-        const activeColor = "#00C058";
-        const inactiveColor = "transparent";
-        e.target.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
-
-        // Afficher la scène mise à jour dans la console
-        console.log(VR);
+       LoadSlider(e.target);
 
     }
 }
@@ -106,6 +100,9 @@ export function renameTag(type, nom) {
         } else if (type === 'text') {
             ModifyText({ target: { id: inputRename } });
         }
+        else if (type === 'photo') {
+            ModifyPhoto({ target: { id: inputRename } });
+        }
     }
 }
 export function duplicateTag(tagType) {
@@ -130,6 +127,9 @@ export function duplicateTag(tagType) {
         } else if (tagType === 'door') {
             clonedTag = new Door(selectedScene).addDoorTag(newTagName, newPosition, originalTag.targetScene);
         }
+        if (tagType === 'photo') {
+            clonedTag = new Photo(selectedScene).addPhotoTag(newTagName, newPosition);
+        }
 
         // Ajouter le tag cloné à la scène
         tagManager.addTag(clonedTag);
@@ -146,6 +146,9 @@ export function duplicateTag(tagType) {
             ModifyDoor({target: {id: newTagName}});
         } else if (tagType === 'text') {
             ModifyText({target: {id: newTagName}});
+        }
+        else if (tagType === 'photo') {
+            ModifyPhoto({target: {id: newTagName}});
         }
     }
 }
@@ -206,6 +209,20 @@ function createEntity(tag) {
         newEntity.setAttribute('id', tag.name);
         newEntity.object3D.rotation.set(tag.rotation.x, tag.rotation.y, tag.rotation.z);
     }
+    if(tag.type === 'photo') {
+        newEntity = document.createElement('a-image');
+        newEntity.setAttribute('position', `${tag.position.x} ${tag.position.y} ${tag.position.z}`);
+        newEntity.setAttribute('src', './assets/img/sky.jpg');
+        newEntity.setAttribute('scale', '1 1 1');
+        newEntity.setAttribute('id', tag.name);
+        newEntity.object3D.rotation.set(0, tag.rotation.y, tag.rotation.z);
+        document.querySelector('#rightController').addEventListener('grip-down', function (event) {
+            if (event.target === newEntity) {
+                // Logique pour déplacer la photo
+                console.log(`Photo ${tag.name} moved`);
+            }
+        });
+    }
 
     return newEntity;
 }
@@ -225,7 +242,10 @@ export function toggleMove(Name) {
         const clickedElement = document.querySelector(`#${Name}`);
         console.log(clickedElement);
         // Si l'élément a une classe ou un attribut indiquant son type, récupérons-le
-        let Type = clickedElement.getAttribute('data-type') || clickedElement.classList.contains('door') ? 'door' : 'text'; // Remplace 'data-type' par l'attribut qui te convient si besoin
+        let Type = clickedElement.getAttribute('data-type') || 
+                   (clickedElement.classList.contains('door') ? 'door' : 
+                   (clickedElement.classList.contains('text') ? 'text' : 
+                   (clickedElement.classList.contains('photo') ? 'photo' : null))); // Remplace 'data-type' par l'attribut qui te convient si besoin
   
         // Appeler `handleMove` avec le nom de l'élément et le type récupéré dynamiquement
         handleMove(event, Name, Type);
@@ -295,6 +315,8 @@ export function handleMove(event, Name, Type) {
             tagInstance = new Door(Name, selectedScene);
         } else if (Type === 'text') {
             tagInstance = new Text(Name, selectedScene);
+        } else if (Type === 'photo') {
+            tagInstance = new Photo(Name, selectedScene);
         } else {
             console.error('Type de tag non reconnu.');
             return;
@@ -330,8 +352,7 @@ export function handleMove(event, Name, Type) {
     console.log(`Tag déplacé à la position : ${intersectionPoint.x}, ${intersectionPoint.y}, ${intersectionPoint.z}`);
 }
 
-
-// Fonction générique pour charger et instancier les tags (door et text)
+// Fonction générique pour charger et instancier les tags (door, text, et photo)
 export function loadTag() {
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
@@ -339,8 +360,9 @@ export function loadTag() {
     // Vide les entités existantes
     const doorEntities = document.querySelector('#door-entity');
     const textEntities = document.querySelector('#text-entity');
+    const photoEntities = document.querySelector('#photo-entity');
     
-    [doorEntities, textEntities].forEach(entityContainer => {
+    [doorEntities, textEntities, photoEntities].forEach(entityContainer => {
         while (entityContainer.firstChild) {
             entityContainer.removeChild(entityContainer.firstChild);
         }
@@ -355,6 +377,9 @@ export function loadTag() {
         } else if (tag.type === 'text') {
             tagInstance = new Text(tag.name, selectedScene);
         }
+        else if (tag.type === 'photo') {
+            tagInstance = new Photo(tag.name, selectedScene);
+        }
 
         // Crée l'entité correspondante à partir du tag et la classe
         const newEntity = createEntity(tag);
@@ -364,7 +389,42 @@ export function loadTag() {
             doorEntities.appendChild(newEntity);
         } else if (tag.type === 'text') {
             textEntities.appendChild(newEntity);
+        } else if (tag.type === 'photo') {
+            photoEntities.appendChild(newEntity);
         }
     });
 }
 
+export function tagRotationChange(e, tagType) {
+    const tagName = document.getElementById(`${tagType}-name`).textContent; // "door-name" ou "text-name"
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const axis = e.target.name; // 'x', 'y', or 'z'
+    const newRotation = parseFloat(e.target.value);
+
+    // Mettre à jour l'affichage de la valeur du slider
+    document.querySelector(`#${axis}-value`).textContent = `${newRotation}`;
+
+    // Créer une instance de TagManager pour gérer les tags
+    const tagManager = new TagManager(selectedScene);
+
+    // Récupérer le tag actuel dans la scène
+    const currentTag = selectedScene.tags.find(tag => tag.type === tagType && tag.name === tagName);
+    if (!currentTag) return;
+
+    // Mettre à jour seulement la rotation
+    const updatedTag = tagManager.rotateTag(tagName, { ...selectedScene.tags.find(tag => tag.type === tagType && tag.name === tagName).rotation, [axis]: newRotation });
+
+    // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
+    if (updatedTag) {
+        const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+        if (tagElement) {
+            tagElement.setAttribute('rotation', `${updatedTag.rotation.x} ${updatedTag.rotation.y} ${updatedTag.rotation.z}`);
+        }
+
+        // Mise à jour du dégradé linéaire du slider
+        LoadSlider(e.target);
+        loadTag();
+    }
+    console.log(VR);
+}

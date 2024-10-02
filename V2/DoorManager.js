@@ -2,6 +2,7 @@ import  VR  from './main.js';
 import { Door } from './Tagclass.js';
 import { AddSceneExplorer , switchScene , AddSceneSelectOption , updateSelectedTag } from './SceneManager.js';
 import { renameTag , TagPositionChange , duplicateTag , deleteTag , toggleMove , LoadSlider} from './TagManager.js';
+import { LoadFile } from './FileManager.js';
 
 
 
@@ -70,8 +71,7 @@ export function TakeDoor(e) {
     const doorName = e.target.id;
     selectedScene.tags.forEach(tag => {
         if (tag.type === 'door' && tag.name === doorName && tag.targetScene !== 'no scene') {
-            var skyElement = document.getElementById('image-360');
-            skyElement.setAttribute('src', VR.scenes[tag.targetScene].image.url); 
+            LoadFile();
             console.log('Téléportation vers ' + tag.targetScene);
 
             // Change the selected scene in the select element

@@ -6,8 +6,9 @@ function saveVRToLocalStorage() {
 // Function to load VR object from localStorage
 function loadVRFromLocalStorage() {
     const savedVR = localStorage.getItem('VR');
-    if (savedVR) {
+    if (savedVR && savedVR !== "{}") {
         VR = JSON.parse(savedVR);
+        console.log('Loaded VR from localStorage:', VR);
     } else {
         VR = {
             scenes: {
@@ -21,6 +22,7 @@ function loadVRFromLocalStorage() {
                 }
             }
         };
+        console.log('Initialized default VR:', VR);
     }
 }
 
@@ -30,16 +32,15 @@ let VR;
 // Call loadVRFromLocalStorage when the page loads
 loadVRFromLocalStorage();
 
-// Set an interval to call saveVRToLocalStorage every second (10000 milliseconds)
-setInterval(saveVRToLocalStorage, 120000);
+// Set an interval to call saveVRToLocalStorage every 120 seconds (120000 milliseconds)
+setInterval(saveVRToLocalStorage, 1000);
 
 export default VR;
 
-import {addDoor } from './DoorManager.js';
-import {AddScene, DeleteScene, ChangeSceneName , DuplicateScene , SceneExplorer , AddSceneSelectOption, switchScene} from './SceneManager.js';
-import {LoadFile } from './FileManager.js';
-import {addText,  LegendText } from './TextManager.js';
-
+import { addDoor } from './DoorManager.js';
+import { AddScene, DeleteScene, ChangeSceneName, DuplicateScene,  AddSceneSelectOption, switchScene } from './SceneManager.js';
+import { addText,  } from './TextManager.js';
+import { addPhoto } from './PhotoManager.js';
 
 const actions = {
     'plus-scene': AddScene,
@@ -48,6 +49,7 @@ const actions = {
     'duplicate-scene': DuplicateScene,
     'plus-door': addDoor,
     'plus-text': addText,
+    'plus-photo': addPhoto,
     'export-button': saveVRToJSON,
     'delete-save': ResetAll,
     'save-button': saveVRToLocalStorage
@@ -60,7 +62,6 @@ Object.keys(actions).forEach(id => {
 });
 
 document.getElementById('selectscene').addEventListener('change', switchScene);
-
 
 function saveVRToJSON() {
     let VRString = JSON.stringify(VR);

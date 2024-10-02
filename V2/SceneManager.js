@@ -3,6 +3,7 @@ import { LoadFile } from './FileManager.js';
 import {  ModifyDoor , RouteSelect } from './DoorManager.js';
 import {  ModifyText  } from './TextManager.js';
 import { loadTag } from './TagManager.js';
+import { ModifyPhoto } from './PhotoManager.js';
 
 export function AddScene() {
     const selectElement = document.getElementById('selectscene');
@@ -85,9 +86,6 @@ export function DuplicateScene() {
 
 
 export function switchScene() {
-    if (Object.keys(VR.scenes).length === 0) {
-        return;
-    }
     const skyElement = document.getElementById('image-360');
     const sceneselect = document.getElementById('selectscene');
     const sceneNameInput = document.getElementById('scene-name');
@@ -129,10 +127,13 @@ export function SceneExplorer() {
         tagElement.textContent = tag.name;
         tagElement.id = tag.name;
         if (tag.type === 'door') {
-            tagElement.className = 'list__objet porte';
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/card-text-dark.svg")]';
         
         } else if (tag.type === 'text') {
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/card-text-dark.svg")]';
+        }
+        else if (tag.type === 'photo') {
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/file-image-dark.svg")]';
         }
 
         sceneExplorer.appendChild(tagElement);
@@ -163,6 +164,15 @@ export function AddSceneExplorer(newtag, type) {
         document.addEventListener('click', function (event) {
             if (event.target.id === newtag) {
                 ModifyText(event);
+            }
+        });
+    }
+    else if (type === 'photo') {
+        tagElement.setAttribute('data-type', 'photo');
+        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/file-image-dark.svg")]';
+        document.addEventListener('click', function (event) {
+            if (event.target.id === newtag) {
+                ModifyPhoto(event);
             }
         });
     }
@@ -202,6 +212,14 @@ export function LoadSceneExplorer() {
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/card-text-dark.svg")]';
             tagElement.addEventListener('click', function (event) {
                 ModifyText(event);
+                updateSelectedTag(event.target);
+            });
+        }
+        else if (tag.type === 'photo') {
+            tagElement.setAttribute('data-type', 'photo');
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/file-image-dark.svg")]';
+            tagElement.addEventListener('click', function (event) {
+                ModifyPhoto(event);
                 updateSelectedTag(event.target);
             });
         }
