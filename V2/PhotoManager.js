@@ -32,7 +32,11 @@ export function addPhoto() {
     const photoName = `photo${photoCount + 1}`;
 
     // Ajouter la photo via Photo
-    photoManager.addPhotoTag(photoName, { x: position.x, y: position.y, z: position.z });
+    photoManager.addPhotoTag(
+        photoName,
+        { x: position.x, y: position.y, z: position.z },
+        { rx: 0, ry: cameraEl.rotation.y, rz: cameraEl.rotation.z },
+    );
 
     // Créer l'entité pour la photo
     const newEntity = document.createElement('a-image');
@@ -78,9 +82,9 @@ export function ModifyPhoto(event) {
     templatePhoto = templatePhoto.replaceAll("{{rangeValueX}}", photo.position.x);
     templatePhoto = templatePhoto.replaceAll("{{rangeValueY}}", photo.position.y);
     templatePhoto = templatePhoto.replaceAll("{{rangeValueZ}}", photo.position.z);
-    templatePhoto = templatePhoto.replaceAll("{{rangeValueRx}}", photo.rotation.x);
-    templatePhoto = templatePhoto.replaceAll("{{rangeValueRy}}", photo.rotation.y);
-    templatePhoto = templatePhoto.replaceAll("{{rangeValueRz}}", photo.rotation.z);
+    templatePhoto = templatePhoto.replaceAll("{{rangeValueRx}}", photo.rotation.rx);
+    templatePhoto = templatePhoto.replaceAll("{{rangeValueRy}}", photo.rotation.ry);
+    templatePhoto = templatePhoto.replaceAll("{{rangeValueRz}}", photo.rotation.rz);
     recipe.innerHTML = templatePhoto;
     recipe.className = 'fixed h-[97%] border-solid border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2.5 top-2.5 border-2 border-custom-blue';
     let Explorer = document.getElementById(photoName);

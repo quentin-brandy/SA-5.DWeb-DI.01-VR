@@ -36,7 +36,7 @@ export function addText() {
     textManager.addTextTag(
         textName,
         { x: position.x, y: position.y, z: position.z },
-        { x: 0, y: cameraEl.rotation.y, z: cameraEl.rotation.z },
+        { rx: 0, ry: cameraEl.rotation.y, rz: cameraEl.rotation.z },
         "Sample Text",
         '#00C058'
     );
@@ -79,9 +79,9 @@ console.log(text);
     templateText = templateText.replaceAll("{{rangeValueX}}", text.position.x);
     templateText = templateText.replaceAll("{{rangeValueY}}", text.position.y);
     templateText = templateText.replaceAll("{{rangeValueZ}}", text.position.z);
-    templateText = templateText.replaceAll("{{rangeValueRx}}", text.rotation.x);
-    templateText = templateText.replaceAll("{{rangeValueRy}}", text.rotation.y);
-    templateText = templateText.replaceAll("{{rangeValueRz}}", text.rotation.z);
+    templateText = templateText.replaceAll("{{rangeValueRx}}", text.rotation.rx);
+    templateText = templateText.replaceAll("{{rangeValueRy}}", text.rotation.ry);
+    templateText = templateText.replaceAll("{{rangeValueRz}}", text.rotation.rz);
     templateText = templateText.replaceAll("{{colorFill}}", text.fill);
     recipe.innerHTML = templateText;
     recipe.className = 'fixed h-[97%] border-solid border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2.5 top-2.5 border-2 border-custom-blue';

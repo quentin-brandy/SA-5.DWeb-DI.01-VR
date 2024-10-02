@@ -401,7 +401,6 @@ export function tagRotationChange(e, tagType) {
     const selectedScene = VR.scenes[sceneSelect.value];
     const axis = e.target.name; // 'x', 'y', or 'z'
     const newRotation = parseFloat(e.target.value);
-
     // Mettre à jour l'affichage de la valeur du slider
     document.querySelector(`#${axis}-value`).textContent = `${newRotation}`;
 
@@ -413,18 +412,17 @@ export function tagRotationChange(e, tagType) {
     if (!currentTag) return;
 
     // Mettre à jour seulement la rotation
-    const updatedTag = tagManager.rotateTag(tagName, { ...selectedScene.tags.find(tag => tag.type === tagType && tag.name === tagName).rotation, [axis]: newRotation });
+    const updatedTag = tagManager.rotateTag(tagName, { ...currentTag.rotation, [axis]: newRotation });
 
     // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
     if (updatedTag) {
         const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
         if (tagElement) {
-            tagElement.setAttribute('rotation', `${updatedTag.rotation.x} ${updatedTag.rotation.y} ${updatedTag.rotation.z}`);
+            tagElement.setAttribute('rotation', `${updatedTag.rotation.rx} ${updatedTag.rotation.ry} ${updatedTag.rotation.rz}`);
         }
 
         // Mise à jour du dégradé linéaire du slider
         LoadSlider(e.target);
-        loadTag();
     }
     console.log(VR);
 }
