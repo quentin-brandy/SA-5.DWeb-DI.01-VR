@@ -13,76 +13,6 @@
   <script src="https://unpkg.com/aframe-layout-component@4.x.x/dist/aframe-layout-component.min.js"></script>
   <script src="https://unpkg.com/aframe-event-set-component@5.x.x/dist/aframe-event-set-component.min.js"></script>
   <script src="https://unpkg.com/aframe-proxy-event-component@2.1.0/dist/aframe-proxy-event-component.min.js"></script>
-  <script>
-    AFRAME.registerComponent('grab-actions', {
-   init: function () {
-     const controller = this.el;
-     const raycaster = controller.components.raycaster;
-     const movableBox = document.querySelector('.movableBox');	
-     let isGrabbing = false;
- 
-     // Lorsque le bouton grip est enfoncé
-     controller.addEventListener('gripdown', function () {
-       const intersections = raycaster.intersections;
-       if (intersections.length > 0) {
-         const intersection = intersections[0];
-         
-         // Si le raycaster touche l'objet, commence à bouger
-         if (intersection.object.el === movableBox) {
-           isGrabbing = true;
-           // Émettre l'événement pour déclencher la mise à jour de la position en temps réel
-           movableBox.emit('start-move');
-         }
-       }
-     });
- 
-     // Lorsque le bouton grip est relâché
-     controller.addEventListener('gripup', function () {
-       if (isGrabbing) {
-         isGrabbing = false;
-         // Émettre l'événement pour arrêter la mise à jour de la position en temps réel
-         movableBox.emit('stop-move');
-       }
-     });
-   }
- });
- 
- 
-     AFRAME.registerComponent('move-on-tick', {
-   init: function () {
-     this.isMoving = false;
-     const movableBox = this.el;
- 
-     // Écouter les événements pour démarrer ou arrêter le mouvement
-     movableBox.addEventListener('start-move', () => {
-       this.isMoving = true;
-     });
- 
-     movableBox.addEventListener('stop-move', () => {
-       this.isMoving = false;
-     });
-   },
- 
-   tick: function () {
-     if (this.isMoving) {
-       const rightControllerEl = document.querySelector('#rightController').object3D;
-       const direction = new THREE.Vector3();
-       rightControllerEl.getWorldDirection(direction);
- 
-       // Positionner l'objet selon la direction du contrôleur avec un décalage en Z
-       const distance = -3;
-       const newPosition = rightControllerEl.position.clone().add(direction.multiplyScalar(distance));
- 
-       // Déplacer le cube tout en conservant le décalage Y et le Z fixe
-       this.el.setAttribute('position', {
-         x: newPosition.x,
-         y: newPosition.y - 1.6,
-         z: newPosition.z,
-       });
-     }
-   }
- });
-     </script> 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -170,7 +100,7 @@
         <label for="file-upload" class="inline-block text-custom-gray cursor-pointer">
           ajouter une image 360
         </label>
-        <input id="file-upload" type="file" accept=".png, .jpg, .jpeg" class="hidden" />
+        <input id="file-upload" type="file" accept=".png, .jpg, .jpeg, .mp4, .mov, .avi" class="hidden" />
         <div class="flex items-center ml-2">
           <label for="file-upload" class="flex items-center cursor-pointer p-[5px] border-[none]">
             <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
@@ -233,8 +163,11 @@
     <a-assets id="assets-container">
     </a-assets>
 
+
     <a-sky id="image-360" rotation="0 -90 0" src="#img1" material="color: #FFFFFF"></a-sky>
-    <!-- Assets 360 -->
+    
+  
+  
 
     <a-entity id="door-entity">
    
@@ -283,23 +216,15 @@
     </div>
   </div>
 
-  <!-- <div
-    class="flex items-center gap-[5px] w-full bg-custom-light-gray mt-[5px] mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/card-text-dark.svg')]">
-    <p id="text-name" class="text-custom-dark-gray">{{name}}</p>
-  </div> -->
-
   <div class="flex justify-between gap-3">
     <input class="flex items-center gap-[5px] w-full bg-custom-light-gray mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/card-text-dark.svg')]" type="text" id="rename"
       name="rename" placeholder="Renommez" value="{{name}}" />
-    <button
-      class="w-[61.59px] h-auto text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue"
-      id="RenameButton">Valider</button>
   </div>
   <span id="span__error" class="text-red-500"></span>
   </div>
 
   <div class="mt-[50px]">
-    <div class="flex items-center gap-[5px] mb-[5px]"> <!-- flex items-center gap-[5px] mb-[5px] -->
+    <div class="flex items-center gap-[5px] mb-[5px]"> 
       <img src="./assets/svg/braces.svg" alt="Braces icon">
       <label>Chemin (provisioire)</label>
     </div>
@@ -633,10 +558,7 @@
 
   <div class="flex justify-between gap-3">
     <input class="flex items-center gap-[5px] w-full bg-custom-light-gray mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/card-text-dark.svg')]" type="text" id="rename"
-      name="rename" placeholder="Renommez" value="{{name}}" />
-    <button
-      class="w-[61.59px] h-auto text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue"
-      id="RenameButton">Valider</button>
+      name="rename"  placeholder="Renommez" value="{{name}}" />
   </div>
   <span id="span__error" class="text-red-500"></span>
   </div>

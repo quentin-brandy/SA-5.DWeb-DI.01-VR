@@ -16,3 +16,9 @@ autrs :
 modification render image dans objet 
 ajout de scène par sélécteur
 modification de changement de nom
+
+
+A enlever :
+
+taille , stroke
+

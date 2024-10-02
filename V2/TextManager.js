@@ -1,6 +1,7 @@
 import VR from './main.js';
+import { Text } from './Tagclass.js';
 import { AddSceneExplorer , updateSelectedTag } from './SceneManager.js';
-import { loadTag , TagPositionChange , renameTag , Text , duplicateTag , deleteTag , toggleMove , LoadSlider} from './TagManager.js';
+import { loadTag , TagPositionChange , renameTag ,  duplicateTag , deleteTag , toggleMove , LoadSlider} from './TagManager.js';
 
 
 
@@ -98,8 +99,12 @@ console.log(text);
         LoadSlider(rgInput);
     });
 
-    document.getElementById('RenameButton').addEventListener('click', function () {
-        renameTag('text', event.target.id);
+    let renameTimeout;
+    document.getElementById('rename').addEventListener('input', function (event) {
+        clearTimeout(renameTimeout);
+        renameTimeout = setTimeout(() => {
+            renameTag('text', textName);  // Utilise la valeur de l'input
+        }, 1000);
     });
 
     document.getElementById('LegendButton').addEventListener('click', function () {

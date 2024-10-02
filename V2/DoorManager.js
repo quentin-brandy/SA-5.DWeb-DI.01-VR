@@ -1,6 +1,7 @@
 import  VR  from './main.js';
+import { Door } from './Tagclass.js';
 import { AddSceneExplorer , switchScene , AddSceneSelectOption , updateSelectedTag } from './SceneManager.js';
-import { renameTag , TagPositionChange , Door , duplicateTag , deleteTag , toggleMove , LoadSlider} from './TagManager.js';
+import { renameTag , TagPositionChange , duplicateTag , deleteTag , toggleMove , LoadSlider} from './TagManager.js';
 
 
 
@@ -113,9 +114,13 @@ export function ModifyDoor(e) {
         let Name = document.getElementById('door-name');
         Name.textContent = doorName;
 
-        document.getElementById('RenameButton').addEventListener('click', function () {
-            renameTag('door', e.target.id);
-        });
+        let renameTimeout;
+    document.getElementById('rename').addEventListener('input', function (event) {
+        clearTimeout(renameTimeout);
+        renameTimeout = setTimeout(() => {
+            renameTag('door', doorName);  // Utilise la valeur de l'input
+        }, 1000);
+    });
 
         let CopyDoor = document.getElementById('dupliButton');
         CopyDoor.addEventListener('click', () => duplicateTag('door'));

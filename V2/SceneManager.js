@@ -85,17 +85,15 @@ export function DuplicateScene() {
 
 
 export function switchScene() {
+    if (Object.keys(VR.scenes).length === 0) {
+        return;
+    }
     const skyElement = document.getElementById('image-360');
     const sceneselect = document.getElementById('selectscene');
     const sceneNameInput = document.getElementById('scene-name');
     
     // Mettre à jour l'image de la scène
-    const selectedScene = VR.scenes[sceneselect.value];
-    if (selectedScene.image.url) {
-        skyElement.setAttribute('src', selectedScene.image.url);
-    } else {
-        skyElement.setAttribute('src', './assets/img/sky.jpg');
-    }
+    
     let templateSection = document.getElementById('template_section');
     templateSection.className = '';
     templateSection.innerHTML = '';

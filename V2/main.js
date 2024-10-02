@@ -41,37 +41,25 @@ import {LoadFile } from './FileManager.js';
 import {addText,  LegendText } from './TextManager.js';
 
 
+const actions = {
+    'plus-scene': AddScene,
+    'minus-scene': DeleteScene,
+    'switchscenename': ChangeSceneName,
+    'duplicate-scene': DuplicateScene,
+    'plus-door': addDoor,
+    'plus-text': addText,
+    'export-button': saveVRToJSON,
+    'delete-save': ResetAll,
+    'save-button': saveVRToLocalStorage
+};
+Object.keys(actions).forEach(id => {
+    let element = document.getElementById(id);
+    if (element) {
+        element.addEventListener('click', actions[id]);
+    }
+});
 
-let Addscene = document.getElementById('plus-scene');
-Addscene.addEventListener('click', AddScene);
-
-let Deletescene = document.getElementById('minus-scene');
-Deletescene.addEventListener('click', DeleteScene);
-
-let SceneSelect= document.getElementById('selectscene');
-SceneSelect.addEventListener('change', switchScene);
-
-let SceneName = document.getElementById('switchscenename');
-SceneName.addEventListener('click', ChangeSceneName);
-
-let Duplicatescene = document.getElementById('duplicate-scene');
-Duplicatescene.addEventListener('click', DuplicateScene);
-
-let AddDoor = document.getElementById('plus-door');
-AddDoor.addEventListener('click', addDoor);
-
-let AddText = document.getElementById('plus-text');
-AddText.addEventListener('click', addText);
-
-// Add event listener to the save button
-let exportButton = document.getElementById('export-button');
-exportButton.addEventListener('click', saveVRToJSON);
-
-let resetButton = document.getElementById('delete-save');
-resetButton.addEventListener('click', ResetAll);
-
-let SaveButton = document.getElementById('save-button');
-SaveButton.addEventListener('click', saveVRToLocalStorage);
+document.getElementById('selectscene').addEventListener('change', switchScene);
 
 
 function saveVRToJSON() {

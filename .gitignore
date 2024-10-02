@@ -1,2 +1,8 @@
 server.js
 post.js
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.flv
+*.wmv

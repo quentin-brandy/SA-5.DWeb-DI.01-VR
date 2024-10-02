@@ -2,87 +2,7 @@ import  VR  from './main.js';
 import { AddSceneExplorer, LoadSceneExplorer  } from './SceneManager.js';
 import { ModifyDoor , TakeDoor } from './DoorManager.js';
 import { ModifyText } from './TextManager.js';
-export class TagManager {
-    constructor(scene) {
-        this.scene = scene;
-        this.tags = scene.tags;
-    }
-
-    addTag(type, name, position, rotation = {}, additionalProperties = {}) {
-        const tag = {
-            type,
-            name,
-            position,
-            rotation,
-            ...additionalProperties
-        };
-        this.scene.tags.push(tag);
-        return tag;  // Retourne le tag pour des manipulations supplémentaires
-    }
-
-    moveTag(name, newPosition) {
-        const tag = this.tags.find(t => t.name === name);
-        if (tag) {
-            tag.position = { ...newPosition };
-            return tag;
-        }
-        return null;
-    }
-
-    getTag(name) {
-        return this.tags.find(t => t.name === name);
-    }
-    
-    renameTag(oldName, newName) {
-        const tag = this.getTag(oldName);
-        if (tag) {
-            tag.name = newName;
-        }
-    }
-    deleteTag(name) {
-        const index = this.tags.findIndex(t => t.name === name);
-        if (index !== -1) {
-            this.tags.splice(index, 1);
-            return true;
-        }
-        return false;
-    }
-
-    duplicateTag(tagName) {
-        const originalTag = this.getTag(tagName);
-        if (originalTag) {
-            const newTagName = this.generateUniqueName(originalTag.name, originalTag.type);
-            const newTag = { ...originalTag, name: newTagName, position: { ...originalTag.position } };
-            this.scene.tags.push(newTag);
-            return newTag;
-        }
-        return null;
-    }
-
-    generateUniqueName(baseName, type) {
-        let newName = baseName;
-        let count = 1;
-        while (this.tags.some(tag => tag.name === newName)) {
-            newName = `${baseName}_copy${count}`;
-            count++;
-        }
-        return newName;
-    }
-}
-
-export class Door extends TagManager {
-    addDoorTag(name, position, targetScene = 'no scene') {
-        return this.addTag('door', name, position, {}, { targetScene });
-    }
-    
-}
-
-export class Text extends TagManager {
-    addTextTag(name, position, rotation = {}, content = "Sample Text", fill = '#FFFFFF') {
-        return this.addTag('text', name, position, rotation, { content, fill });
-    }
-    
-}
+import { TagManager , Door, Text } from './Tagclass.js';
 
 
 export function LoadSlider(e) {
@@ -152,7 +72,6 @@ export function renameTag(type, nom) {
     const inputRename = document.getElementById('rename').value;
     const spanError = document.getElementById('span__error');
     
-    // Utiliser TagManager pour la gestion des tags
     const tagManager = new TagManager(scene);
 
     // Vérifier si le nouveau nom existe déjà
@@ -160,26 +79,32 @@ export function renameTag(type, nom) {
         spanError.innerHTML = "Ce nom existe déjà !";
         return;
     }
-
-    spanError.innerHTML = "";
     
-    // Récupérer et renommer le tag via TagManager
+    if (inputRename === "") {
+        spanError.innerHTML = "Le champ ne peut pas être vide";
+        return;
+    }
+    
+    spanError.innerHTML = ""; // Clear the error message
+    
     const tag = tagManager.getTag(nom);
     let tagScene = document.querySelector(`#${type}-entity #${nom}`);
-    
+
     if (tag) {
-        tagManager.renameTag(nom, inputRename);  // Utiliser la méthode renameTag
+        tagManager.renameTag(nom, inputRename);
 
-        // Mettre à jour l'ID de l'entité dans la scène A-Frame
-        tagScene.setAttribute('id', inputRename);
+        // Mettre à jour l'ID de l'entité dans A-Frame
+        if (tagScene) {
+            tagScene.setAttribute('id', inputRename);
+        }
 
-        // Appel des fonctions spécifiques au type
         AddSceneExplorer(inputRename, type);
         LoadSceneExplorer();
+        
         if (type === 'door') {
-            ModifyDoor({target: {id: inputRename}});
+            ModifyDoor({ target: { id: inputRename } });
         } else if (type === 'text') {
-            ModifyText({target: {id: inputRename}});
+            ModifyText({ target: { id: inputRename } });
         }
     }
 }
