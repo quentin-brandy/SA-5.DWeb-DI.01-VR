@@ -1,37 +1,10 @@
-// Function to save VR object to localStorage
-function saveVRToLocalStorage() {
-    localStorage.setItem('VR', JSON.stringify(VR));
-}
 
-// Function to load VR object from localStorage
-function loadVRFromLocalStorage() {
-    const savedVR = localStorage.getItem('VR');
-    if (savedVR) {
-        VR = JSON.parse(savedVR);
-    } else {
-        VR = {
-            scenes: {
-                scene1: {
-                    name: 'scene1',
-                    tags: [],
-                    image: {
-                        url: './assets/img/1.jpg',
-                        name: '1.jpg'
-                    }
-                }
-            }
-        };
-    }
-}
+       let VR = 
+            {"scenes":{"scene1":{"name":"scene1","tags":[{"type":"door","name":"door1","position":{"x":-3.7,"y":0.2,"z":-8.2},"rotation":{},"targetScene":"scene2"},{"type":"text","name":"textporte","position":{"x":-4.3,"y":-1.3,"z":-10},"rotation":{"x":0,"y":1.1,"z":0},"content":"porte studio","fill":"#06fe7a"}],"image":{"url":"./assets/img/1.jpg","name":"1.jpg"}},"scene2":{"name":"scene2","tags":[{"type":"door","name":"door1","position":{"x":-9.6,"y":-0.8,"z":10},"rotation":{},"targetScene":"scene1"},{"type":"text","name":"text1","position":{"x":-9.4,"y":-2.8,"z":9},"rotation":{"x":0,"y":2.398000000000004,"z":0},"content":"Porte sortie","fill":"#00eeff"},{"type":"text","name":"text2","position":{"x":10,"y":0,"z":-10},"rotation":{"x":0,"y":-0.9239999999999959,"z":0},"content":"Suite du studio \nProchainement\n","fill":"#0fff7f"}],"image":{"url":"./assets/img/2.jpg","name":"2.jpg"}}}}
 
-// Declare VR variable
-let VR;
 
-// Call loadVRFromLocalStorage when the page loads
-loadVRFromLocalStorage();
 
-// Set an interval to call saveVRToLocalStorage every second (10000 milliseconds)
-setInterval(saveVRToLocalStorage, 120000);
+
 
 export default VR;
 
@@ -41,37 +14,6 @@ import {LoadFile } from './FileManager.js';
 import {addText,  LegendText } from './TextManager.js';
 
 
-
-let Addscene = document.getElementById('plus-scene');
-Addscene.addEventListener('click', AddScene);
-
-let Deletescene = document.getElementById('minus-scene');
-Deletescene.addEventListener('click', DeleteScene);
-
-let SceneSelect= document.getElementById('selectscene');
-SceneSelect.addEventListener('change', switchScene);
-
-let SceneName = document.getElementById('switchscenename');
-SceneName.addEventListener('click', ChangeSceneName);
-
-let Duplicatescene = document.getElementById('duplicate-scene');
-Duplicatescene.addEventListener('click', DuplicateScene);
-
-let AddDoor = document.getElementById('plus-door');
-AddDoor.addEventListener('click', addDoor);
-
-let AddText = document.getElementById('plus-text');
-AddText.addEventListener('click', addText);
-
-// Add event listener to the save button
-let exportButton = document.getElementById('export-button');
-exportButton.addEventListener('click', saveVRToJSON);
-
-let resetButton = document.getElementById('delete-save');
-resetButton.addEventListener('click', ResetAll);
-
-let SaveButton = document.getElementById('save-button');
-SaveButton.addEventListener('click', saveVRToLocalStorage);
 
 
 function saveVRToJSON() {
