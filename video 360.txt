@@ -3,7 +3,7 @@ video 360
 réglage du son
 rotation a-sky de l'img
 info bulles très important
-ajout de scène par sélécteur
+
 
 florian
 pannel de modification du tag au click sur l'entité
@@ -11,3 +11,8 @@ changer le nom trigger
 remplacer la façon de changer de nom d'un tag
 Rajouter l'icon + dans la zone cliquable
 ouvrir le panel de modification du tag dès ça création
+
+autrs :
+modification render image dans objet 
+ajout de scène par sélécteur
+modification de changement de nom
