@@ -3,6 +3,7 @@ import { LoadFile } from './FileManager.js';
 import {  ModifyDoor , RouteSelect } from './DoorManager.js';
 import {  ModifyText  } from './TextManager.js';
 import { loadTag } from './TagManager.js';
+import { ModifyInfoBulle } from './InfoBulleManager.js';
 
 export function AddScene() {
     const selectElement = document.getElementById('selectscene');
@@ -167,6 +168,14 @@ export function AddSceneExplorer(newtag, type) {
                 ModifyText(event);
             }
         });
+    } else if (type === 'infoBulle') {
+        tagElement.setAttribute('data-type', 'infoBulle');
+        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/info-circle-dark.svg")]';
+        document.addEventListener('click', function (event) {
+            if (event.target.id === newtag) {
+                ModifyInfoBulle(event);
+            }
+        });
     }
     updateSelectedTag(tagElement);
 }
@@ -204,6 +213,13 @@ export function LoadSceneExplorer() {
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/card-text-dark.svg")]';
             tagElement.addEventListener('click', function (event) {
                 ModifyText(event);
+                updateSelectedTag(event.target);
+            });
+        } else if (tag.type === 'infoBulle') {
+            tagElement.setAttribute('data-type', 'infoBulle');
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("./assets/svg/info-circle-dark.svg")]';
+            tagElement.addEventListener('click', function (event) {
+                ModifyInfoBulle(event);
                 updateSelectedTag(event.target);
             });
         }

@@ -39,6 +39,7 @@ import {addDoor } from './DoorManager.js';
 import {AddScene, DeleteScene, ChangeSceneName , DuplicateScene , SceneExplorer , AddSceneSelectOption, switchScene} from './SceneManager.js';
 import {LoadFile } from './FileManager.js';
 import {addText,  LegendText } from './TextManager.js';
+import { addInfoBulle } from './InfoBulleManager.js';
 
 
 
@@ -62,6 +63,9 @@ AddDoor.addEventListener('click', addDoor);
 
 let AddText = document.getElementById('plus-text');
 AddText.addEventListener('click', addText);
+
+let AddInfoBulle = document.getElementById('plus-infoBulle');
+AddInfoBulle.addEventListener('click', addInfoBulle);
 
 // Add event listener to the save button
 let exportButton = document.getElementById('export-button');

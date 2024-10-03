@@ -190,7 +190,7 @@
           <img src="./assets/svg/door-closed.svg" alt="Door icon">
           Porte
         </button>
-        <button
+        <button id="plus-infoBulle"
           class="relative flex items-center gap-[5px] text-[15px] text-custom-white cursor-pointer pl-9 pr-3 py-2 rounded-[20rem] border-[none] bg-gradient-to-r from-custom-green to-custom-blue before:content-[url('./assets/svg/plus-lg-light.svg')] before:flex before:justify-center before:items-center before:absolute before:w-6 before:h-6 before:bg-custom-white before:rounded-[20rem] before:left-[7px] before:top-[7px]">
           <img src="./assets/svg/info-circle.svg" alt="Info Bulle icon">
           Info Bulle
@@ -241,6 +241,9 @@
     </a-entity>
   
     <a-entity id="text-entity">
+    </a-entity>
+
+    <a-entity id="infoBulle-entity">
     </a-entity>
   
     <!-- Camera and cursor with Oculus Quest 2 controller support -->
@@ -443,34 +446,26 @@
 
   <div class="flex items-center gap-2 mt-10 mb-0 mx-0">
     <img src="./assets/svg/box.svg" alt="Box icon">
-    <label>Objet</label>
+    <label id="infoBulle-name">{{name}}</label>
     <div class="flex items-center ml-2">
-      <button class="flex items-center cursor-pointer p-[5px] border-[none]">
-        <img class="icon__scene" src="./assets/svg/plus-lg.svg" alt="Plus icon">
-      </button>
-      <button class="flex items-center cursor-pointer p-[5px] border-[none]">
+      <button id="dupliButton" class="flex items-center cursor-pointer p-[5px] border-[none]">
         <img class="icon__scene" src="./assets/svg/copy.svg" alt="Copy icon">
       </button>
-      <button class="flex items-center cursor-pointer p-[5px] border-[none]">
+      <button id="TrashButton" class="flex items-center cursor-pointer p-[5px] border-[none]">
         <img class="icon__scene" src="./assets/svg/trash3.svg" alt="Trash icon">
       </button>
     </div>
   </div>
 
-  <div
-    class="flex items-center gap-[5px] w-full bg-custom-light-gray mt-[5px] mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/info-circle-dark.svg')]">
-    <p class="text-custom-dark-gray">Info Bulle 1</p>
-  </div>
-
-  <div class="mx-0 my-4"></div>
-  <label class="text-[15px] text-custom-dark-gray" for="rename">Renommez</label>
   <div class="flex justify-between gap-3">
-    <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid" type="text" id="rename"
-      name="rename" placeholder="Renommez" />
+    <input
+      class="flex items-center gap-[5px] w-full bg-custom-light-gray mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('./assets/svg/card-text-dark.svg')]"
+      type="text" id="rename" name="rename" placeholder="Renommez" value="{{name}}" />
     <button
-      class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
+      class="w-[61.59px] h-auto text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue"
+      id="RenameButton">Valider</button>
   </div>
-  </div>
+  <span id="span__error" class="text-red-500"></span>
 
   <div class="mt-[50px]">
     <div class="flex items-center gap-[5px] mb-[5px]">
@@ -478,30 +473,54 @@
       <label>Texte</label>
     </div>
 
-    <div class="flex flex-col mt-3">
-      <label class="text-[15px] text-custom-dark-gray" for="text_info_bulle">Titre</label>
+    <div class="flex flex-row mt-3 gap-[5px]">
       <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid text" type="text"
-        name="text_info_bulle" placeholder="Entrez votre titre...">
+        name="text_info_bulle" id="textInfoBulleTitle" placeholder="{{title}}">
+        <input type="color" id="colorInputTitle" value="{{colorTitle}}" class="colorText w-[36px] h-auto cursor-pointer rounded-[20px] border-[none]">
+      </div>
+      <div class="flex flex-row mt-3 gap-[5px]">
+        <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid text" type="text"
+        name="text_info_bulle" id="textInfoBulleDesc" placeholder="{{description}}">
+        <input type="color" id="colorInputDesc" value="{{colorDesc}}" class="colorText w-[36px] h-auto cursor-pointer rounded-[20px] border-[none]">
     </div>
-    <div class="flex flex-col mt-3">
-      <label class="text-[15px] text-custom-dark-gray" for="text_info_bulle">Description</label>
-      <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid text" type="text"
-        name="text_info_bulle" placeholder="Entrez votre description...">
+    <button id="NameButton"
+      class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 mt-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
+  </div>
+
+  <div class="mt-[50px]">
+    <div class="flex items-center gap-[5px] mb-[5px]">
+      <img src="./assets/svg/clipboard-check.svg" alt="Clipboard icon">
+      <label>Paramètre</label>
     </div>
-    <button
-      class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
+
+    <input type="checkbox" name="isVisible" id="checkboxOpen" {{checkedOrNot}}>
+    <label for="isVisible">Info Bulle ouverte</label>
+    <div class="flex items-center gap-[5px]">
+      <label for="rad">radius</label>
+      <input type="range" name="rad" id="rad-slider" value="{{rangeValueRad}}" min="0.2" max="0.8" step="any" class="inputRange radius appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      [&::-webkit-slider-thumb]:w-2.5
+      [&::-webkit-slider-thumb]:h-2.5
+      [&::-webkit-slider-thumb]:appearance-none
+      [&::-webkit-slider-thumb]:bg-custom-blue
+      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+      [&::-webkit-slider-thumb]:rounded-full
+      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
+      <div id="rad-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>{{rangeValueRad}}</p>
+      </div>
+    </div>
   </div>
 
   <div class="mt-[50px]">
     <div class="flex items-center gap-[5px] mb-[5px]">
       <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
       <label>Position</label>
-      <button id="button_move">test déplacement</button>
     </div>
 
     <div class="flex items-center gap-[5px]">
       <label for="x">x</label>
-      <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <input type="range" name="x" id="x-slider" value="{{rangeValueX}}" min="-10" max="10" step="any" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -509,14 +528,14 @@
       [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div
+      <div id="x-value"
         class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-        <p>0</p>
+        <p>{{rangeValueX}}</p>
       </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="y">y</label>
-      <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-10" max="10" step="any" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -524,14 +543,14 @@
       [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div
+      <div id="y-value"
         class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-        <p>0</p>
+        <p>{{rangeValueY}}0</p>
       </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="z">z</label>
-      <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <input type="range" name="z" id="z-slider" value="{{rangeValueZ}}" min="-10" max="10" step="any" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -539,9 +558,62 @@
       [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div
+      <div id="z-value"
         class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-        <p>0</p>
+        <p>{{rangeValueZ}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="text-position" class="mt-[50px]">
+    <div class="flex items-center gap-[5px] mb-[5px]">
+      <img src="./assets/svg/arrow-repeat.svg" alt="Rotation icon">
+      <label>Rotation</label>
+    </div>
+
+    <div class="flex items-center gap-[5px]">
+      <label for="rx">rx</label>
+      <input type="range" name="rx" id="rx-slider" value="{{rangeValueRx}}" min="-5" max="5" step="0.1" class="inputRange rotation appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      [&::-webkit-slider-thumb]:w-2.5
+      [&::-webkit-slider-thumb]:h-2.5
+      [&::-webkit-slider-thumb]:appearance-none
+      [&::-webkit-slider-thumb]:bg-custom-blue
+      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+      [&::-webkit-slider-thumb]:rounded-full
+      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
+      <div id="rx-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>{{rangeValueRx}}</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-[5px]">
+      <label for="ry">ry</label>
+      <input type="range" name="ry" id="ry-slider" value="{{rangeValueRy}}" min="-5" max="5" step="0.1" class="inputRange rotation appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      [&::-webkit-slider-thumb]:w-2.5
+      [&::-webkit-slider-thumb]:h-2.5
+      [&::-webkit-slider-thumb]:appearance-none
+      [&::-webkit-slider-thumb]:bg-custom-blue
+      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+      [&::-webkit-slider-thumb]:rounded-full
+      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
+      <div id="ry-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>{{rangeValueRy}}</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-[5px]">
+      <label for="rz">rz</label>
+      <input type="range" name="rz" id="rz-slider" value="{{rangeValueRz}}" min="-5" max="5" step="0.1" class="inputRange rotation appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      [&::-webkit-slider-thumb]:w-2.5
+      [&::-webkit-slider-thumb]:h-2.5
+      [&::-webkit-slider-thumb]:appearance-none
+      [&::-webkit-slider-thumb]:bg-custom-blue
+      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+      [&::-webkit-slider-thumb]:rounded-full
+      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
+      <div id="rz-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>{{rangeValueRz}}</p>
       </div>
     </div>
   </div>
@@ -554,7 +626,7 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="w">w</label>
-      <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <input type="range" name="w" id="w" value="0" min="-10" max="10" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -569,7 +641,7 @@
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="h">h</label>
-      <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <input type="range" name="h" id="h" value="0" min="-10" max="10" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -580,30 +652,6 @@
       <div
         class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
         <p>0</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="mt-[50px]">
-    <div class="flex items-center gap-[5px] mb-[5px]">
-      <img src="./assets/svg/palette.svg" alt="Palette icon">
-      <label>Couleurs</label>
-    </div>
-
-    <div class="flex flex-col mx-0 my-3">
-      <label class="text-[15px] text-custom-dark-gray" for="fill">Fill</label>
-      <div class="flex items-center w-min gap-[5px] border border-custom-gray p-1 rounded-[5px] border-solid">
-        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="fill" id="fill"
-          value="#00C058">
-        <p class="text-[15px] text-custom-dark-gray">00C058</p>
-      </div>
-    </div>
-    <div class="flex flex-col mx-0 my-3">
-      <label class="text-[15px] text-custom-dark-gray" for="stroke">Stroke</label>
-      <div class="flex items-center w-min gap-[5px] border border-custom-gray p-1 rounded-[5px] border-solid">
-        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="stroke"
-          id="stroke" value="#009EC0">
-        <p class="text-[15px] text-custom-dark-gray">009EC0</p>
       </div>
     </div>
   </div>

@@ -1,7 +1,8 @@
-import  VR  from './main.js';
-import { AddSceneExplorer, LoadSceneExplorer  } from './SceneManager.js';
-import { ModifyDoor , TakeDoor } from './DoorManager.js';
+import VR from './main.js';
+import { AddSceneExplorer, LoadSceneExplorer } from './SceneManager.js';
+import { ModifyDoor, TakeDoor } from './DoorManager.js';
 import { ModifyText } from './TextManager.js';
+import { ModifyInfoBulle } from './InfoBulleManager.js';
 export class TagManager {
     constructor(scene) {
         this.scene = scene;
@@ -32,7 +33,7 @@ export class TagManager {
     getTag(name) {
         return this.tags.find(t => t.name === name);
     }
-    
+
     renameTag(oldName, newName) {
         const tag = this.getTag(oldName);
         if (tag) {
@@ -74,14 +75,21 @@ export class Door extends TagManager {
     addDoorTag(name, position, targetScene = 'no scene') {
         return this.addTag('door', name, position, {}, { targetScene });
     }
-    
+
 }
 
 export class Text extends TagManager {
     addTextTag(name, position, rotation = {}, content = "Sample Text", fill = '#FFFFFF') {
         return this.addTag('text', name, position, rotation, { content, fill });
     }
-    
+
+}
+
+export class InfoBulle extends TagManager {
+    addInfoBulleTag(name, position, rotation = {}, contentTitle = "Sample Title", contentDesc = "Sample Description", fillTitle = '#000', fillDesc = '#000', radius = '0.5', visible = false) {
+        return this.addTag('infoBulle', name, position, rotation, { contentTitle, contentDesc, fillTitle, fillDesc, radius, visible });
+    }
+
 }
 
 
@@ -151,7 +159,7 @@ export function renameTag(type, nom) {
     const scene = VR.scenes[sceneName];
     const inputRename = document.getElementById('rename').value;
     const spanError = document.getElementById('span__error');
-    
+
     // Utiliser TagManager pour la gestion des tags
     const tagManager = new TagManager(scene);
 
@@ -162,11 +170,11 @@ export function renameTag(type, nom) {
     }
 
     spanError.innerHTML = "";
-    
+
     // Récupérer et renommer le tag via TagManager
     const tag = tagManager.getTag(nom);
     let tagScene = document.querySelector(`#${type}-entity #${nom}`);
-    
+
     if (tag) {
         tagManager.renameTag(nom, inputRename);  // Utiliser la méthode renameTag
 
@@ -177,9 +185,11 @@ export function renameTag(type, nom) {
         AddSceneExplorer(inputRename, type);
         LoadSceneExplorer();
         if (type === 'door') {
-            ModifyDoor({target: {id: inputRename}});
+            ModifyDoor({ target: { id: inputRename } });
         } else if (type === 'text') {
-            ModifyText({target: {id: inputRename}});
+            ModifyText({ target: { id: inputRename } });
+        } else if (type === 'infoBulle') {
+            ModifyInfoBulle({ target: { id: inputRename } });
         }
     }
 }
@@ -204,6 +214,8 @@ export function duplicateTag(tagType) {
             clonedTag = new Text(selectedScene).addTextTag(newTagName, newPosition, originalTag.rotation, originalTag.content, originalTag.fill);
         } else if (tagType === 'door') {
             clonedTag = new Door(selectedScene).addDoorTag(newTagName, newPosition, originalTag.targetScene);
+        } else if (tagType === 'infoBulle') {
+            clonedTag = new InfoBulle(selectedScene).addInfoBulleTag(newTagName, newPosition, originalTag.targetScene, originalTag.contentTitle, originalTag.contentDesc, originalTag.fillTitle, originalTag.fillDesc, originalTag.radius);
         }
 
         // Ajouter le tag cloné à la scène
@@ -218,9 +230,11 @@ export function duplicateTag(tagType) {
         console.log(`Tag dupliqué: ${newTagName}`);
 
         if (tagType === 'door') {
-            ModifyDoor({target: {id: newTagName}});
+            ModifyDoor({ target: { id: newTagName } });
         } else if (tagType === 'text') {
-            ModifyText({target: {id: newTagName}});
+            ModifyText({ target: { id: newTagName } });
+        } else if (tagType === 'infoBulle') {
+            ModifyInfoBulle({ target: { id: newTagName } });
         }
     }
 }
@@ -271,7 +285,8 @@ function createEntity(tag) {
                 TakeDoor(event);
             }
         });
-    } else if (tag.type === 'text') {
+    }
+    else if (tag.type === 'text') {
         newEntity = document.createElement('a-text');
         newEntity.setAttribute('position', `${tag.position.x} ${tag.position.y} ${tag.position.z}`);
         newEntity.setAttribute('value', tag.content);
@@ -280,6 +295,50 @@ function createEntity(tag) {
         newEntity.setAttribute('scale', '5 5 5');
         newEntity.setAttribute('id', tag.name);
         newEntity.object3D.rotation.set(tag.rotation.x, tag.rotation.y, tag.rotation.z);
+    }
+    else if (tag.type === 'infoBulle') {
+        newEntity = document.createElement('a-entity');
+        newEntity.setAttribute('id', `${tag.name}`);
+        newEntity.setAttribute('position', tag.position.x + ' ' + tag.position.y + ' ' + tag.position.z);
+        newEntity.object3D.rotation.set(tag.rotation.x, tag.rotation.y, tag.rotation.z);
+
+        var sphereEntity = document.createElement('a-sphere');
+        sphereEntity.setAttribute('id', `${tag.name}-sphere`);
+        sphereEntity.setAttribute('radius', tag.radius);
+        sphereEntity.setAttribute('color', '#EF2D5E');
+        sphereEntity.setAttribute('class', 'link');
+
+        var infoPanelEntity = document.createElement('a-entity');
+        infoPanelEntity.setAttribute('id', `${tag.name}-info-panel`);
+        infoPanelEntity.setAttribute('visible', false);
+
+        var infoPlane = document.createElement('a-plane');
+        infoPlane.setAttribute('color', '#FFF');
+        infoPlane.setAttribute('width', '2');
+        infoPlane.setAttribute('height', '1');
+
+        var infoTextTitle = document.createElement('a-text');
+        infoTextTitle.setAttribute('id', `${tag.name}-title`);
+        infoTextTitle.setAttribute('value', "Sample Title");
+        infoTextTitle.setAttribute('color', "#000");
+        infoTextTitle.setAttribute('opacity', '0');
+        infoTextTitle.setAttribute('width', '1.9');
+        infoTextTitle.setAttribute('wrap-count', '30');
+
+        var infoTextDescription = document.createElement('a-text');
+        infoTextDescription.setAttribute('id', `${tag.name}-description`);
+        infoTextDescription.setAttribute('value', "Sample Description");
+        infoTextDescription.setAttribute('color', "#000");
+        infoTextDescription.setAttribute('width', '1.9');
+        infoTextDescription.setAttribute('wrap-count', '30');
+
+        infoPlane.appendChild(infoTextTitle);
+        infoPlane.appendChild(infoTextDescription);
+
+        infoPanelEntity.appendChild(infoPlane);
+
+        newEntity.appendChild(sphereEntity);
+        newEntity.appendChild(infoPanelEntity);
     }
 
     return newEntity;
@@ -301,7 +360,7 @@ export function toggleMove(Name) {
         console.log(clickedElement);
         // Si l'élément a une classe ou un attribut indiquant son type, récupérons-le
         let Type = clickedElement.getAttribute('data-type') || clickedElement.classList.contains('door') ? 'door' : 'text'; // Remplace 'data-type' par l'attribut qui te convient si besoin
-  
+
         // Appeler `handleMove` avec le nom de l'élément et le type récupéré dynamiquement
         handleMove(event, Name, Type);
 
@@ -363,13 +422,15 @@ export function handleMove(event, Name, Type) {
 
     // Vérifier si une instance de tag existe déjà dans VR, sinon créer une nouvelle instance
     let tagInstance = VR.scenes[sceneSelect.value].tags.find(tag => tag.name === Name);
-    
+
     if (!tagInstance) {
         // Créer une nouvelle instance si elle n'existe pas déjà
         if (Type === 'door') {
             tagInstance = new Door(Name, selectedScene);
         } else if (Type === 'text') {
             tagInstance = new Text(Name, selectedScene);
+        } else if (Type === 'infoBulle') {
+            tagInstance = new InfoBulle(Name, selectedScene);
         } else {
             console.error('Type de tag non reconnu.');
             return;
@@ -406,7 +467,7 @@ export function handleMove(event, Name, Type) {
 }
 
 
-// Fonction générique pour charger et instancier les tags (door et text)
+// Fonction générique pour charger et instancier les tags (door et text et infoBulle)
 export function loadTag() {
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
@@ -414,8 +475,9 @@ export function loadTag() {
     // Vide les entités existantes
     const doorEntities = document.querySelector('#door-entity');
     const textEntities = document.querySelector('#text-entity');
-    
-    [doorEntities, textEntities].forEach(entityContainer => {
+    const infoBulleEntities = document.querySelector('#infoBulle-entity');
+
+    [doorEntities, textEntities, infoBulleEntities].forEach(entityContainer => {
         while (entityContainer.firstChild) {
             entityContainer.removeChild(entityContainer.firstChild);
         }
@@ -429,6 +491,8 @@ export function loadTag() {
             tagInstance = new Door(tag.name, selectedScene);
         } else if (tag.type === 'text') {
             tagInstance = new Text(tag.name, selectedScene);
+        } else if (tag.type === 'infoBulle') {
+            tagInstance = new InfoBulle(tag.name, selectedScene);
         }
 
         // Crée l'entité correspondante à partir du tag et la classe
@@ -439,6 +503,8 @@ export function loadTag() {
             doorEntities.appendChild(newEntity);
         } else if (tag.type === 'text') {
             textEntities.appendChild(newEntity);
+        } else if (tag.type === 'infoBulle') {
+            infoBulleEntities.appendChild(newEntity);
         }
     });
 }
