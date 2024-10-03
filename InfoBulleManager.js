@@ -1,6 +1,7 @@
 import VR from './main.js';
 import { AddSceneExplorer, updateSelectedTag } from './SceneManager.js';
-import { loadTag, TagPositionChange, renameTag, duplicateTag, deleteTag, toggleMove, LoadSlider, InfoBulle } from './TagManager.js';
+import { loadTag, TagPositionChange, renameTag, duplicateTag, deleteTag, toggleMove, LoadSlider, tagRotationChange } from './TagManager.js';
+import { InfoBulle } from "./Tagclass.js";
 
 export function addInfoBulle() {
     const sceneSelect = document.getElementById('selectscene');
@@ -22,7 +23,7 @@ export function addInfoBulle() {
     InfoBulleManager.addInfoBulleTag(
         infoBulleName,
         { x: position.x, y: position.y, z: position.z },
-        { x: 0, y: cameraEl.rotation.y, z: cameraEl.rotation.z },
+        { rx: cameraEl.rotation.x, ry: cameraEl.rotation.y, rz: cameraEl.rotation.z },
         "Sample Title",
         "Sample Description",
         '#000',
@@ -35,12 +36,15 @@ export function addInfoBulle() {
     globalEntity.setAttribute('id', `${infoBulleName}`);
     globalEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);
     globalEntity.object3D.rotation.set(cameraEl.rotation.x, cameraEl.rotation.y, cameraEl.rotation.z);
-
+    
     var sphereEntity = document.createElement('a-sphere');
     sphereEntity.setAttribute('id', `${infoBulleName}-sphere`);
     sphereEntity.setAttribute('radius', 0.5);
     sphereEntity.setAttribute('color', '#EF2D5E');
-    sphereEntity.setAttribute('class', 'link');
+    sphereEntity.setAttribute('class', 'link clickable movableBox');
+    sphereEntity.addEventListener('click', function (event) {
+        switchAnimInfoBulle(event);
+    });
 
     var infoPanelEntity = document.createElement('a-entity');
     infoPanelEntity.setAttribute('id', `${infoBulleName}-info-panel`);
@@ -84,7 +88,6 @@ export function addInfoBulle() {
 
 
 export function ModifyInfoBulle(event) {
-    console.log(event.target.innerText);
     let templateInfBulle = document.getElementById('template__info_bulle').innerHTML;
     const recipe = document.getElementById('template_section');
     templateInfBulle = templateInfBulle.replaceAll("{{name}}", event.target.id);
@@ -95,19 +98,20 @@ export function ModifyInfoBulle(event) {
     const selectedScene = VR.scenes[sceneSelect.value];
     const InfoBulle = selectedScene.tags.find(tag => tag.type === 'infoBulle' && tag.name === textInfoBulle);
     console.log(InfoBulle);
-    templateInfBulle = templateInfBulle.replaceAll("{{name}}", textInfoBulle);
-    templateInfBulle = templateInfBulle.replaceAll("{{title}}", InfoBulle.contentTitle);
-    templateInfBulle = templateInfBulle.replaceAll("{{description}}", InfoBulle.contentDesc);
+    
+    templateInfBulle = templateInfBulle.replaceAll("{{name}}", textInfoBulle.name);
+    templateInfBulle = templateInfBulle.replaceAll("{{title}}", InfoBulle.title);
+    templateInfBulle = templateInfBulle.replaceAll("{{description}}", InfoBulle.desc);
+    templateInfBulle = templateInfBulle.replaceAll("{{colorTitle}}", InfoBulle.titleColor);
+    templateInfBulle = templateInfBulle.replaceAll("{{colorDesc}}", InfoBulle.descColor);
+    templateInfBulle = templateInfBulle.replaceAll("{{checkedOrNot}}", InfoBulle.visible);
+    templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRad}}", InfoBulle.radius);
     templateInfBulle = templateInfBulle.replaceAll("{{rangeValueX}}", InfoBulle.position.x);
     templateInfBulle = templateInfBulle.replaceAll("{{rangeValueY}}", InfoBulle.position.y);
     templateInfBulle = templateInfBulle.replaceAll("{{rangeValueZ}}", InfoBulle.position.z);
-    templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRx}}", InfoBulle.rotation.x);
-    templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRy}}", InfoBulle.rotation.y);
-    templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRz}}", InfoBulle.rotation.z);
-    templateInfBulle = templateInfBulle.replaceAll("{{colorTitle}}", InfoBulle.fillTitle);
-    templateInfBulle = templateInfBulle.replaceAll("{{colorDesc}}", InfoBulle.fillDesc);
-    templateInfBulle = templateInfBulle.replaceAll("{{checkedOrNot}}", InfoBulle.visible);
-    templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRad}}", InfoBulle.radius);
+    templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRx}}", InfoBulle.rotation.rx);
+    templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRy}}", InfoBulle.rotation.ry);
+    templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRz}}", InfoBulle.rotation.rz);
     recipe.innerHTML = templateInfBulle;
     recipe.className = 'fixed h-[97%] border-solid border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2.5 top-2.5 border-2 border-custom-blue';
     let Explorer = document.getElementById(textInfoBulle);
@@ -125,6 +129,7 @@ export function ModifyInfoBulle(event) {
     });
 
     let CheckboxOpen = document.getElementById('checkboxOpen');
+    // loadTag();
     CheckboxOpen.addEventListener('click', function () {
         InfBulleVisibleOrNot(event);
     });
@@ -160,10 +165,13 @@ export function ModifyInfoBulle(event) {
 
     let inputRangesRotation = document.querySelectorAll('.rotation')
     inputRangesRotation.forEach(inputRange => {
-        inputRange.addEventListener('input', InfBulleRotationChange);
+        inputRange.addEventListener('input', (event) => tagRotationChange(event, 'infoBulle'));
     });
 
-    // document.getElementById('fillText').addEventListener('input', InfBulleClrsChange);
+    let inputClrs = document.querySelectorAll('.colorText')
+    inputClrs.forEach(inputClr => {
+        inputClr.addEventListener('input', InfBulleClrsChange);
+    });
 }
 
 
@@ -172,6 +180,8 @@ export function InfBulleText(nom) {
     let scene = VR.scenes[sceneName];
     let tags = scene.tags;
     let tag = tags.find(isGoodInfBulle);
+    console.log(tag);
+    
 
     let valueInputTitle = document.getElementById('textInfoBulleTitle').value;
     let valueInputDesc = document.getElementById('textInfoBulleDesc').value;
@@ -183,31 +193,6 @@ export function InfBulleText(nom) {
         return text.name === nom;
     }
 
-    loadTag();
-}
-
-
-export function InfBulleRotationChange(e) {
-    const infBulleName = document.getElementById('infoBulle-name').textContent;
-    const sceneSelect = document.getElementById('selectscene');
-    const selectedScene = VR.scenes[sceneSelect.value];
-    const axis = e.target.name; // 'x', 'y', or 'z'
-    const infBullePosition = parseFloat(e.target.value);
-    let axisAlone = axis.slice(1);
-
-
-    document.querySelector(`#${axis}-value`).textContent = `${infBullePosition}`;
-
-    const infBulle = selectedScene.tags.find(tag => tag.type === 'infoBulle' && tag.name === infBulleName);
-    if (infBulle) {
-        infBulle.rotation = { ...infBulle.rotation, [axisAlone]: infBullePosition };
-
-        const infBulleGlobal = document.querySelector(`#${infBulleName}`);
-        if (infBulleGlobal) {
-            infBulleGlobal.setAttribute('rotation', `${infBulle.rotation.x} ${infBulle.rotation.y} ${infBulle.rotation.z}`);
-        }
-    }
-    LoadSlider(e.target);
     loadTag();
 }
 
@@ -247,7 +232,7 @@ export function InfBulleClrsChange(e) {
     loadTag();
 }
 
-function switchAnimInfoBulle(ev) {
+export function switchAnimInfoBulle(ev) {
     let baseId = ev.target.id.split('-')[0];
     var panel = document.querySelector(`#${baseId}-info-panel`);
     var sphere = document.querySelector(`#${baseId}-sphere`);
@@ -281,7 +266,7 @@ function InfBulleVisibleOrNot(e) {
     const selectedScene = VR.scenes[sceneSelect.value];
     const infBulle = selectedScene.tags.find(tag => tag.type === "infoBulle" && tag.name === e.target.id);
     let InputChecked = document.getElementById('checkboxOpen').checked;
-
+    
     infBulle.isVisible = InputChecked;
     switchAnimInfoBulle(e)
 }

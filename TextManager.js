@@ -1,7 +1,7 @@
 import VR from './main.js';
 import { AddSceneExplorer , updateSelectedTag } from './SceneManager.js';
-import { loadTag , TagPositionChange , renameTag , Text , duplicateTag , deleteTag , toggleMove , LoadSlider} from './TagManager.js';
-
+import { loadTag , TagPositionChange , renameTag , duplicateTag , deleteTag , toggleMove , LoadSlider} from './TagManager.js';
+import { Text } from "./Tagclass.js";
 
 
 
