@@ -5,6 +5,9 @@ import { ModifyText } from './TextManager.js';
 import { TagManager , Door, Text , Photo } from './Tagclass.js';
 import { ModifyPhoto } from './PhotoManager.js';
 
+
+
+
 export function LoadSlider(e) {
     const ratio = (e.value - e.min) / (e.max - e.min) * 100;
     const activeColor = "#00C058";
@@ -13,7 +16,6 @@ export function LoadSlider(e) {
     e.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
 
 }
-
 
 // Fonction pour générer un nom unique
 function generateUniqueName(baseName, tags, type) {
@@ -34,11 +36,11 @@ export function TagPositionChange(e, tagType) {
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
     const axis = e.target.name; // 'x', 'y', or 'z'
-    const newPosition = parseFloat(e.target.value);
-
+    let newPosition = parseFloat(e.target.value);
+    newPosition = parseFloat(newPosition.toFixed(1));
     // Mettre à jour l'affichage de la valeur du slider
-    document.querySelector(`#${axis}-value`).textContent = `${newPosition}`;
 
+    document.getElementById(`${axis}-value`).value = newPosition;
     // Créer une instance de TagManager pour gérer les tags
     const tagManager = new TagManager(selectedScene);
 
@@ -59,6 +61,30 @@ export function TagPositionChange(e, tagType) {
 }
 
 
+export function TagPositionChangeValue(e, tagType) {
+    const tagName = document.getElementById(`${tagType}-name`).textContent; // "door-name" ou "text-name"
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const axis = e.target.name; // 'x', 'y', or 'z'
+    let newPosition = parseFloat(document.getElementById(`${axis}-value`).value);
+    newPosition = parseFloat(newPosition.toFixed(1));
+    // Créer une instance de TagManager pour gérer les tags
+    const tagManager = new TagManager(selectedScene);
+
+    // Mettre à jour la position en utilisant la méthode moveTag
+    const updatedTag = tagManager.moveTag(tagName, { ...selectedScene.tags.find(tag => tag.type === tagType && tag.name === tagName).position, [axis]: newPosition });
+
+    // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
+    if (updatedTag) {
+        const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+        if (tagElement) {
+            tagElement.setAttribute('position', `${updatedTag.position.x} ${updatedTag.position.y} ${updatedTag.position.z}`);
+        }
+    }
+    const slider = document.getElementById(`${axis}-slider`);
+    slider.value = newPosition;
+    LoadSlider(slider);
+}
 
 export function renameTag(type, nom) {
     const sceneName = document.getElementById('selectscene').value;
@@ -105,6 +131,8 @@ export function renameTag(type, nom) {
         }
     }
 }
+
+
 export function duplicateTag(tagType) {
     const tagName = document.getElementById(`${tagType}-name`).textContent;
     const sceneSelect = document.getElementById('selectscene');
@@ -189,7 +217,7 @@ function createEntity(tag) {
         newEntity.setAttribute('radius', '1');
         newEntity.setAttribute('color', tag.fill);
         newEntity.setAttribute('class', 'link clickable');
-        newEntity.setAttribute('scale', '0.5 0.5 0.5');
+        newEntity.setAttribute('scale', `${tag.scale.sx}  ${tag.scale.sy}  ${tag.scale.sz}`);
         newEntity.setAttribute('id', tag.name);
         newEntity.addEventListener('click', function (event) {
             TakeDoor(event);
@@ -200,16 +228,18 @@ function createEntity(tag) {
         newEntity.setAttribute('value', tag.content);
         newEntity.setAttribute('color', tag.fill);
         newEntity.setAttribute('align', 'center');
-        newEntity.setAttribute('scale', '5 5 5');
+        newEntity.setAttribute('scale', `${tag.scale.sx}  ${tag.scale.sy}  ${tag.scale.sz}`);
         newEntity.setAttribute('id', tag.name);
         newEntity.object3D.rotation.set(tag.rotation.rx, tag.rotation.ry, tag.rotation.rz);
     }
     if(tag.type === 'photo') {
         newEntity = document.createElement('a-image');
         newEntity.setAttribute('position', `${tag.position.x} ${tag.position.y} ${tag.position.z}`);
-        newEntity.setAttribute('src', '../assets/img/sky.jpg');
-        newEntity.setAttribute('scale', '1 1 1');
+        newEntity.setAttribute('src', tag.src);
+        newEntity.setAttribute('scale', `${tag.scale.sx}  ${tag.scale.sy}  ${tag.scale.sz}`);
         newEntity.setAttribute('id', tag.name);
+        newEntity.setAttribute('width', tag.taille.width);
+        newEntity.setAttribute('height', tag.taille.height);
         newEntity.object3D.rotation.set(tag.rotation.rx, tag.rotation.ry, tag.rotation.rz);
     }
 
@@ -389,9 +419,13 @@ export function tagRotationChange(e, tagType) {
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
     const axis = e.target.name; // 'x', 'y', or 'z'
-    const newRotation = parseFloat(e.target.value);
+    let newRotation = parseFloat(e.target.value);
+
+    // Limiter la valeur à un chiffre après la virgule
+    newRotation = parseFloat(newRotation.toFixed(1));
+
     // Mettre à jour l'affichage de la valeur du slider
-    document.querySelector(`#${axis}-value`).textContent = `${newRotation}`;
+    document.getElementById(`${axis}-value`).value = newRotation;
 
     // Créer une instance de TagManager pour gérer les tags
     const tagManager = new TagManager(selectedScene);
@@ -417,6 +451,53 @@ export function tagRotationChange(e, tagType) {
 }
 
 
+export function tagRotationChangeValue(e, tagType) {
+    const tagName = document.getElementById(`${tagType}-name`).textContent; // "door-name" ou "text-name"
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const axis = e.target.name; // 'x', 'y', or 'z'
+    console.log(axis);
+    let newRotation = parseFloat(document.getElementById(`${axis}-value`).value);
+
+    // Limiter la valeur à un chiffre après la virgule
+    newRotation = parseFloat(newRotation.toFixed(1));
+
+    // Créer une instance de TagManager pour gérer les tags
+    const tagManager = new TagManager(selectedScene);
+
+    // Récupérer le tag actuel dans la scène
+    const currentTag = selectedScene.tags.find(tag => tag.type === tagType && tag.name === tagName);
+    if (!currentTag) return;
+
+    // Mettre à jour seulement la rotation
+    const updatedTag = tagManager.rotateTag(tagName, { ...currentTag.rotation, [axis]: newRotation });
+
+    // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
+    if (updatedTag) {
+        const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+        if (tagElement) {
+            tagElement.setAttribute('rotation', `${updatedTag.rotation.rx} ${updatedTag.rotation.ry} ${updatedTag.rotation.rz}`);
+        }
+    }
+
+    const slider = document.getElementById(`${axis}-slider`);
+    slider.value = newRotation;
+    LoadSlider(slider);
+    console.log(VR);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 export function TagColorFillChange(tagType) {
     const tagName = document.getElementById(`${tagType}-name`).textContent;
     const sceneSelect = document.getElementById('selectscene');
@@ -437,4 +518,69 @@ console.log(inputColor);
     } else {
         console.error(`Tag ${tagName} non trouvé ou mise à jour échouée.`);
     }
+}
+
+
+export function tagScaleChange( e, tagType) {
+    console.log(tagType);
+    const tagName = document.getElementById(`${tagType}-name`).textContent;
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const newScale = parseFloat(e.target.value);
+    // Mettre à jour l'affichage de la valeur du slider
+    document.querySelector(`#scale-value`).textContent = `${newScale}`;
+
+    // Créer une instance de TagManager pour gérer les tags
+    const tagManager = new TagManager(selectedScene);
+
+    // Récupérer le tag actuel dans la scène
+    const currentTag = selectedScene.tags.find(tag => tag.type === tagType && tag.name === tagName);
+    if (!currentTag) return;
+
+    // Mettre à jour le scale uniformément sur les trois axes
+    const updatedTag = tagManager.scaleTag(tagName, { sx: newScale, sy: newScale, sz: newScale });
+
+    // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
+    if (updatedTag) {
+        const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+        if (tagElement) {
+            tagElement.setAttribute('scale', `${newScale} ${newScale} ${newScale}`);
+        }
+
+        // Mise à jour du dégradé linéaire du slider
+        LoadSlider(e.target);
+    }
+    console.log(VR);
+}
+
+export function tagDimensionChange(e, tagType) {
+    const tagName = document.getElementById(`${tagType}-name`).textContent;
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const newValue = parseFloat(e.target.value);
+    const dimension = e.target.name; 
+    // Mettre à jour l'affichage de la valeur du slider
+    document.querySelector(`#${dimension}-value`).textContent = `${newValue}`;
+
+    // Créer une instance de TagManager pour gérer les tags
+    const tagManager = new TagManager(selectedScene);
+
+    // Récupérer le tag actuel dans la scène
+    const currentTag = selectedScene.tags.find(tag => tag.type === tagType && tag.name === tagName);
+    if (!currentTag) return;
+
+    // Mettre à jour la dimension
+    let updatedTag;
+        updatedTag = tagManager.updateTagSize(tagName, newValue , dimension);
+    document.querySelector(`#${dimension}-value`).textContent = `${newValue}`;
+    // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
+    if (updatedTag) {
+        const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+        if (tagElement) {
+            tagElement.setAttribute(dimension, `${newValue}`);
+        }
+
+        LoadSlider(e.target);
+    }
+    console.log(VR);
 }

@@ -1,7 +1,7 @@
 import  VR  from './main.js';
 import { Door } from './Tagclass.js';
 import { AddSceneExplorer , switchScene , AddSceneSelectOption , updateSelectedTag } from './SceneManager.js';
-import { renameTag , TagPositionChange , duplicateTag , deleteTag , toggleMove , LoadSlider , TagColorFillChange} from './TagManager.js';
+import { renameTag , TagPositionChange , TagPositionChangeValue, duplicateTag , deleteTag , toggleMove , LoadSlider , TagColorFillChange, tagScaleChange} from './TagManager.js';
 import { LoadFile } from './FileManager.js';
 
 
@@ -37,7 +37,9 @@ export function addDoor() {
     doorManager.addDoorTag(doorName, 
         { x: position.x, y: position.y, z: position.z }, 
         'no scene', 
-        '#FF0000');
+        '#FF0000',
+        { sx: 0.5, sy: 0.5, sz: 0.5 }
+        );
 
     // Créer l'entité pour la porte
     const newEntity = document.createElement('a-sphere');
@@ -104,6 +106,7 @@ export function ModifyDoor(e) {
     templateText = templateText.replaceAll("{{rangeValueY}}", text.position.y); 
     templateText = templateText.replaceAll("{{rangeValueZ}}", text.position.z);
     templateText = templateText.replaceAll("{{colorFill}}", text.fill);
+    templateText = templateText.replaceAll("{{scale}}", text.scale);
     recipe.innerHTML = templateText;
     recipe.className = "fixed h-[97%] border-4 border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2 top-2";
     let rangeInputs = document.querySelectorAll('.inputRange');
@@ -117,7 +120,7 @@ export function ModifyDoor(e) {
         Name.textContent = doorName;
 
         let renameTimeout;
-    document.getElementById('rename').addEventListener('input', function (event) {
+    document.getElementById('rename').addEventListener('input', function () {
         clearTimeout(renameTimeout);
         renameTimeout = setTimeout(() => {
             renameTag('door', doorName);  // Utilise la valeur de l'input
@@ -145,6 +148,21 @@ export function ModifyDoor(e) {
         inputRangesPosition.forEach(inputRange => {
             inputRange.addEventListener('input', (event) => TagPositionChange(event, 'door'));
         });
+
+        let inputRangeX = document.querySelector('#x-value');
+        inputRangeX.addEventListener('input', (event) => TagPositionChangeValue(event, 'door'));
+    
+        let inputRangeY = document.querySelector('#y-value');
+        inputRangeY.addEventListener('input', (event) => TagPositionChangeValue(event, 'door'));
+    
+        let inputRangeZ = document.querySelector('#z-value');
+        inputRangeZ.addEventListener('input', (event) => TagPositionChangeValue(event, 'door'));
+    
+        
+
+        let inputRangeScale = document.getElementById('scale-value');
+            inputRangeScale.addEventListener('input', (event) => tagScaleChange(event, 'door'));
+
         document.getElementById('fill').addEventListener('input', () => TagColorFillChange('door'));
 
         const moveButton = document.getElementById('button_move');

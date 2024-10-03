@@ -1,7 +1,7 @@
 import VR from './main.js';
 import { Text } from './Tagclass.js';
 import { AddSceneExplorer , updateSelectedTag } from './SceneManager.js';
-import { loadTag , TagPositionChange , renameTag ,  duplicateTag , deleteTag , toggleMove , LoadSlider , tagRotationChange, TagColorFillChange} from './TagManager.js';
+import { loadTag , TagPositionChange , TagPositionChangeValue, renameTag ,  duplicateTag , deleteTag , toggleMove , LoadSlider , tagRotationChange, tagRotationChangeValue, TagColorFillChange, tagScaleChange} from './TagManager.js';
 
 
 
@@ -38,7 +38,8 @@ export function addText() {
         { x: position.x, y: position.y, z: position.z },
         { rx: 0, ry: cameraEl.rotation.y, rz: cameraEl.rotation.z },
         "Sample Text",
-        '#00C058'
+        '#00C058',
+        { sx: 5, sy: 5, sz: 5 }
     );
 
     // Créer l'entité pour le texte
@@ -83,6 +84,7 @@ console.log(text);
     templateText = templateText.replaceAll("{{rangeValueRy}}", text.rotation.ry);
     templateText = templateText.replaceAll("{{rangeValueRz}}", text.rotation.rz);
     templateText = templateText.replaceAll("{{colorFill}}", text.fill);
+    templateText = templateText.replaceAll("{{scale}}", text.scale.sx);
     recipe.innerHTML = templateText;
     recipe.className = "fixed h-[97%] border-4 border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2 top-2";
     let Explorer = document.getElementById(textName);
@@ -98,6 +100,7 @@ console.log(text);
     rangeInputs.forEach(rgInput => {
         LoadSlider(rgInput);
     });
+
 
     let renameTimeout;
     document.getElementById('rename').addEventListener('input', function (event) {
@@ -131,6 +134,28 @@ console.log(text);
     inputRangesRotation.forEach(inputRange => {
         inputRange.addEventListener('input', (event) => tagRotationChange(event , 'text'));
     });
+
+    let inputRangeX = document.querySelector('#x-value');
+    inputRangeX.addEventListener('input', (event) => TagPositionChangeValue(event, 'text'));
+
+    let inputRangeY = document.querySelector('#y-value');
+    inputRangeY.addEventListener('input', (event) => TagPositionChangeValue(event, 'text'));
+
+    let inputRangeZ = document.querySelector('#z-value');
+    inputRangeZ.addEventListener('input', (event) => TagPositionChangeValue(event, 'text'));
+
+    let inputRangeXRotation = document.querySelector('#rx-value');
+    inputRangeXRotation.addEventListener('input', (event) => tagRotationChangeValue(event, 'text'));
+
+    let inputRangeYRotation = document.querySelector('#ry-value');
+    inputRangeYRotation.addEventListener('input', (event) => tagRotationChangeValue(event, 'text'));
+
+    let inputRangeZRotation = document.querySelector('#rz-value');
+    inputRangeZRotation.addEventListener('input', (event) => tagRotationChangeValue(event, 'text'));
+
+
+    let inputRangeScale = document.getElementById('scale-value')
+        inputRangeScale.addEventListener('input', (event) => tagScaleChange(event , 'text'));
 
     document.getElementById('fill').addEventListener('input', () => TagColorFillChange('text'));
 }

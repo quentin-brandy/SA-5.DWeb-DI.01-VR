@@ -33,6 +33,22 @@ export class TagManager {
         }
         return null;
     }
+    scaleTag(name, newScale) {
+        const tag = this.getTag(name);
+        if (tag) {
+            tag.scale = newScale;
+            return tag;
+        }
+        return null;
+    }
+    updateTagSize(name, newSize, dimension) {
+        const tag = this.getTag(name);
+        if (tag && tag.taille && (dimension === 'width' || dimension === 'height')) {
+            tag.taille[dimension] = newSize;
+            return tag;
+        }
+        return null;
+    }
     getTag(name) {
         return this.tags.find(t => t.name === name);
     }
@@ -83,21 +99,29 @@ export class TagManager {
 }
 
 export class Door extends TagManager {
-    addDoorTag(name, position, targetScene = 'no scene', fill = '#FFFFFF') {
-        return this.addTag('door', name, position, {}, { targetScene, fill });
+    addDoorTag(name, position, targetScene = 'no scene', fill = '#FFFFFF' , scale = {sx: 1, sy: 1, sz: 1}) {
+        return this.addTag('door', name, position, {}, { targetScene, fill , scale} );
     }
 }
 
 export class Text extends TagManager {
-    addTextTag(name, position, rotation = {}, content = "Sample Text", fill = '#FFFFFF') {
-        return this.addTag('text', name, position, rotation, { content, fill });
+    addTextTag(name, position, rotation = {}, content = "Sample Text", fill = '#FFFFFF' , scale = {sx: 1, sy: 1, sz: 1}) {
+        return this.addTag('text', name, position, rotation, { content, fill , scale});
     }
     
 }
 
 export class Photo extends TagManager {
-    addPhotoTag(name, position, rotation = {}, src = '../assets/img/sky.jpg') {
-        return this.addTag('photo', name, position, rotation, { src });
+    addPhotoTag(name, position, rotation = {}, src = '../assets/img/image_photo.png', photoname='image_photo.png', taille = {width: 10 , height: 10 }, scale = {sx: 1, sy: 1, sz: 1}) {
+        return this.addTag('photo', name, position, rotation, { src, photoname, taille, scale });
     }
-    
+
+    updatePhotoSrc(name, newSrc) {
+        const tag = this.getTag(name);
+        if (tag && tag.type === 'photo') {
+            tag.src = newSrc;
+            return tag;
+        }
+        return null;
+    }
 }
