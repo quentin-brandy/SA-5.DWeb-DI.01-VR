@@ -72,6 +72,13 @@
       </div>
     </div>
 
+    <div class="flex items-center gap-2 mt-10 mb-0 mx-0">
+      <label for="default-scene-checkbox" class="flex items-center cursor-pointer">
+        <span class="w-4 h-4 inline-block border border-custom-gray rounded-sm bg-white"></span>
+        Scène par défaut
+      </label>
+      <input class="w-10" type="checkbox" id="default-scene-checkbox">
+    </div>
     <div class="mt-[50px]">
       <div class="flex items-center gap-[5px] mb-[5px]">
         <img src="../assets/svg/folder.svg" alt="Folder icon">
@@ -105,7 +112,7 @@
             <img src="../assets/svg/door-closed.svg" alt="Door icon">
             Porte
           </button>
-          <button
+          <button id="plus-infoBulle"
             class="relative flex items-center gap-[5px] text-[15px] text-custom-white cursor-pointer pl-9 pr-3 py-2 rounded-[20rem] border-[none] bg-gradient-to-r from-custom-green to-custom-blue before:content-[url('../assets/svg/plus-lg-light.svg')] before:flex before:justify-center before:items-center before:absolute before:w-6 before:h-6 before:bg-custom-white before:rounded-[20rem] before:left-[7px] before:top-[7px]">
             <img src="../assets/svg/info-circle.svg" alt="Info Bulle icon">
             Info Bulle
@@ -148,7 +155,7 @@
     </a-assets>
 
 
-    <a-sky id="image-360" rotation="0 -90 0" src="#img1" material="color: #FFFFFF"></a-sky>
+    <a-sky id="image-360" rotation="0 0 0" src="#img1" material="color: #FFFFFF"></a-sky>
 
 
 
@@ -163,6 +170,10 @@
 
     <a-entity id="photo-entity">
     </a-entity>
+
+    <a-entity id="infoBulle-entity">
+    </a-entity>
+
 
     <!-- Camera and cursor with Oculus Quest 2 controller support -->
     <a-entity position="0 1.6 0" id="camera" camera look-controls>
@@ -208,7 +219,6 @@
       type="text" id="rename" name="rename" placeholder="Renommez" value="{{name}}" />
   </div>
   <span id="span__error" class="text-red-500"></span>
-  </div>
 
   <div class="mt-[50px]">
     <div class="flex items-center gap-[5px] mb-[5px]">
@@ -250,8 +260,9 @@
         [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
         [&::-webkit-slider-thumb]:rounded-full
         [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-        <div class="flex items-center gap-[5px]">
-          <input type="number" name="x" id="x-value" value="{{rangeValueX}}" min="-30" max="30" step="0.1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="x" id="x-value" value="{{rangeValueX}}" min="-30" max="30" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
       </div>
     </div>
     <div class="flex items-center gap-[5px]">
@@ -265,8 +276,9 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="y" id="y-value" value="{{rangeValueY}}" min="-30" max="30" step="0.1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="y" id="y-value" value="{{rangeValueY}}" min="-30" max="30" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="z">z</label>
@@ -279,8 +291,9 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="z" id="z-value" value="{{rangeValueZ}}" min="-30" max="30" step="0.1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="z" id="z-value" value="{{rangeValueZ}}" min="-30" max="30" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
   </div>
 
@@ -319,7 +332,6 @@
     </div>
   </div>
 </template>
-
 <template id="template__info_bulle">
   <img id="close-object" src="../assets/svg/cross-svgrepo-com.svg" alt=""
     class="absolute w-10 top-0 left-0 cursor-pointer">
@@ -327,34 +339,23 @@
 
   <div class="flex items-center gap-2 mt-10 mb-0 mx-0">
     <img src="../assets/svg/box.svg" alt="Box icon">
-    <label>Objet</label>
+    <label id="infoBulle-name">{{name}}</label>
     <div class="flex items-center ml-2">
-      <button class="flex items-center cursor-pointer p-[5px] border-[none]">
-        <img class="icon__scene" src="../assets/svg/plus-lg.svg" alt="Plus icon">
-      </button>
-      <button class="flex items-center cursor-pointer p-[5px] border-[none]">
+      <button id="dupliButton" class="flex items-center cursor-pointer p-[5px] border-[none]">
         <img class="icon__scene" src="../assets/svg/copy.svg" alt="Copy icon">
       </button>
-      <button class="flex items-center cursor-pointer p-[5px] border-[none]">
+      <button id="TrashButton" class="flex items-center cursor-pointer p-[5px] border-[none]">
         <img class="icon__scene" src="../assets/svg/trash3.svg" alt="Trash icon">
       </button>
     </div>
   </div>
 
-  <div
-    class="flex items-center gap-[5px] w-full bg-custom-light-gray mt-[5px] mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('../assets/svg/info-circle-dark.svg')]">
-    <p class="text-custom-dark-gray">Info Bulle 1</p>
-  </div>
-
-  <div class="mx-0 my-4"></div>
-  <label class="text-[15px] text-custom-dark-gray" for="rename">Renommez</label>
   <div class="flex justify-between gap-3">
-    <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid" type="text" id="rename"
-      name="rename" placeholder="Renommez" />
-    <button
-      class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
+    <input
+      class="flex items-center gap-[5px] w-full bg-custom-light-gray mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('../assets/svg/card-text-dark.svg')]"
+      type="text" id="rename" name="rename" placeholder="Renommez" value="{{name}}" />
   </div>
-  </div>
+  <span id="span__error" class="text-red-500"></span>
 
   <div class="mt-[50px]">
     <div class="flex items-center gap-[5px] mb-[5px]">
@@ -362,21 +363,48 @@
       <label>Texte</label>
     </div>
 
-    <div class="flex flex-col mt-3">
-      <label class="text-[15px] text-custom-dark-gray" for="text_info_bulle">Titre</label>
+    <div class="flex flex-row mt-3 gap-[5px]">
       <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid text" type="text"
-        name="text_info_bulle" placeholder="Entrez votre titre...">
+        name="text_info_bulle" id="textInfoBulleTitle" placeholder="{{title}}">
+      <input type="color" id="colorInputTitle" value="{{colorTitle}}"
+        class="colorText w-[36px] h-auto cursor-pointer rounded-[20px] border-[none]">
     </div>
-    <div class="flex flex-col mt-3">
-      <label class="text-[15px] text-custom-dark-gray" for="text_info_bulle">Description</label>
+    <div class="flex flex-row mt-3 gap-[5px]">
       <input class="w-full border border-custom-gray p-[5px] rounded-[5px] border-solid text" type="text"
-        name="text_info_bulle" placeholder="Entrez votre description...">
+        name="text_info_bulle" id="textInfoBulleDesc" placeholder="{{description}}">
+      <input type="color" id="colorInputDesc" value="{{colorDesc}}"
+        class="colorText w-[36px] h-auto cursor-pointer rounded-[20px] border-[none]">
     </div>
-    <button
-      class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
+    <button id="NameButton"
+      class="w-[61.59px] text-[15px] text-custom-white cursor-pointer p-2 mt-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">Valider</button>
   </div>
 
   <div class="mt-[50px]">
+    <div class="flex items-center gap-[5px] mb-[5px]">
+      <img src="../assets/svg/clipboard-check.svg" alt="Clipboard icon">
+      <label>Paramètre</label>
+    </div>
+
+    <input type="checkbox" name="isVisible" id="checkboxOpen" {{checkedOrNot}}>
+    <label for="isVisible">Info Bulle ouverte</label>
+    <div class="flex items-center gap-[5px]">
+      <label for="rad">radius</label>
+      <input type="range" name="rad" id="rad-slider" value="{{rangeValueRad}}" min="0.2" max="0.8" step="any" class="inputRange radius appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      [&::-webkit-slider-thumb]:w-2.5
+      [&::-webkit-slider-thumb]:h-2.5
+      [&::-webkit-slider-thumb]:appearance-none
+      [&::-webkit-slider-thumb]:bg-custom-blue
+      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+      [&::-webkit-slider-thumb]:rounded-full
+      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
+      <div id="rad-value"
+        class="w-[55px] border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <p>{{rangeValueRad}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="infoBulle-position" class="mt-[50px]">
     <div class="flex items-center justify-between mb-2">
       <div class="flex items-center justify-between gap-[5px] mb-[5px]">
         <img src="../assets/svg/crosshair.svg" alt="Crosshair icon">
@@ -388,26 +416,22 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="x">x</label>
-      <input type="range" name="x" id="x" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
-      [&::-webkit-slider-thumb]:w-2.5
-      [&::-webkit-slider-thumb]:h-2.5
-      [&::-webkit-slider-thumb]:appearance-none
-      [&::-webkit-slider-thumb]:bg-custom-blue
-      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
-      [&::-webkit-slider-thumb]:rounded-full
-      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div id="x-value"
-        class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-        <p style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{rangeValueX}}</p>
-      </div>
-      <div
-        class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-        <p>0</p>
+      <input type="range" name="x" id="x-slider" value="{{rangeValueX}}" min="-30" max="30" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+        [&::-webkit-slider-thumb]:w-2.5
+        [&::-webkit-slider-thumb]:h-2.5
+        [&::-webkit-slider-thumb]:appearance-none
+        [&::-webkit-slider-thumb]:bg-custom-blue
+        [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+        [&::-webkit-slider-thumb]:rounded-full
+        [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="x" id="x-value" value="{{rangeValueX}}" min="-30" max="30" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
       </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="y">y</label>
-      <input type="range" name="y" id="y" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-30" max="30" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -415,14 +439,14 @@
       [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div
-        class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-        <p>0</p>
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="y" id="y-value" value="{{rangeValueY}}" min="-30" max="30" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
       </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="z">z</label>
-      <input type="range" name="z" id="z" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <input type="range" name="z" id="z-slider" value="{{rangeValueZ}}" min="-30" max="30" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -430,14 +454,14 @@
       [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div
-        class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-        <p>0</p>
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="z" id="z-value" value="{{rangeValueZ}}" min="-30" max="30" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
       </div>
     </div>
   </div>
 
-  <div id="text-position" class="mt-[50px]">
+  <div id="infoBulle-position" class="mt-[50px]">
     <div class="flex items-center gap-[5px] mb-[5px]">
       <img src="../assets/svg/arrow-repeat.svg" alt="Rotation icon">
       <label>Rotation</label>
@@ -454,9 +478,9 @@
       [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div id="rx-value"
-        class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-        <p>{{rangeValueRx}}</p>
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="rx" id="rx-value" value="{{rangeValueRx}}" min="-180" max="180" step="1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
       </div>
     </div>
     <div class="flex items-center gap-[5px]">
@@ -470,9 +494,9 @@
       [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div id="ry-value"
-        class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-        <p>{{rangeValueRy}}</p>
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="ry" id="ry-value" value="{{rangeValueRy}}" min="-180" max="180" step="1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
       </div>
     </div>
     <div class="flex items-center gap-[5px]">
@@ -486,9 +510,9 @@
       [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div id="rz-value"
-        class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-        <p>{{rangeValueRz}}</p>
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="rz" id="rz-value" value="{{rangeValueRz}}" min="-180" max="180" step="1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
       </div>
     </div>
   </div>
@@ -500,8 +524,8 @@
     </div>
 
     <div class="flex items-center gap-[5px]">
-      <label for="w">w</label>
-      <input type="range" name="w" id="w" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <label for="scale-value">échelle</label>
+      <input type="range" name="scale-value" id="scale-value" value="{{scale}}" min="0" max="10" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -509,42 +533,6 @@
       [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div
-        class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-        <p>0</p>
-      </div>
-    </div>
-    <div class="flex items-center gap-[5px]">
-      <label for="h">h</label>
-      <input type="range" name="h" id="h" value="0" min="-100" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
-      [&::-webkit-slider-thumb]:w-2.5
-      [&::-webkit-slider-thumb]:h-2.5
-      [&::-webkit-slider-thumb]:appearance-none
-      [&::-webkit-slider-thumb]:bg-custom-blue
-      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
-      [&::-webkit-slider-thumb]:rounded-full
-      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div
-        class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-        <p>0</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="mt-[50px]">
-    <div class="flex items-center gap-[5px] mb-[5px]">
-      <img src="../assets/svg/palette.svg" alt="Palette icon">
-      <label>Couleurs</label>
-    </div>
-
-
-    <div class="flex flex-col mx-0 my-3">
-      <label class="text-[15px] text-custom-dark-gray" for="fill">Fill</label>
-      <div class="flex items-center w-min gap-[5px] border border-custom-gray p-1 rounded-[5px] border-solid">
-        <input class="w-[26px] h-[26px] cursor-pointer rounded-[20px] border-[none]" type="color" name="fill" id="fill"
-          value="{{colorFill}}">
-        <p class="text-[15px] text-custom-dark-gray" id="textColorFill">{{colorFill}}</p>
-      </div>
     </div>
   </div>
 </template>
@@ -604,8 +592,9 @@
         [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
         [&::-webkit-slider-thumb]:rounded-full
         [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-        <div class="flex items-center gap-[5px]">
-          <input type="number" name="x" id="x-value" value="{{rangeValueX}}" min="-30" max="30" step="0.1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="x" id="x-value" value="{{rangeValueX}}" min="-30" max="30" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
       </div>
     </div>
     <div class="flex items-center gap-[5px]">
@@ -619,8 +608,9 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="y" id="y-value" value="{{rangeValueY}}" min="-30" max="30" step="0.1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="y" id="y-value" value="{{rangeValueY}}" min="-30" max="30" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="z">z</label>
@@ -633,8 +623,9 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="z" id="z-value" value="{{rangeValueZ}}" min="-30" max="30" step="0.1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="z" id="z-value" value="{{rangeValueZ}}" min="-30" max="30" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
   </div>
 
@@ -656,8 +647,9 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="rx" id="rx-value" value="{{rangeValueRx}}" min="-180" max="180" step="1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="rx" id="rx-value" value="{{rangeValueRx}}" min="-180" max="180" step="1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="ry">ry</label>
@@ -671,8 +663,9 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="ry" id="ry-value" value="{{rangeValueRy}}" min="-180" max="180" step="1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="ry" id="ry-value" value="{{rangeValueRy}}" min="-180" max="180" step="1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="rz">rz</label>
@@ -686,8 +679,9 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="rz" id="rz-value" value="{{rangeValueRz}}" min="-180" max="180" step="1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="rz" id="rz-value" value="{{rangeValueRz}}" min="-180" max="180" step="1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
   </div>
 
@@ -756,10 +750,10 @@
   <div class="mt-[50px]"></div>
   <div class="flex flex-col justify-start items-start gap-[5px] mb-[5px]">
     <div class="flex items-center justify-center">
-    <img src="../assets/svg/folder.svg" alt="Folder icon">
-    <label for="input_file">Photo importé</label>
-  </div>
-    <p  id="photo_import_name">{{photoName}}</p>
+      <img src="../assets/svg/folder.svg" alt="Folder icon">
+      <label for="input_file">Photo importé</label>
+    </div>
+    <p id="photo_import_name">{{photoName}}</p>
   </div>
 
   <div class="flex items-center">
@@ -795,8 +789,9 @@
         [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
         [&::-webkit-slider-thumb]:rounded-full
         [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-        <div class="flex items-center gap-[5px]">
-          <input type="number" name="x" id="x-value" value="{{rangeValueX}}" min="-30" max="30" step="0.1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="x" id="x-value" value="{{rangeValueX}}" min="-30" max="30" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
       </div>
     </div>
     <div class="flex items-center gap-[5px]">
@@ -810,8 +805,9 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="y" id="y-value" value="{{rangeValueY}}" min="-30" max="30" step="0.1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="y" id="y-value" value="{{rangeValueY}}" min="-30" max="30" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="z">z</label>
@@ -824,8 +820,9 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="z" id="z-value" value="{{rangeValueZ}}" min="-30" max="30" step="0.1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="z" id="z-value" value="{{rangeValueZ}}" min="-30" max="30" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
   </div>
 
@@ -847,8 +844,9 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="rx" id="rx-value" value="{{rangeValueRx}}" min="-180" max="180" step="1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="rx" id="rx-value" value="{{rangeValueRx}}" min="-180" max="180" step="1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="ry">ry</label>
@@ -862,8 +860,9 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="ry" id="ry-value" value="{{rangeValueRy}}" min="-180" max="180" step="1"  class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="ry" id="ry-value" value="{{rangeValueRy}}" min="-180" max="180" step="1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label for="rz">rz</label>
@@ -877,8 +876,9 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="rz" id="rz-value" value="{{rangeValueRz}}" min="-180" max="180" step="1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="rz" id="rz-value" value="{{rangeValueRz}}" min="-180" max="180" step="1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
   </div>
 
@@ -899,11 +899,12 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="width" id="width-value" value="{{photoWidth}}"  min="0" max="100" step="0.01" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="width" id="width-value" value="{{photoWidth}}" min="0" max="100" step="0.01"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
     <div class="flex items-center gap-[5px]">
-      <label  for="height">h</label>
+      <label for="height">h</label>
       <input type="range" name="height" id="height-slider" value="{{photoHeight}}" min="0" max="100" step="0.01" class="inputRange taille appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
@@ -913,12 +914,13 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="height" id="height-value" value="{{photoHeight}}" min="0" max="100" step="0.01" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-    </div>
+        <input type="number" name="height" id="height-value" value="{{photoHeight}}" min="0" max="100" step="0.01"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
     </div>
     <div class="flex items-center gap-[5px]"></div>
-      <label for="scale-value">échelle</label>
-      <input type="range" name="scale-value" id="scale-value" value="{{scale}}" min="0" max="10" step="any" class=" inputRange scale appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+    <label for="scale-value">échelle</label>
+    <input type="range" name="scale-value" id="scale-value" value="{{scale}}" min="0" max="10" step="any" class=" inputRange scale appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -926,7 +928,7 @@
       [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-    </div>
+  </div>
   </div>
   </div>
 </template>

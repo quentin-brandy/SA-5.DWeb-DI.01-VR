@@ -638,6 +638,10 @@ video {
   margin-top: 2.5rem;
 }
 
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
 .mt-3 {
   margin-top: 0.75rem;
 }
@@ -652,10 +656,6 @@ video {
 
 .mt-\[50px\] {
   margin-top: 50px;
-}
-
-.mt-\[5px\] {
-  margin-top: 5px;
 }
 
 .inline-block {
@@ -682,6 +682,10 @@ video {
   height: 9px;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .w-10 {
   width: 2.5rem;
 }
@@ -704,6 +708,14 @@ video {
 
 .w-\[26px\] {
   width: 26px;
+}
+
+.w-\[36px\] {
+  width: 36px;
+}
+
+.w-\[55px\] {
+  width: 55px;
 }
 
 .w-\[61\.59px\] {
@@ -731,6 +743,10 @@ video {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
+}
+
+.flex-row {
+  flex-direction: row;
 }
 
 .flex-col {
@@ -1045,11 +1061,6 @@ video {
 
 .before\:content-\[url\(\'\.\.\/assets\/svg\/card-text-dark\.svg\'\)\]::before {
   --tw-content: url('../assets/svg/card-text-dark.svg');
-  content: var(--tw-content);
-}
-
-.before\:content-\[url\(\'\.\.\/assets\/svg\/info-circle-dark\.svg\'\)\]::before {
-  --tw-content: url('../assets/svg/info-circle-dark.svg');
   content: var(--tw-content);
 }
 
