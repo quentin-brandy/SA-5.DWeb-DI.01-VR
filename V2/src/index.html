@@ -746,11 +746,6 @@
     </div>
   </div>
 
-  <!-- <div
-    class="flex items-center gap-[5px] w-full bg-custom-light-gray mt-[5px] mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('../assets/svg/card-text-dark.svg')]">
-    <p id="text-name" class="text-custom-dark-gray">{{name}}</p>
-  </div> -->
-
   <div class="flex justify-between gap-3">
     <input
       class="flex items-center gap-[5px] w-full bg-custom-light-gray mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('../assets/svg/card-text-dark.svg')]"
@@ -759,7 +754,7 @@
   <span id="span__error" class="text-red-500"></span>
   </div>
   <div class="mt-[50px]"></div>
-  <div class="flex flex-col gap-[5px] mb-[5px]">
+  <div class="flex flex-col justify-start items-start gap-[5px] mb-[5px]">
     <div class="flex items-center justify-center">
     <img src="../assets/svg/folder.svg" alt="Folder icon">
     <label for="input_file">Photo importé</label>
@@ -895,7 +890,7 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="width">w</label>
-      <input type="range" id="width-value" name="width" value="{{photoWidth}}" min="0" max="100" step="0.01" class="inputRange taille appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <input type="range" id="width-slider" name="width" value="{{photoWidth}}" min="0" max="100" step="0.01" class="inputRange taille appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -904,12 +899,12 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="width-value" id="width-value" value="{{photoWidth}}" min="-30" max="30" step="0.1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <input type="number" name="width" id="width-value" value="{{photoWidth}}"  min="0" max="100" step="0.01" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
     </div>
     </div>
     <div class="flex items-center gap-[5px]">
       <label  for="height">h</label>
-      <input type="range" name="height" id="height-value" value="{{photoHeight}}" min="0" max="100" step="any" class="inputRange taille appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <input type="range" name="height" id="height-slider" value="{{photoHeight}}" min="0" max="100" step="0.01" class="inputRange taille appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -918,7 +913,7 @@
       [&::-webkit-slider-thumb]:rounded-full
       [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
       <div class="flex items-center gap-[5px]">
-        <input type="number" name="height-value" id="height-value" value="{{photoHeight}}" min="-30" max="30" step="0.1" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+        <input type="number" name="height" id="height-value" value="{{photoHeight}}" min="0" max="100" step="0.01" class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
     </div>
     </div>
     <div class="flex items-center gap-[5px]"></div>

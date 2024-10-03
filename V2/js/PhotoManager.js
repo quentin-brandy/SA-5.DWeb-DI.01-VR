@@ -1,8 +1,8 @@
 import  VR  from './main.js';
-import { Photo, TagManager } from './Tagclass.js';
+import { Photo } from './Tagclass.js';
 import { AddSceneExplorer , updateSelectedTag } from './SceneManager.js';
-
-import { renameTag , TagPositionChange , TagPositionChangeValue , duplicateTag , deleteTag , toggleMove , LoadSlider , tagRotationChange, tagRotationChangeValue , tagScaleChange, tagDimensionChange} from './TagManager.js';
+import { createEntity } from './a-frame_entity.js';
+import { renameTag , TagPositionChange , TagPositionChangeValue , duplicateTag , deleteTag , toggleMove , LoadSlider , tagRotationChange, tagRotationChangeValue , tagScaleChange, tagDimensionChange , tagDimensionChangeValue} from './TagManager.js';
 
 
 export function addPhoto() {
@@ -42,17 +42,7 @@ export function addPhoto() {
         { sx: 1, sy: 1, sz: 1 }
     );
 
-    // Créer l'entité pour la photo
-    const newEntity = document.createElement('a-image');
-    newEntity.setAttribute('position', `${position.x} ${position.y} ${position.z}`);
-    newEntity.setAttribute('src', '../assets/img/image_photo.png');
-    newEntity.setAttribute('width', '1');
-    newEntity.setAttribute('height', '1');
-    newEntity.setAttribute('scale', '1 1 1');
-    newEntity.setAttribute('id', photoName);
-    newEntity.object3D.rotation.set(0, cameraEl.rotation.y, cameraEl.rotation.z);
-
-  
+    const newEntity = createEntity(selectedScene.tags.find(tag => tag.name === photoName));
 
     document.querySelector('#rightController').addEventListener('grip-down', function (event) {
         if (event.target === newEntity) {
@@ -117,22 +107,14 @@ export function ModifyPhoto(event) {
     });
 
     let renameTimeout;
-    document.getElementById('rename').addEventListener('input', function (event) {
+    document.getElementById('rename').addEventListener('input', function () {
         clearTimeout(renameTimeout);
         renameTimeout = setTimeout(() => {
             renameTag('photo', photoName);
         }, 1000);
     });
 
-    document.getElementById('close-object').addEventListener('click', function () {
-        recipe.innerHTML = '';
-        recipe.className = '';
-        Explorer.style.backgroundColor = '';
-    });
-
-    let CopyDoor = document.getElementById('dupliButton');
-    CopyDoor.addEventListener('click', () => duplicateTag('photo'));
-
+    document.getElementById('dupliButton').addEventListener('click', () => duplicateTag('photo'));
 
     document.getElementById('TrashButton').addEventListener('click', function () {
         deleteTag('photo');
@@ -142,42 +124,32 @@ export function ModifyPhoto(event) {
         updatePhoto(e)
     });
 
-    let inputRangeScale = document.getElementById('scale-value')
-    inputRangeScale.addEventListener('input', (event) => tagScaleChange(event , 'photo'));
-
-    let inputRangesPosition = document.querySelectorAll('.position');
-    inputRangesPosition.forEach(inputRange => {
-        inputRange.addEventListener('input', (event) => TagPositionChange(event, 'photo'));
+    document.getElementById('close-object').addEventListener('click', function () {
+        recipe.innerHTML = '';
+        recipe.className = '';
+        Explorer.style.backgroundColor = '';
     });
 
-    let inputRangeX = document.querySelector('#x-value');
-    inputRangeX.addEventListener('input', (event) => TagPositionChangeValue(event, 'photo'));
+    const inputRanges = [
+        { selector: '#scale-value', event: 'input', handler: (event) => tagScaleChange(event, 'photo') },
+        { selector: '.position', event: 'input', handler: (event) => TagPositionChange(event, 'photo') },
+        { selector: '#x-value', event: 'input', handler: (event) => TagPositionChangeValue(event, 'photo') },
+        { selector: '#y-value', event: 'input', handler: (event) => TagPositionChangeValue(event, 'photo') },
+        { selector: '#z-value', event: 'input', handler: (event) => TagPositionChangeValue(event, 'photo') },
+        { selector: '#rx-value', event: 'input', handler: (event) => tagRotationChangeValue(event, 'photo') },
+        { selector: '#ry-value', event: 'input', handler: (event) => tagRotationChangeValue(event, 'photo') },
+        { selector: '#rz-value', event: 'input', handler: (event) => tagRotationChangeValue(event, 'photo') },
+        { selector: '#width-value', event: 'input', handler: (event) => tagDimensionChangeValue(event, 'photo') },
+        { selector: '#height-value', event: 'input', handler: (event) => tagDimensionChangeValue(event, 'photo') },
+        { selector: '.rotation', event: 'input', handler: (event) => tagRotationChange(event, 'photo') },
+        { selector: '.taille', event: 'input', handler: (event) => tagDimensionChange(event, 'photo') }
+    ];
 
-    let inputRangeY = document.querySelector('#y-value');
-    inputRangeY.addEventListener('input', (event) => TagPositionChangeValue(event, 'photo'));
-
-    let inputRangeZ = document.querySelector('#z-value');
-    inputRangeZ.addEventListener('input', (event) => TagPositionChangeValue(event, 'photo'));
-
-
-    let inputRangeXRotation = document.querySelector('#rx-value');
-    inputRangeXRotation.addEventListener('input', (event) => tagRotationChangeValue(event, 'photo'));
-
-    let inputRangeYRotation = document.querySelector('#ry-value');
-    inputRangeYRotation.addEventListener('input', (event) => tagRotationChangeValue(event, 'photo'));
-
-    let inputRangeZRotation = document.querySelector('#rz-value');
-    inputRangeZRotation.addEventListener('input', (event) => tagRotationChangeValue(event, 'photo'));
-
-
-
-    let inputRangesRotation = document.querySelectorAll('.rotation');
-    inputRangesRotation.forEach(inputRange => {
-        inputRange.addEventListener('input', (event) => tagRotationChange(event, 'photo'));
-    });
-    let inputTaille = document.querySelectorAll('.taille');
-    inputTaille.forEach(inputRange => {
-        inputRange.addEventListener('input', (event) => tagDimensionChange(event, 'photo'));
+    inputRanges.forEach(({ selector, event, handler }) => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(element => {
+            element.addEventListener(event, handler);
+        });
     });
 }
 export function updatePhoto(event) {

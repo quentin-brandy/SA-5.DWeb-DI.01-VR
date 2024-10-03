@@ -3,6 +3,7 @@ import { Door } from './Tagclass.js';
 import { AddSceneExplorer , switchScene , AddSceneSelectOption , updateSelectedTag } from './SceneManager.js';
 import { renameTag , TagPositionChange , TagPositionChangeValue, duplicateTag , deleteTag , toggleMove , LoadSlider , TagColorFillChange, tagScaleChange} from './TagManager.js';
 import { LoadFile } from './FileManager.js';
+import { createEntity } from './a-frame_entity.js'
 
 
 
@@ -41,25 +42,7 @@ export function addDoor() {
         { sx: 0.5, sy: 0.5, sz: 0.5 }
         );
 
-    // Créer l'entité pour la porte
-    const newEntity = document.createElement('a-sphere');
-    newEntity.setAttribute('position', `${position.x} ${position.y} ${position.z}`);
-    newEntity.setAttribute('radius', '1');
-    newEntity.setAttribute('color', '#FF0000');
-    newEntity.setAttribute('class', 'link clickable movableBox');
-    newEntity.setAttribute('scale', '0.5 0.5 0.5');
-    newEntity.setAttribute('id', doorName);
-    
-    // Ajouter des événements de clic et de déplacement
-    newEntity.addEventListener('click', function (event) {
-        TakeDoor(event);
-    });
-    
-    document.querySelector('#rightController').addEventListener('grip-down', function (event) {
-        if (event.target === newEntity) {
-            MoveDoor(event);
-        }
-    });
+        const newEntity = createEntity(selectedScene.tags.find(tag => tag.name === doorName));
 
     // Ajouter l'entité à la scène
     document.querySelector('#door-entity').appendChild(newEntity);
@@ -119,62 +102,45 @@ export function ModifyDoor(e) {
         let Name = document.getElementById('door-name');
         Name.textContent = doorName;
 
-        let renameTimeout;
-    document.getElementById('rename').addEventListener('input', function () {
-        clearTimeout(renameTimeout);
-        renameTimeout = setTimeout(() => {
-            renameTag('door', doorName);  // Utilise la valeur de l'input
-        }, 1000);
-    });
+        const eventListeners = [
+            { selector: '#rename', event: 'input', handler: function () {
+                clearTimeout(renameTimeout);
+                renameTimeout = setTimeout(() => {
+                    renameTag('door', doorName);
+                }, 1000);
+            }},
+            { selector: '#dupliButton', event: 'click', handler: () => duplicateTag('door') },
+            { selector: '#TrashButton', event: 'click', handler: () => deleteTag('door') },
+            { selector: '#scene-route-select', event: 'change', handler: RouteSelected },
+            { selector: '#close-object', event: 'click', handler: function () {
+                recipe.innerHTML = '';
+                recipe.className = '';
+                Explorer.style.backgroundColor = '';
+            }},
+            { selector: '.position', event: 'input', handler: (event) => TagPositionChange(event, 'door'), isMultiple: true },
+            { selector: '#x-value', event: 'input', handler: (event) => TagPositionChangeValue(event, 'door') },
+            { selector: '#y-value', event: 'input', handler: (event) => TagPositionChangeValue(event, 'door') },
+            { selector: '#z-value', event: 'input', handler: (event) => TagPositionChangeValue(event, 'door') },
+            { selector: '#scale-value', event: 'input', handler: (event) => tagScaleChange(event, 'door') },
+            { selector: '#fill', event: 'input', handler: () => TagColorFillChange('door') },
+            { selector: '#button_move', event: 'click', handler: function() {
+                toggleMove(doorName);
+            }},
+            { selector: '#plus-doorscene', event: 'click', handler: AddSelectScene }
+        ];
 
-        let CopyDoor = document.getElementById('dupliButton');
-        CopyDoor.addEventListener('click', () => duplicateTag('door'));
-
-        document.getElementById('TrashButton').addEventListener('click', function () {
-            deleteTag('door');
+        eventListeners.forEach(({ selector, event, handler, isMultiple }) => {
+            if (isMultiple) {
+                document.querySelectorAll(selector).forEach(element => {
+                    element.addEventListener(event, handler);
+                });
+            } else {
+                const element = document.querySelector(selector);
+                if (element) {
+                    element.addEventListener(event, handler);
+                }
+            }
         });
-
-        let Route = document.getElementById('scene-route-select');
-        Route.addEventListener('change', RouteSelected);
-
-
-        document.getElementById('close-object').addEventListener('click', function () {
-            recipe.innerHTML = '';
-            recipe.className = '';
-            Explorer.style.backgroundColor = '';
-        });
-
-        let inputRangesPosition = document.querySelectorAll('.position');
-        inputRangesPosition.forEach(inputRange => {
-            inputRange.addEventListener('input', (event) => TagPositionChange(event, 'door'));
-        });
-
-        let inputRangeX = document.querySelector('#x-value');
-        inputRangeX.addEventListener('input', (event) => TagPositionChangeValue(event, 'door'));
-    
-        let inputRangeY = document.querySelector('#y-value');
-        inputRangeY.addEventListener('input', (event) => TagPositionChangeValue(event, 'door'));
-    
-        let inputRangeZ = document.querySelector('#z-value');
-        inputRangeZ.addEventListener('input', (event) => TagPositionChangeValue(event, 'door'));
-    
-        
-
-        let inputRangeScale = document.getElementById('scale-value');
-            inputRangeScale.addEventListener('input', (event) => tagScaleChange(event, 'door'));
-
-        document.getElementById('fill').addEventListener('input', () => TagColorFillChange('door'));
-
-        const moveButton = document.getElementById('button_move');
-        if (moveButton) {
-            moveButton.addEventListener('click', function() {
-                // Si vous avez besoin de désactiver un précédent listener, vous pouvez le faire ici
-                toggleMove(doorName); // Remplacez cela par la fonction de déplacement
-            });
-        }
-
-        let Addscene = document.getElementById('plus-doorscene');
-        Addscene.addEventListener('click',AddSelectScene);
 
         RouteSelect();
     } 

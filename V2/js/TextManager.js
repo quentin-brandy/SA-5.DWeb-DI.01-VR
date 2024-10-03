@@ -2,7 +2,7 @@ import VR from './main.js';
 import { Text } from './Tagclass.js';
 import { AddSceneExplorer , updateSelectedTag } from './SceneManager.js';
 import { loadTag , TagPositionChange , TagPositionChangeValue, renameTag ,  duplicateTag , deleteTag , toggleMove , LoadSlider , tagRotationChange, tagRotationChangeValue, TagColorFillChange, tagScaleChange} from './TagManager.js';
-
+import { createEntity } from './a-frame_entity.js';
 
 
 
@@ -43,15 +43,7 @@ export function addText() {
     );
 
     // Créer l'entité pour le texte
-    const newEntity = document.createElement('a-text');
-    newEntity.setAttribute('position', `${position.x} ${position.y} ${position.z}`);
-    newEntity.setAttribute('value', 'Sample Text');
-    newEntity.setAttribute('color', '#00C058');
-    newEntity.setAttribute('align', 'center');
-    newEntity.setAttribute('scale', '5 5 5');
-    newEntity.setAttribute('id', textName);
-    newEntity.object3D.rotation.set(0, cameraEl.rotation.y, cameraEl.rotation.z);
-
+    const newEntity = createEntity(selectedScene.tags.find(tag => tag.name === textName));
     // Ajouter l'entité à la scène
     document.querySelector('#text-entity').appendChild(newEntity);
 
@@ -89,77 +81,82 @@ console.log(text);
     recipe.className = "fixed h-[97%] border-4 border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2 top-2";
     let Explorer = document.getElementById(textName);
     updateSelectedTag(Explorer);
-    const moveButton = document.getElementById('button_move');
-    if (moveButton) {
-        moveButton.addEventListener('click', function() {
-            // Si vous avez besoin de désactiver un précédent listener, vous pouvez le faire ici
-            toggleMove(textName); // Remplacez cela par la fonction de déplacement
-        });
-    }
     let rangeInputs = document.querySelectorAll('.inputRange');
     rangeInputs.forEach(rgInput => {
         LoadSlider(rgInput);
     });
 
 
-    let renameTimeout;
-    document.getElementById('rename').addEventListener('input', function (event) {
+// Liste des événements 'input'
+const inputEvents = [
+    { selector: '#rename', handler: function (event) {
         clearTimeout(renameTimeout);
         renameTimeout = setTimeout(() => {
             renameTag('text', textName);  // Utilise la valeur de l'input
         }, 1000);
-    });
+    }},
+    { selector: '#x-value', handler: (event) => TagPositionChangeValue(event, 'text') },
+    { selector: '#y-value', handler: (event) => TagPositionChangeValue(event, 'text') },
+    { selector: '#z-value', handler: (event) => TagPositionChangeValue(event, 'text') },
+    { selector: '#rx-value', handler: (event) => tagRotationChangeValue(event, 'text') },
+    { selector: '#ry-value', handler: (event) => tagRotationChangeValue(event, 'text') },
+    { selector: '#rz-value', handler: (event) => tagRotationChangeValue(event, 'text') },
+    { selector: '#scale-value', handler: (event) => tagScaleChange(event, 'text') },
+    { selector: '#fill', handler: () => TagColorFillChange('text') }
+];
 
-    document.getElementById('LegendButton').addEventListener('click', function () {
+// Liste des événements 'click'
+const clickEvents = [
+    { selector: '#LegendButton', handler: function () {
         LegendText(event.target.id);
-    });
-    document.getElementById('close-object').addEventListener('click', function () {
+    }},
+    { selector: '#close-object', handler: function () {
         recipe.innerHTML = '';
         recipe.className = '';
         Explorer.style.backgroundColor = '';
-    });
-    let CopyDoor = document.getElementById('dupliButton');
-    CopyDoor.addEventListener('click', () => duplicateTag('text'));
-
-    document.getElementById('TrashButton').addEventListener('click', function () {
+    }},
+    { selector: '#dupliButton', handler: () => duplicateTag('text') },
+    { selector: '#TrashButton', handler: function () {
         deleteTag('text');
+    }}
+];
+
+const moveButton = document.getElementById('button_move');
+if (moveButton) {
+    moveButton.addEventListener('click', function() {
+        // Si vous avez besoin de désactiver un précédent listener, vous pouvez le faire ici
+        toggleMove(textName); // Remplacez cela par la fonction de déplacement
     });
-
-    let inputRangesPosition = document.querySelectorAll('.position')
-    inputRangesPosition.forEach(inputRange => {
-        inputRange.addEventListener('input', (event) => TagPositionChange(event, 'text'))
-    });
-
-    let inputRangesRotation = document.querySelectorAll('.rotation')
-    inputRangesRotation.forEach(inputRange => {
-        inputRange.addEventListener('input', (event) => tagRotationChange(event , 'text'));
-    });
-
-    let inputRangeX = document.querySelector('#x-value');
-    inputRangeX.addEventListener('input', (event) => TagPositionChangeValue(event, 'text'));
-
-    let inputRangeY = document.querySelector('#y-value');
-    inputRangeY.addEventListener('input', (event) => TagPositionChangeValue(event, 'text'));
-
-    let inputRangeZ = document.querySelector('#z-value');
-    inputRangeZ.addEventListener('input', (event) => TagPositionChangeValue(event, 'text'));
-
-    let inputRangeXRotation = document.querySelector('#rx-value');
-    inputRangeXRotation.addEventListener('input', (event) => tagRotationChangeValue(event, 'text'));
-
-    let inputRangeYRotation = document.querySelector('#ry-value');
-    inputRangeYRotation.addEventListener('input', (event) => tagRotationChangeValue(event, 'text'));
-
-    let inputRangeZRotation = document.querySelector('#rz-value');
-    inputRangeZRotation.addEventListener('input', (event) => tagRotationChangeValue(event, 'text'));
-
-
-    let inputRangeScale = document.getElementById('scale-value')
-        inputRangeScale.addEventListener('input', (event) => tagScaleChange(event , 'text'));
-
-    document.getElementById('fill').addEventListener('input', () => TagColorFillChange('text'));
 }
 
+// Liste des événements 'input' pour les sliders de position
+const positionSliders = document.querySelectorAll('.position');
+positionSliders.forEach(inputRange => {
+    inputRange.addEventListener('input', (event) => TagPositionChange(event, 'text'));
+});
+
+// Liste des événements 'input' pour les sliders de rotation
+const rotationSliders = document.querySelectorAll('.rotation');
+rotationSliders.forEach(inputRange => {
+    inputRange.addEventListener('input', (event) => tagRotationChange(event, 'text'));
+});
+
+// Ajout des événements 'input'
+inputEvents.forEach(event => {
+    const element = document.querySelector(event.selector);
+    if (element) {
+        element.addEventListener('input', event.handler);
+    }
+});
+
+// Ajout des événements 'click'
+clickEvents.forEach(event => {
+    const element = document.querySelector(event.selector);
+    if (element) {
+        element.addEventListener('click', event.handler);
+    }
+});
+}
 
 
 export function LegendText(nom) {

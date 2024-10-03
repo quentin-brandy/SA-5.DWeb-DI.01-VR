@@ -1,9 +1,10 @@
 import  VR  from './main.js';
 import { AddSceneExplorer, LoadSceneExplorer  } from './SceneManager.js';
-import { ModifyDoor , TakeDoor } from './DoorManager.js';
+import { ModifyDoor } from './DoorManager.js';
 import { ModifyText } from './TextManager.js';
 import { TagManager , Door, Text , Photo } from './Tagclass.js';
 import { ModifyPhoto } from './PhotoManager.js';
+import { createEntity } from './a-frame_entity.js';
 
 
 
@@ -208,43 +209,6 @@ export function deleteTag(tagType) {
     }
 }
 
-
-function createEntity(tag) {
-    let newEntity;
-    if (tag.type === 'door') {
-        newEntity = document.createElement('a-sphere');
-        newEntity.setAttribute('position', `${tag.position.x} ${tag.position.y} ${tag.position.z}`);
-        newEntity.setAttribute('radius', '1');
-        newEntity.setAttribute('color', tag.fill);
-        newEntity.setAttribute('class', 'link clickable');
-        newEntity.setAttribute('scale', `${tag.scale.sx}  ${tag.scale.sy}  ${tag.scale.sz}`);
-        newEntity.setAttribute('id', tag.name);
-        newEntity.addEventListener('click', function (event) {
-            TakeDoor(event);
-        });
-    } else if (tag.type === 'text') {
-        newEntity = document.createElement('a-text');
-        newEntity.setAttribute('position', `${tag.position.x} ${tag.position.y} ${tag.position.z}`);
-        newEntity.setAttribute('value', tag.content);
-        newEntity.setAttribute('color', tag.fill);
-        newEntity.setAttribute('align', 'center');
-        newEntity.setAttribute('scale', `${tag.scale.sx}  ${tag.scale.sy}  ${tag.scale.sz}`);
-        newEntity.setAttribute('id', tag.name);
-        newEntity.object3D.rotation.set(tag.rotation.rx, tag.rotation.ry, tag.rotation.rz);
-    }
-    if(tag.type === 'photo') {
-        newEntity = document.createElement('a-image');
-        newEntity.setAttribute('position', `${tag.position.x} ${tag.position.y} ${tag.position.z}`);
-        newEntity.setAttribute('src', tag.src);
-        newEntity.setAttribute('scale', `${tag.scale.sx}  ${tag.scale.sy}  ${tag.scale.sz}`);
-        newEntity.setAttribute('id', tag.name);
-        newEntity.setAttribute('width', tag.taille.width);
-        newEntity.setAttribute('height', tag.taille.height);
-        newEntity.object3D.rotation.set(tag.rotation.rx, tag.rotation.ry, tag.rotation.rz);
-    }
-
-    return newEntity;
-}
 
 
 
@@ -560,8 +524,7 @@ export function tagDimensionChange(e, tagType) {
     const newValue = parseFloat(e.target.value);
     const dimension = e.target.name; 
     // Mettre à jour l'affichage de la valeur du slider
-    document.querySelector(`#${dimension}-value`).textContent = `${newValue}`;
-
+    document.querySelector(`#${dimension}-value`).value = `${newValue}`;
     // Créer une instance de TagManager pour gérer les tags
     const tagManager = new TagManager(selectedScene);
 
@@ -582,5 +545,39 @@ export function tagDimensionChange(e, tagType) {
 
         LoadSlider(e.target);
     }
+    console.log(VR);
+}
+
+
+export function tagDimensionChangeValue(e, tagType) {
+    const tagName = document.getElementById(`${tagType}-name`).textContent;
+    const sceneSelect = document.getElementById('selectscene');
+    const selectedScene = VR.scenes[sceneSelect.value];
+    const dimension = e.target.name; // 'width' or 'height'
+    console.log(dimension);
+    let newValue = parseFloat(document.getElementById(`${dimension}-value`).value);
+
+    // Créer une instance de TagManager pour gérer les tags
+    const tagManager = new TagManager(selectedScene);
+
+    // Récupérer le tag actuel dans la scène
+    const currentTag = selectedScene.tags.find(tag => tag.type === tagType && tag.name === tagName);
+    if (!currentTag) return;
+
+    // Mettre à jour seulement la dimension
+    const updatedTag = tagManager.updateTagSize(tagName, newValue, dimension);
+
+    // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
+    if (updatedTag) {
+        const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+        if (tagElement) {
+            tagElement.setAttribute(dimension, `${newValue}`);
+        }
+    }
+
+    const slider = document.getElementById(`${dimension}-slider`);
+    slider.value = newValue;
+    console.log(slider);
+    LoadSlider(slider);
     console.log(VR);
 }
