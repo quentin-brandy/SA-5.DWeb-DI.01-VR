@@ -243,9 +243,7 @@ function createEntity(tag) {
         newEntity = document.createElement('a-entity');
         newEntity.setAttribute('id', `${tag.name}`);
         newEntity.setAttribute('position', tag.position.x + ' ' + tag.position.y + ' ' + tag.position.z);
-        console.log(tag);
-        
-        newEntity.object3D.rotation.set(tag.rotation.rx, tag.rotation.ry, tag.rotation.rz);
+        newEntity.object3D.rotation.set(0, tag.rotation.ry, tag.rotation.rz);
 
         var sphereEntity = document.createElement('a-sphere');
         sphereEntity.setAttribute('id', `${tag.name}-sphere`);
@@ -258,7 +256,6 @@ function createEntity(tag) {
 
         var infoPanelEntity = document.createElement('a-entity');
         infoPanelEntity.setAttribute('id', `${tag.name}-info-panel`);
-        infoPanelEntity.setAttribute('visible', tag.isVisible);
 
         var infoPlane = document.createElement('a-plane');
         infoPlane.setAttribute('color', '#FFF');
@@ -270,7 +267,7 @@ function createEntity(tag) {
         infoTextTitle.setAttribute('value', tag.title);
         infoTextTitle.setAttribute('position', '-0.95 0.25 0.01');
         infoTextTitle.setAttribute('color', tag.titleColor);
-        infoTextTitle.setAttribute('opacity', '0');
+        infoTextTitle.setAttribute('opacity', '1');
         infoTextTitle.setAttribute('width', '1.9');
         infoTextTitle.setAttribute('wrap-count', '30');
         
@@ -455,6 +452,8 @@ export function loadTag() {
 
     // Parcourt tous les tags de la scène sélectionnée
     selectedScene.tags.forEach(tag => {
+        console.log(tag);
+        
         // Instancie la classe appropriée selon le type de tag
         let tagInstance;
         if (tag.type === 'door') {

@@ -78,6 +78,8 @@ export class TagManager {
 
     duplicateTag(tagName) {
         const originalTag = this.getTag(tagName);
+        console.log(originalTag);
+        
         if (originalTag) {
             const newTagName = this.generateUniqueName(originalTag.name, originalTag.type);
             const newTag = { ...originalTag, name: newTagName, position: { ...originalTag.position } };

@@ -323,10 +323,10 @@
 
   <div id="door-position" class="mt-[50px]">
     <div class="flex items-center justify-between mb-2">
-    <div class="flex items-center justify-between gap-[5px] mb-[5px]">
-      <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
-      <label>Position</label>
-    </div>
+      <div class="flex items-center justify-between gap-[5px] mb-[5px]">
+        <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
+        <label>Position</label>
+      </div>
       <img id="button_move" class=" cursor-pointer bg-gray-300 p-2 rounded-md  hover:bg-gray-400  w-8" src="./assets/svg/reshot-icon-direction-arrow-VF2Q9X3CEB.svg" alt="">
     </div>
 
@@ -493,8 +493,6 @@
       <label>Paramètre</label>
     </div>
 
-    <input type="checkbox" name="isVisible" id="checkboxOpen" {{checkedOrNot}}>
-    <label for="isVisible">Info Bulle ouverte</label>
     <div class="flex items-center gap-[5px]">
       <label for="rad">radius</label>
       <input type="range" name="rad" id="rad-slider" value="{{rangeValueRad}}" min="0.2" max="0.8" step="any" class="inputRange radius appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
@@ -513,9 +511,12 @@
   </div>
 
   <div class="mt-[50px]">
-    <div class="flex items-center gap-[5px] mb-[5px]">
-      <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
-      <label>Position</label>
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center justify-between gap-[5px] mb-[5px]">
+        <img src="./assets/svg/crosshair.svg" alt="Crosshair icon">
+        <label>Position</label>
+      </div>
+      <img id="button_move" class=" cursor-pointer bg-gray-300 p-2 rounded-md  hover:bg-gray-400  w-8" src="./assets/svg/reshot-icon-direction-arrow-VF2Q9X3CEB.svg" alt="">
     </div>
 
     <div class="flex items-center gap-[5px]">

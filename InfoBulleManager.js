@@ -12,7 +12,8 @@ export function addInfoBulle() {
 
     const InfoBulleManager = new InfoBulle(selectedScene);
 
-    var distance = -1;
+    // Changement de la distance de -1 à 1
+    var distance = -3;
     var position = cameraEl.position.clone().add(direction.multiplyScalar(distance));
 
     const infoBulleCount = selectedScene.tags.filter(tag => tag.type === 'infoBulle').length;
@@ -23,7 +24,7 @@ export function addInfoBulle() {
     InfoBulleManager.addInfoBulleTag(
         infoBulleName,
         { x: position.x, y: position.y, z: position.z },
-        { rx: cameraEl.rotation.x, ry: cameraEl.rotation.y, rz: cameraEl.rotation.z },
+        { rx: 0, ry: cameraEl.rotation.y, rz: cameraEl.rotation.z },
         "Sample Title",
         "Sample Description",
         '#000',
@@ -35,7 +36,7 @@ export function addInfoBulle() {
     var globalEntity = document.createElement('a-entity');
     globalEntity.setAttribute('id', `${infoBulleName}`);
     globalEntity.setAttribute('position', position.x + ' ' + position.y + ' ' + position.z);
-    globalEntity.object3D.rotation.set(cameraEl.rotation.x, cameraEl.rotation.y, cameraEl.rotation.z);
+    globalEntity.object3D.rotation.set(0, cameraEl.rotation.y, cameraEl.rotation.z);
     
     var sphereEntity = document.createElement('a-sphere');
     sphereEntity.setAttribute('id', `${infoBulleName}-sphere`);
@@ -60,7 +61,7 @@ export function addInfoBulle() {
     infoTextTitle.setAttribute('value', "Sample Title");
     infoTextTitle.setAttribute('position', '-0.95 0.25 0.01');
     infoTextTitle.setAttribute('color', "#000");
-    infoTextTitle.setAttribute('opacity', '0');
+    infoTextTitle.setAttribute('opacity', '1');
     infoTextTitle.setAttribute('width', '1.9');
     infoTextTitle.setAttribute('wrap-count', '30');
 
@@ -97,14 +98,12 @@ export function ModifyInfoBulle(event) {
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
     const InfoBulle = selectedScene.tags.find(tag => tag.type === 'infoBulle' && tag.name === textInfoBulle);
-    console.log(InfoBulle);
     
     templateInfBulle = templateInfBulle.replaceAll("{{name}}", textInfoBulle.name);
     templateInfBulle = templateInfBulle.replaceAll("{{title}}", InfoBulle.title);
     templateInfBulle = templateInfBulle.replaceAll("{{description}}", InfoBulle.desc);
     templateInfBulle = templateInfBulle.replaceAll("{{colorTitle}}", InfoBulle.titleColor);
     templateInfBulle = templateInfBulle.replaceAll("{{colorDesc}}", InfoBulle.descColor);
-    templateInfBulle = templateInfBulle.replaceAll("{{checkedOrNot}}", InfoBulle.visible);
     templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRad}}", InfoBulle.radius);
     templateInfBulle = templateInfBulle.replaceAll("{{rangeValueX}}", InfoBulle.position.x);
     templateInfBulle = templateInfBulle.replaceAll("{{rangeValueY}}", InfoBulle.position.y);
@@ -126,12 +125,6 @@ export function ModifyInfoBulle(event) {
     let rangeInputs = document.querySelectorAll('.inputRange');
     rangeInputs.forEach(rgInput => {
         LoadSlider(rgInput);
-    });
-
-    let CheckboxOpen = document.getElementById('checkboxOpen');
-    // loadTag();
-    CheckboxOpen.addEventListener('click', function () {
-        InfBulleVisibleOrNot(event);
     });
 
     document.getElementById('RenameButton').addEventListener('click', function () {
@@ -157,6 +150,8 @@ export function ModifyInfoBulle(event) {
     inputRangesRad.forEach(inputRange => {
         inputRange.addEventListener('input', InfBulleRadiusChange);
     });
+    console.log(VR.scenes);
+    
 
     let inputRangesPosition = document.querySelectorAll('.position')
     inputRangesPosition.forEach(inputRange => {
@@ -172,6 +167,7 @@ export function ModifyInfoBulle(event) {
     inputClrs.forEach(inputClr => {
         inputClr.addEventListener('input', InfBulleClrsChange);
     });
+    loadTag();
 }
 
 
@@ -242,7 +238,6 @@ export function switchAnimInfoBulle(ev) {
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
     let infBulle = selectedScene.tags.find(tag => tag.type === 'infoBulle' && tag.name === baseId);
-    console.log(infBulle);
 
     var isVisible = panel.getAttribute('visible');
     panel.setAttribute('visible', !isVisible);
@@ -259,14 +254,4 @@ export function switchAnimInfoBulle(ev) {
         sphere.setAttribute('animation', `property: radius; to: ${infBulle.radius}; dur: 1000`);
         sphere.setAttribute('animation__pos', `property: position; to: 0 0 0; dur: 1000`); //0 1.25 -3
     }
-}
-
-function InfBulleVisibleOrNot(e) {
-    const sceneSelect = document.getElementById('selectscene');
-    const selectedScene = VR.scenes[sceneSelect.value];
-    const infBulle = selectedScene.tags.find(tag => tag.type === "infoBulle" && tag.name === e.target.id);
-    let InputChecked = document.getElementById('checkboxOpen').checked;
-    
-    infBulle.isVisible = InputChecked;
-    switchAnimInfoBulle(e)
 }
