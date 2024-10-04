@@ -77,6 +77,8 @@ export class TagManager {
     }
 
     duplicateTag(tagName) {
+        console.log(tagName);
+        
         const originalTag = this.getTag(tagName);
         console.log(originalTag);
         

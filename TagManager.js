@@ -147,31 +147,31 @@ export function duplicateTag(tagType) {
     // Récupérer le tag original
     const originalTag = tagManager.getTag(tagName);
 
+    
     if (originalTag) {
         const newTagName = generateUniqueName(originalTag.name, selectedScene.tags, tagType);
         const newPosition = { ...originalTag.position };
-
+        
         let clonedTag;
-
+        
         // Créer une nouvelle instance basée sur le type de tag
         if (tagType === 'text') {
             clonedTag = new Text(selectedScene).addTextTag(newTagName, newPosition, originalTag.rotation, originalTag.content, originalTag.fill);
         } else if (tagType === 'door') {
             clonedTag = new Door(selectedScene).addDoorTag(newTagName, newPosition, originalTag.targetScene);
         } else if (tagType === 'infoBulle') {
-            clonedTag = new InfoBulle(selectedScene).addInfoBulleTag(newTagName, newPosition, originalTag.rotation, originalTag.targetScene, originalTag.title, originalTag.desc, originalTag.titleColor, originalTag.descColor, originalTag.radius, originalTag.isVisible);
+            clonedTag = new InfoBulle(selectedScene).addInfoBulleTag(newTagName, newPosition, originalTag.rotation, originalTag.title, originalTag.desc, originalTag.titleColor, originalTag.descColor, originalTag.radius, originalTag.isVisible);
         }
         if (tagType === 'photo') {
             clonedTag = new Photo(selectedScene).addPhotoTag(newTagName, newPosition);
         }
-
+        
         // Ajouter le tag cloné à la scène
         tagManager.addTag(clonedTag);
+        console.log(clonedTag);
 
         // Créer l'entité correspondante dans A-Frame
         createEntity(tagType, clonedTag);
-
-        console.log(VR);
         AddSceneExplorer(newTagName, tagType);
         loadTag();
         console.log(`Tag dupliqué: ${newTagName}`);
