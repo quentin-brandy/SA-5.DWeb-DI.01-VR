@@ -7,7 +7,7 @@ Le but de ce projet est de créer une expérience  de visite 360 où les utilisa
 
 ## 🚀 Lien vers l'expérience en ligne
 L'expérience finale est hébergée sur GitHub Pages. Vous pouvez y accéder directement via ce lien :  
-**[Accéder à l'expérience VR]((https://quentin-brandy.github.io/SA-5.DWeb-DI.01-VR/src/))**
+**[Accéder à l'expérience VR]([(https://quentin-brandy.github.io/SA-5.DWeb-DI.01-VR/src/)])**
 
 ## 🗂️ Branches
 
