@@ -85,7 +85,7 @@ export function createEntity(tag) {
             y: tag.rotation.ry,
             z: tag.rotation.rz,
         });
-
+        newEntity.setAttribute("scale", `${tag.scale.sx} ${tag.scale.sy} ${tag.scale.sz}`);
         var sphereEntity = document.createElement("a-sphere");
         sphereEntity.setAttribute("id", `${tag.name}-sphere`);
         sphereEntity.setAttribute("radius", tag.radius);
