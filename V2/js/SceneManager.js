@@ -33,11 +33,10 @@ export function checkAndSpawnDefaultScene() {
   }
 
 
-
 export function AddScene() {
     const selectElement = document.getElementById('selectscene');
     const sceneNameInput = document.getElementById('scene-name');
-    const sceneCount = Object.keys(VR.scenes).filter(sceneKey => sceneKey !== 'defaultScene').length;
+    const sceneCount = Object.keys(VR.scenes).length - 1; // Ignore 'defaultScene'
     const newSceneName = `scene${sceneCount + 1}`;
     VR.scenes[newSceneName] = {
         name: newSceneName,

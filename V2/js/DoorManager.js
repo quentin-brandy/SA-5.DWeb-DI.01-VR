@@ -249,18 +249,13 @@ export function RouteSelect() {
   RouteSelect.add(noSceneOption);
 
   Object.values(VR.scenes).forEach((scene) => {
-    if (scene !== selectedScene) {
+    if (scene !== selectedScene && scene.name !== "defaultScene" && scene.name !== undefined) {
       var option = document.createElement("option");
       option.text = scene.name; // Assuming each scene has a 'name' property
       option.value = scene.name; // Assuming each scene has a 'name' property
       RouteSelect.add(option);
     }
   });
-
-  const doorTag = selectedScene.tags.find(
-    (tag) => tag.type === "door" && tag.name === doorName
-  );
-  RouteSelect.value = doorTag.targetScene;
 }
 
 export function RouteSelected() {

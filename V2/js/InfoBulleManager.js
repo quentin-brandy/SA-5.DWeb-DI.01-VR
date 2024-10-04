@@ -177,6 +177,7 @@ export function InfBulleRadiusChange(e) {
   const infBulleName = document.getElementById("infoBulle-name").textContent;
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
+  console.log(e);
   const infBulleRadius = parseFloat(e.target.value);
 
   document.querySelector(`#rad-value`).textContent = `${infBulleRadius}`;

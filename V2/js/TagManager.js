@@ -188,7 +188,6 @@ export function duplicateTag(tagType) {
         newTagName,
         newPosition,
         originalTag.rotation,
-        originalTag.targetScene,
         originalTag.title,
         originalTag.desc,
         originalTag.titleColor,
