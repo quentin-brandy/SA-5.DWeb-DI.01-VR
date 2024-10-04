@@ -1,10 +1,7 @@
 // Declare VR variable
 let VR;
 
-// Function to save VR object to localStorage
-function saveVRToLocalStorage() {
-  localStorage.setItem("VR", JSON.stringify(VR));
-}
+
 try {
   const response = await fetch('../assets/json/VR.json');
   if (response.ok) {
