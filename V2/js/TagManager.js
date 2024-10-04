@@ -193,7 +193,8 @@ export function duplicateTag(tagType) {
         originalTag.titleColor,
         originalTag.descColor,
         originalTag.radius,
-        originalTag.isVisible
+        originalTag.isVisible,
+        originalTag.scale
       );
     }
 

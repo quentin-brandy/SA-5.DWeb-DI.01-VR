@@ -182,7 +182,8 @@ export class InfoBulle extends TagManager {
     titleColor = "#000",
     descColor = "#000",
     radius = "0.5",
-    isVisible = false
+    isVisible = false,
+    scale = { sx: 1, sy: 1, sz: 1 }
   ) {
     return this.addTag("infoBulle", name, position, rotation, {
       title,
@@ -191,6 +192,7 @@ export class InfoBulle extends TagManager {
       descColor,
       radius,
       isVisible,
+      scale,
     });
   }
 }
