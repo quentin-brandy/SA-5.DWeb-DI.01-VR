@@ -1,3 +1,5 @@
+
+
 // Function to save VR object to localStorage
 function saveVRToLocalStorage() {
   localStorage.setItem("VR", JSON.stringify(VR));
@@ -20,6 +22,14 @@ function loadVRFromLocalStorage() {
             name: "1.jpg",
           },
         },
+          scene2: {
+            name: "scene2",
+            tags: [],
+            image: {
+              url: "../assets/img/2.jpg",
+              name: "1.jpg",
+            },
+        },
         defaultScene: "scene1",
       },
     };
@@ -34,7 +44,7 @@ let VR;
 loadVRFromLocalStorage();
 
 // Set an interval to call saveVRToLocalStorage every 120 seconds (120000 milliseconds)
-setInterval(saveVRToLocalStorage, 1000);
+setInterval(saveVRToLocalStorage, 120000);
 
 export default VR;
 
@@ -52,6 +62,7 @@ import {
 import { addText } from "./TextManager.js";
 import { addPhoto } from "./PhotoManager.js";
 import { addInfoBulle } from "./InfoBulleManager.js";
+
 const actions = {
   "plus-scene": AddScene,
   "minus-scene": DeleteScene,
@@ -61,11 +72,12 @@ const actions = {
   "plus-text": addText,
   "plus-photo": addPhoto,
   "plus-infoBulle": addInfoBulle,
-  "export-button": saveVRToJSON,
+  "export-button": saveVRToZip,
   "delete-save": ResetAll,
   "save-button": saveVRToLocalStorage,
   "default-scene-checkbox": setDefaultScene,
 };
+
 Object.keys(actions).forEach((id) => {
   let element = document.getElementById(id);
   if (element) {
@@ -75,14 +87,36 @@ Object.keys(actions).forEach((id) => {
 
 document.getElementById("selectscene").addEventListener("change", switchScene);
 
-function saveVRToJSON() {
-  let VRString = JSON.stringify(VR);
-  let blob = new Blob([VRString], { type: "application/json" });
-  let url = URL.createObjectURL(blob);
-  let a = document.createElement("a");
-  a.href = url;
-  a.download = "VR.json";
-  a.click();
+async function saveVRToZip() {
+  let zip = new JSZip();
+  let vrFolder = zip.folder("VR");
+  vrFolder.file("VR.json", JSON.stringify(VR));
+
+  // Add assets folder to the zip
+  let assetsFolder = vrFolder.folder("assets");
+  let imgFolder = assetsFolder.folder("img");
+
+  // Assuming you have a list of image URLs to add to the zip
+  let imageUrls = []; // Add more image URLs as needed
+  // Collect image URLs from VR object
+  for (let sceneKey in VR.scenes) {
+    if (VR.scenes.hasOwnProperty(sceneKey) && VR.scenes[sceneKey].image) {
+      imageUrls.push(VR.scenes[sceneKey].image.url);
+    }
+  }
+  for (let url of imageUrls) {
+    let response = await fetch(url);
+    let blob = await response.blob();
+    let fileName = url.split("/").pop();
+    imgFolder.file(fileName, blob);
+  }
+
+  zip.generateAsync({ type: "blob" }).then(function (content) {
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(content);
+    a.download = "VR.zip";
+    a.click();
+  });
 }
 
 function ResetAll() {
