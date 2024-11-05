@@ -15,13 +15,15 @@ app.use(cors());
 const upload = multer({ dest: 'uploads/' });
 
 
+require('dotenv').config();
+
 const transporter = nodemailer.createTransport({
-    host: 'smtp.ionos.fr', // Remplacez par le serveur SMTP de IONOS
-    port: 587, // Port SMTP
-    secure: false, // true pour 465, false pour d'autres ports
+    host: process.env.SMTP_SERVER, // Serveur SMTP de IONOS
+    port: process.env.SMTP_PORT, // Port SMTP
+    secure: process.env.SMTP_SECURE === 'true', // true pour 465, false pour d'autres ports
     auth: {
-        user: 'sae501@quentinbrandy.fr', // Remplacez par votre adresse e-mail IONOS
-        pass: 'Cw*d1S9kHKxyXNPerfb', // Remplacez par votre mot de passe
+        user: process.env.SMTP_USERNAME, // Adresse e-mail IONOS
+        pass: process.env.SMTP_PASSWORD, // Mot de passe
     },
 });
 
@@ -102,6 +104,10 @@ app.post('/watch', upload.single('archive'), async (req, res) => {
         .on('error', (err) => {
             res.status(500).send(`Error extracting files: ${err.message}`);
         });
+});
+
+app.get("/watch" , (req, res) => {
+    res.send("Hello World");
 });
 
 app.listen(PORT, () => {

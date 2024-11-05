@@ -78,7 +78,12 @@ fileForm.addEventListener('submit', async (e) => {
         console.log('Réponse:', responseData);
 
         if (responseData.url) {
-            fileNameDisplay.textContent = responseData.url;
+            const link = document.createElement('a');
+            link.href = responseData.url;
+            link.textContent = 'Le lien vers votre application est disponible';
+            link.target = responseData.url;
+            fileNameDisplay.innerHTML = ''; 
+            fileNameDisplay.appendChild(link);
         } else {
             alert('Erreur lors de l\'envoi du fichier');
         }
