@@ -21,11 +21,11 @@
     class="fixed h-[97%] border-4 border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg left-2.5 top-2.5">
     <!-- fixed__section -->
     <h2 class="text-center mx-0 my-4 text-[25px]">Expérience</h2>
-    <div class="flex gap-2">
+    <div class="flex justify-center gap-2">
       <div class="flex flex-col items-center gap-2 pr-0">
         <div class="flex flex-col justify-center gap-2">
           <button id="export-button"
-            class="flex items-center gap-2 text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">
+            class="flex justify-center items-center gap-2 text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue">
             <h2>Exporter l'Expérience</h2>
             <img class="w-5" src="../assets/svg/export_icon.svg" alt="">
           </button>
@@ -39,6 +39,11 @@
           class="flex items-center gap-2 text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-green to-custom-blue self-center">
           <h2>Sauvegarder l'Expérience</h2>
           <img class="w-5" src="../assets/svg/save-svgrepo-com.svg" alt="">
+        </button>
+        <button id="save-button-valide"
+          class="flex items-center gap-2 text-[15px] text-custom-white cursor-pointer p-2 rounded-[5px] border-[none] bg-gradient-to-r from-custom-dark-green to-custom-dark-blue self-center">
+          <img class="w-5" src="../assets/svg/check-save.svg" alt="">
+          <h2>Expérience sauvegardé</h2>
         </button>
       </div>
     </div>
@@ -128,7 +133,7 @@
         </div>
       </div>
 
-      <div class="mt-4">
+      <div class="mt-[50px] mb-4">
         <div class="flex items-center gap-[5px] mb-[5px]">
           <img src="../assets/svg/diagram-2.svg" alt="Techtree icon">
           <label>Explorer</label>
@@ -137,7 +142,7 @@
           <p id="scene-title-explorer"
             class="w-full font-[bold] text-custom-dark-gray bg-custom-light-gray pl-2 pr-1 py-1 rounded-[5px_5px_0_0]">
             Scène</p>
-          <ul id="scene-tags" class="list-none pl-2">
+          <ul id="scene-tags" class="list-none">
 
           </ul>
         </div>

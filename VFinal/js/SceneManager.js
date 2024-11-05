@@ -174,21 +174,21 @@ export function SceneExplorer() {
         tagElement.id = tag.name;
         if (type === 'door') {
             tagElement.setAttribute('data-type', 'door');
-            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("../assets/svg/door-closed-dark.svg")]';
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
            
         } else if (type === 'text') {
             tagElement.setAttribute('data-type', 'text');
-            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("../assets/svg/card-text-dark.svg")]';
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
            
         }
         else if (type === 'photo') {
             tagElement.setAttribute('data-type', 'photo');
-            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("../assets/svg/file-image-dark.svg")]';
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
            
         }
         else if (type === 'infoBulle') {
             tagElement.setAttribute('data-type', 'infoBulle');
-            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("../assets/svg/info-circle-dark.svg")]';
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
         }
         sceneExplorer.appendChild(tagElement);
     });
@@ -206,13 +206,15 @@ export function AddSceneExplorer(newtag, type) {
     tagElement.className = 'list__objet';
     tagElement.id = newtag;
 
+    const iconArrow = document.createElement('img');
     const icon = document.createElement('img');
 
     // Utiliser le paramètre 'type' au lieu de 'tag.type'
     if (type === 'door') {
         tagElement.setAttribute('data-type', 'door');
+        iconArrow.src = '../assets/svg/arrow-return-right.svg';
         icon.src = '../assets/svg/door-closed-dark.svg';
-        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
+        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("../assets/svg/arrow-return-right.svg")]';
         document.addEventListener('click', function (event) {
             if (event.target.id === newtag) {
                 ModifyDoor(event);
@@ -221,8 +223,9 @@ export function AddSceneExplorer(newtag, type) {
         });
     } else if (type === 'text') {
         tagElement.setAttribute('data-type', 'text');
+        iconArrow.src = '../assets/svg/arrow-return-right.svg';
         icon.src = '../assets/svg/card-text-dark.svg';
-        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
+        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("../assets/svg/arrow-return-right.svg")]';
         document.addEventListener('click', function (event) {
             if (event.target.id === newtag) {
                 ModifyText(event);
@@ -231,8 +234,9 @@ export function AddSceneExplorer(newtag, type) {
         });
     } else if (type === 'photo') {
         tagElement.setAttribute('data-type', 'photo');
+        iconArrow.src = '../assets/svg/arrow-return-right.svg';
         icon.src = '../assets/svg/file-image-dark.svg';
-        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
+        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("../assets/svg/arrow-return-right.svg")]';
         document.addEventListener('click', function (event) {
             if (event.target.id === newtag) {
                 ModifyPhoto(event);
@@ -241,8 +245,9 @@ export function AddSceneExplorer(newtag, type) {
         });
     } else if (type === 'infoBulle') {
         tagElement.setAttribute('data-type', 'infoBulle');
+        iconArrow.src = '../assets/svg/arrow-return-right.svg';
         icon.src = '../assets/svg/info-circle-dark.svg';
-        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
+        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("../assets/svg/arrow-return-right.svg")]';
         document.addEventListener('click', function (event) {
             if (event.target.id === newtag) {
                 ModifyInfoBulle(event);
@@ -252,6 +257,7 @@ export function AddSceneExplorer(newtag, type) {
     }
 
     tagElement.prepend(icon);
+    tagElement.prepend(iconArrow);
     sceneExplorer.appendChild(tagElement);
     updateSelectedTag(tagElement);
 }
@@ -277,9 +283,11 @@ export function LoadSceneExplorer() {
         const tagElement = document.createElement('li');
         tagElement.textContent = tag.name;
         tagElement.id = tag.name;
+        const iconArrow = document.createElement('img');
         const icon = document.createElement('img');
         if (tag.type === 'door') {
             tagElement.setAttribute('data-type', 'door');
+            iconArrow.src = '../assets/svg/arrow-return-right.svg';
             icon.src = '../assets/svg/door-closed-dark.svg';
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
             tagElement.addEventListener('click', function (event) {
@@ -288,6 +296,7 @@ export function LoadSceneExplorer() {
             });
         } else if (tag.type === 'text') {
             tagElement.setAttribute('data-type', 'text');
+            iconArrow.src = '../assets/svg/arrow-return-right.svg';
             icon.src = '../assets/svg/card-text-dark.svg';
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
             tagElement.addEventListener('click', function (event) {
@@ -296,6 +305,7 @@ export function LoadSceneExplorer() {
             });
         } else if (tag.type === 'photo') {
             tagElement.setAttribute('data-type', 'photo');
+            iconArrow.src = '../assets/svg/arrow-return-right.svg';
             icon.src = '../assets/svg/file-image-dark.svg';
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
             tagElement.addEventListener('click', function (event) {
@@ -304,6 +314,7 @@ export function LoadSceneExplorer() {
             });
         } else if (tag.type === 'infoBulle') {
             tagElement.setAttribute('data-type', 'infoBulle');
+            iconArrow.src = '../assets/svg/arrow-return-right.svg';
             icon.src = '../assets/svg/info-circle-dark.svg';
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
             tagElement.addEventListener('click', function (event) {
@@ -312,6 +323,7 @@ export function LoadSceneExplorer() {
             });
         }
         tagElement.prepend(icon);
+        tagElement.prepend(iconArrow);
    
         sceneExplorer.appendChild(tagElement);
     });
