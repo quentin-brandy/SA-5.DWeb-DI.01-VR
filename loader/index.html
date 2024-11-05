@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loader</title>
+</head>
+
+<body>
+    <section>
+        <form id="file-form" class="form-class">
+            <label for="images" class="drop-container" id="dropcontainer">
+                <span class="drop-title">Déposer vos fichiers</span>
+                <div id="file-info">
+                    <span id="file-name"></span>
+                    <button type="button" id="remove-file" class="remove-button">✕</button>
+                </div>
+                <input type="file" id="images" accept=".zip,.rar,.7zip" required>
+            </label>
+            
+            <!-- Bouton d'envoi sous la zone de dépôt -->
+            <button type="submit" id="send-file" class="submit-button">Envoyer le fichier</button>
+        </form>
+    </section>
+</body>
+<script src="script.js" ></script>
+</html>
