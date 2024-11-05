@@ -53,8 +53,7 @@ removeButton.addEventListener('click', () => {
 
 // Gestion de l'envoi de fichier lors du submit du formulaire
 fileForm.addEventListener('submit', async (e) => {
-    e.preventDefault(); // Empêche le rechargement de la page
-    
+    e.preventDefault();
     if (!selectedFile) {
         alert('Aucun fichier sélectionné');
         return;
@@ -62,6 +61,7 @@ fileForm.addEventListener('submit', async (e) => {
 
     const formData = new FormData();
     formData.append('archive', selectedFile);
+    formData.append('email', document.querySelector('#email').value); // Ajoutez l'email ici
 
     try {
         const response = await fetch('http://localhost:3000/watch', {
@@ -69,14 +69,22 @@ fileForm.addEventListener('submit', async (e) => {
             body: formData,
         });
 
-        if (response.ok) {
-            alert('Fichier envoyé avec succès');
-            removeButton.click(); // Réinitialise la zone de dépôt
+        // Vérifiez si la réponse est OK
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+        console.log('Réponse:', responseData);
+
+        if (responseData.url) {
+            fileNameDisplay.textContent = responseData.url;
         } else {
             alert('Erreur lors de l\'envoi du fichier');
         }
     } catch (error) {
-        console.error('Erreur:', error);
-        alert('Erreur lors de l\'envoi du fichier');
+        console.error('Erreur lors de l\'envoi du fichier:', error);
+        alert('Une erreur est survenue lors de l\'envoi du fichier.');
     }
 });
+

@@ -4,23 +4,50 @@ const path = require('path');
 const unzipper = require('unzipper');
 const { v4: uuidv4 } = require('uuid');
 const cors = require('cors');
-const multer = require('multer'); // Import multer
-
+const multer = require('multer');
+const nodemailer = require('nodemailer');
 const app = express();
 const PORT = 3000;
 
-// Utilise CORS pour toutes les routes
 app.use(cors());
 
 // Configuration de multer pour gérer le fichier ZIP uploadé
 const upload = multer({ dest: 'uploads/' });
+
+
+const transporter = nodemailer.createTransport({
+    host: 'smtp.ionos.fr', // Remplacez par le serveur SMTP de IONOS
+    port: 587, // Port SMTP
+    secure: false, // true pour 465, false pour d'autres ports
+    auth: {
+        user: 'sae501@quentinbrandy.fr', // Remplacez par votre adresse e-mail IONOS
+        pass: 'Cw*d1S9kHKxyXNPerfb', // Remplacez par votre mot de passe
+    },
+});
+
+// Fonction pour copier des dossiers et fichiers de manière récursive
+function copyRecursiveSync(src, dest) {
+    const exists = fs.existsSync(src);
+    const stats = exists && fs.statSync(src);
+    const isDirectory = exists && stats.isDirectory();
+
+    if (isDirectory) {
+        fs.mkdirSync(dest, { recursive: true, mode: 0o777 });
+        fs.readdirSync(src).forEach(child => {
+            copyRecursiveSync(path.join(src, child), path.join(dest, child));
+        });
+    } else {
+        fs.copyFileSync(src, dest);
+    }
+}
 
 app.post('/watch', upload.single('archive'), async (req, res) => {
     if (!req.file) {
         return res.status(400).send('No file uploaded');
     }
 
-    const newDirectoryName = `Vfinal_${uuidv4()}`;
+    const directoryPath = path.join(__dirname, '..', 'Vfinal');
+    const newDirectoryName = `${uuidv4()}`;
     const newDirectoryPath = path.join(__dirname, newDirectoryName);
     const assetsPath = path.join(newDirectoryPath, 'assets');
 
@@ -34,7 +61,7 @@ app.post('/watch', upload.single('archive'), async (req, res) => {
     // Décompression de l'archive
     fs.createReadStream(archivePath)
         .pipe(unzipper.Extract({ path: newDirectoryPath }))
-        .on('close', () => {
+        .on('close', async () => { // Utilisation de async ici
             // Déplace les dossiers img et json dans assets
             const imgPath = path.join(newDirectoryPath, 'img');
             const jsonPath = path.join(newDirectoryPath, 'json');
@@ -47,10 +74,30 @@ app.post('/watch', upload.single('archive'), async (req, res) => {
                 fs.renameSync(jsonPath, path.join(assetsPath, 'json'));
             }
 
+            // Copie tous les fichiers de Vfinal dans le nouveau dossier
+            copyRecursiveSync(directoryPath, newDirectoryPath);
+
             // Supprime le fichier temporaire une fois terminé
             fs.unlinkSync(archivePath);
+            const responseUrl = `http://127.0.0.1:5500/${newDirectoryName}/src/index.html`;
+            console.log('URL générée:', responseUrl);
+            
+            // Envoi de l'e-mail
+            const mailOptions = {
+                from: 'sae501@quentinbrandy.fr', // Remplacez par votre adresse e-mail IONOS
+                to: req.body.email, // Utilise l'email du formulaire
+                subject: 'Fichier reçu',
+                text: `Votre fichier a été reçu avec succès. Vous pouvez le consulter à l'adresse suivante : ${responseUrl}`,
+            };
 
-            res.send(`Files extracted to ${newDirectoryPath}`);
+            try {
+                await transporter.sendMail(mailOptions); // Attendre l'envoi de l'e-mail
+                console.log('E-mail envoyé');
+                res.json({ url: responseUrl });
+            } catch (error) {
+                console.error('Erreur lors de l\'envoi de l\'email:', error);
+                res.status(500).send('Erreur lors de l\'envoi de l\'email');
+            }
         })
         .on('error', (err) => {
             res.status(500).send(`Error extracting files: ${err.message}`);
@@ -58,5 +105,5 @@ app.post('/watch', upload.single('archive'), async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
