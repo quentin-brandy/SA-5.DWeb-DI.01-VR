@@ -62,6 +62,7 @@ import {
 import { addText } from "./TextManager.js";
 import { addPhoto } from "./PhotoManager.js";
 import { addInfoBulle } from "./InfoBulleManager.js";
+import { addRobot } from "./RobotManager.js";
 
 const actions = {
   "plus-scene": AddScene,
@@ -72,6 +73,7 @@ const actions = {
   "plus-text": addText,
   "plus-photo": addPhoto,
   "plus-infoBulle": addInfoBulle,
+  "plus-robot": addRobot,
   "export-button": saveVRToZip,
   "delete-save": ResetAll,
   "save-button": saveVRToLocalStorage,

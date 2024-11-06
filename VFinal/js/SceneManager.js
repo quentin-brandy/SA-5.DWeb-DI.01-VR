@@ -5,6 +5,7 @@ import {  ModifyText  } from './TextManager.js';
 import { loadTag } from './TagManager.js';
 import { ModifyPhoto } from './PhotoManager.js';
 import { ModifyInfoBulle } from './InfoBulleManager.js';
+import { ModifyRobot } from './RobotManager.js';
 
 
 export function checkAndSpawnDefaultScene() {
@@ -24,7 +25,6 @@ export function checkAndSpawnDefaultScene() {
       templateSection.className = "";
       templateSection.innerHTML = "";
       // Charger les nouvelles entités et réinitialiser les événements
-      console.log(sceneselect.options);
       sceneNameInput.value = sceneselect.options[sceneselect.selectedIndex].text;
       LoadFile();
       loadTag();
@@ -71,7 +71,6 @@ export function DeleteScene() {
     templateSection.innerHTML = "";
 
     delete VR.scenes[oldScene];
-    console.log(VR);
     AddSceneSelectOption();
     switchScene();
 }
@@ -97,7 +96,6 @@ export function ChangeSceneName() {
     }
     VR.scenes[newSceneName] = { ...VR.scenes[oldSceneName], name: newSceneName };
     delete VR.scenes[oldSceneName];
-console.log(VR);
     selectElement.options[selectElement.selectedIndex].value = newSceneName;
     selectElement.options[selectElement.selectedIndex].text = newSceneName;
     switchScene();
@@ -123,7 +121,6 @@ export function setDefaultScene() {
     const sceneSelect = document.getElementById('selectscene');
     const defaultScene = sceneSelect.value;
     VR.scenes.defaultScene = defaultScene;
-    console.log(VR);
 }
 
 
@@ -190,15 +187,16 @@ export function SceneExplorer() {
             tagElement.setAttribute('data-type', 'infoBulle');
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
         }
+        else if (type === 'robot') {
+            tagElement.setAttribute('data-type', 'robot');
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
+        }
         sceneExplorer.appendChild(tagElement);
     });
 }
 
 
 export function AddSceneExplorer(newtag, type) {
-    console.log(newtag);
-    console.log(type);
-    console.log('test');
 
     const sceneExplorer = document.getElementById('scene-tags');
     const tagElement = document.createElement('li');
@@ -254,6 +252,17 @@ export function AddSceneExplorer(newtag, type) {
                 updateSelectedTag(event.target);
             }
         });
+    } else if (type === 'robot') {
+        tagElement.setAttribute('data-type', 'robot');
+        iconArrow.src = '../assets/svg/arrow-return-right.svg';
+        icon.src = '../assets/svg/robot-dark.svg';
+        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("../assets/svg/arrow-return-right.svg")]';
+        document.addEventListener('click', function (event) {
+            if (event.target.id === newtag) {
+                ModifyRobot(event);
+                updateSelectedTag(event.target);
+            }
+        });
     }
 
     tagElement.prepend(icon);
@@ -263,7 +272,6 @@ export function AddSceneExplorer(newtag, type) {
 }
 
 export function updateSelectedTag(selectedElement) {
-    console.log(selectedElement);
     const sceneExplorer = document.getElementById('scene-tags');
     const tags = sceneExplorer.getElementsByTagName('li');
     for (let tag of tags) {
@@ -319,6 +327,15 @@ export function LoadSceneExplorer() {
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
             tagElement.addEventListener('click', function (event) {
             ModifyInfoBulle(event);
+            updateSelectedTag(event.target);
+            });
+        } else if (tag.type === 'robot') {
+            tagElement.setAttribute('data-type', 'robot');
+            iconArrow.src = '../assets/svg/arrow-return-right.svg';
+            icon.src = '../assets/svg/robot-dark.svg';
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
+            tagElement.addEventListener('click', function (event) {
+            ModifyRobot(event);
             updateSelectedTag(event.target);
             });
         }

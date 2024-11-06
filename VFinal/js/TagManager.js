@@ -2,13 +2,21 @@ import VR from "./main.js";
 import { AddSceneExplorer, LoadSceneExplorer } from "./SceneManager.js";
 import { ModifyDoor } from "./DoorManager.js";
 import { ModifyText } from "./TextManager.js";
-import { TagManager, Door, Text, Photo, InfoBulle } from "./Tagclass.js";
+import { TagManager, Door, Text, Photo, InfoBulle, Robot } from "./Tagclass.js";
 import { ModifyPhoto } from "./PhotoManager.js";
 import { createEntity } from "./a-frame_entity.js";
 import { ModifyInfoBulle } from "./InfoBulleManager.js";
+import { ModifyRobot } from "./RobotManager.js";
 
 export function radToDeg(radians) {
   return radians * (180 / Math.PI);
+}
+
+export function sphericalToCartesian(radius, theta, phi) {
+  const x = radius * Math.sin(phi) * Math.cos(theta);
+  const y = radius * Math.sin(phi) * Math.sin(theta);
+  const z = radius * Math.cos(phi);
+  return { x, y, z }; 
 }
 
 export function LoadSlider(e) {
@@ -196,6 +204,13 @@ export function duplicateTag(tagType) {
         originalTag.isVisible,
         originalTag.scale
       );
+    } else if (tagType === "robot") {
+      clonedTag = new Robot(selectedScene).addRobotTag(
+        newTagName,
+        newPosition,
+        originalTag.rotation,
+        originalTag.scale
+      );
     }
 
     // Ajouter le tag cloné à la scène
@@ -204,10 +219,8 @@ export function duplicateTag(tagType) {
     // Créer l'entité correspondante dans A-Frame
     createEntity(tagType, clonedTag);
 
-    console.log(VR);
     AddSceneExplorer(newTagName, tagType);
     loadTag();
-    console.log(`Tag dupliqué: ${newTagName}`);
 
     if (tagType === "door") {
       ModifyDoor({ target: { id: newTagName } });
@@ -217,6 +230,8 @@ export function duplicateTag(tagType) {
       ModifyPhoto({ target: { id: newTagName } });
     } else if (tagType === "infoBulle") {
       ModifyInfoBulle({ target: { id: newTagName } });
+    } else if (tagType === "robot") {
+      ModifyRobot({ target: { id: newTagName } });
     }
   }
 }
@@ -237,7 +252,6 @@ export function deleteTag(tagType) {
     tagManager.deleteTag(tagName); // Supprime le tag de la scène via TagManager
     tagElement.remove(); // Supprime l'élément de la scène A-Frame
 
-    console.log(`Tag supprimé: ${tagName}`);
     let templateSection = document.getElementById("template_section");
     templateSection.className = "";
     templateSection.innerHTML = "";
@@ -257,7 +271,6 @@ export function toggleMove(Name) {
   function handleSceneClick(event) {
     // Trouver l'élément sur lequel on a cliqué en utilisant `event.target`
     const clickedElement = document.querySelector(`#${Name}`);
-    console.log(clickedElement);
     // Si l'élément a une classe ou un attribut indiquant son type, récupérons-le
     let Type =
       clickedElement.getAttribute("data-type") ||
@@ -269,7 +282,9 @@ export function toggleMove(Name) {
             ? "photo"
             : clickedElement.classList.contains("infoBulle")
               ? "infoBulle"
-              : null); // Remplace 'data-type' par l'attribut qui te convient si besoin
+              : clickedElement.classList.contains("robot")
+                ? "robot"
+                : null); // Remplace 'data-type' par l'attribut qui te convient si besoin
 
     // Appeler `handleMove` avec le nom de l'élément et le type récupéré dynamiquement
     handleMove(event, Name, Type);
@@ -294,7 +309,6 @@ export function toggleMove(Name) {
 }
 
 export function handleMove(event, Name, Type) {
-  console.log(Name);
 
   if (!event.clientX || !event.clientY) {
     console.error(
@@ -307,7 +321,6 @@ export function handleMove(event, Name, Type) {
   const screenPosition = new THREE.Vector2();
   screenPosition.x = (event.clientX / window.innerWidth) * 2 - 1;
   screenPosition.y = -(event.clientY / window.innerHeight) * 2 + 1;
-  console.log("screenPosition:", screenPosition);
 
   const raycaster = new THREE.Raycaster();
   raycaster.setFromCamera(screenPosition, cameraEl.getObject3D("camera"));
@@ -327,9 +340,6 @@ export function handleMove(event, Name, Type) {
     y: intersectionPoint.y,
     z: intersectionPoint.z,
   });
-  console.log(
-    `Position mise à jour : ${intersectionPoint.x}, ${intersectionPoint.y}, ${intersectionPoint.z}`
-  );
 
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
@@ -349,6 +359,8 @@ export function handleMove(event, Name, Type) {
       tagInstance = new Photo(Name, selectedScene);
     } else if (Type === "infoBulle") {
       tagInstance = new InfoBulle(Name, selectedScene);
+    } else if (Type === "robot") {
+      tagInstance = new Robot(Name, selectedScene);
     } else {
       console.error("Type de tag non reconnu.");
       return;
@@ -384,10 +396,6 @@ export function handleMove(event, Name, Type) {
     const inactiveColor = "transparent";
     slider.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
   });
-
-  console.log(
-    `Tag déplacé à la position : ${intersectionPoint.x}, ${intersectionPoint.y}, ${intersectionPoint.z}`
-  );
 }
 
 // Fonction générique pour charger et instancier les tags (door, text, et photo)
@@ -400,8 +408,9 @@ export function loadTag() {
   const textEntities = document.querySelector("#text-entity");
   const photoEntities = document.querySelector("#photo-entity");
   const infoBulleEntities = document.querySelector("#infoBulle-entity");
+  const robotEntities = document.querySelector("#robot-entity");
 
-  [doorEntities, textEntities, infoBulleEntities, photoEntities].forEach(
+  [doorEntities, textEntities, infoBulleEntities, photoEntities, robotEntities].forEach(
     (entityContainer) => {
       while (entityContainer.firstChild) {
         entityContainer.removeChild(entityContainer.firstChild);
@@ -422,6 +431,8 @@ export function loadTag() {
       tagInstance.isVisible = tag.isVisible = false;
     } else if (tag.type === "photo") {
       tagInstance = new Photo(tag.name, selectedScene);
+    } else if (tag.type === "robot") {
+      tagInstance = new Robot(tag.name, selectedScene);
     }
 
     // Crée l'entité correspondante à partir du tag et la classe
@@ -436,6 +447,8 @@ export function loadTag() {
       infoBulleEntities.appendChild(newEntity);
     } else if (tag.type === "photo") {
       photoEntities.appendChild(newEntity);
+    } else if (tag.type === "robot") {
+      robotEntities.appendChild(newEntity);
     }
   });
 }
@@ -481,7 +494,6 @@ export function tagRotationChange(e, tagType) {
     // Mise à jour du dégradé linéaire du slider
     LoadSlider(e.target);
   }
-  console.log(VR);
 }
 
 export function tagRotationChangeValue(e, tagType) {
@@ -489,7 +501,6 @@ export function tagRotationChangeValue(e, tagType) {
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
   const axis = e.target.name; // 'x', 'y', or 'z'
-  console.log(axis);
   let newRotation = parseFloat(document.getElementById(`${axis}-value`).value);
 
   // Limiter la valeur à un chiffre après la virgule
@@ -524,7 +535,6 @@ export function tagRotationChangeValue(e, tagType) {
   const slider = document.getElementById(`${axis}-slider`);
   slider.value = newRotation;
   LoadSlider(slider);
-  console.log(VR);
 }
 
 export function TagColorFillChange(tagType) {
@@ -532,11 +542,9 @@ export function TagColorFillChange(tagType) {
   const sceneSelect = document.getElementById("selectscene");
   const colorValue = document.getElementById("textColorFill");
   const selectedScene = VR.scenes[sceneSelect.value];
-  console.log(colorValue);
   const tagManager = new TagManager(selectedScene);
 
   let inputColor = document.getElementById(`fill`).value;
-  console.log(inputColor);
   const updatedTag = tagManager.updateTagFill(tagName, inputColor);
   if (updatedTag) {
     const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
@@ -550,7 +558,6 @@ export function TagColorFillChange(tagType) {
 }
 
 export function tagScaleChange(e, tagType) {
-  console.log(tagType);
   const tagName = document.getElementById(`${tagType}-name`).textContent;
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
@@ -584,7 +591,6 @@ export function tagScaleChange(e, tagType) {
     // Mise à jour du dégradé linéaire du slider
     LoadSlider(e.target);
   }
-  console.log(VR);
 }
 
 export function tagDimensionChange(e, tagType) {
@@ -617,7 +623,6 @@ export function tagDimensionChange(e, tagType) {
 
     LoadSlider(e.target);
   }
-  console.log(VR);
 }
 
 export function tagDimensionChangeValue(e, tagType) {
@@ -625,7 +630,6 @@ export function tagDimensionChangeValue(e, tagType) {
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
   const dimension = e.target.name; // 'width' or 'height'
-  console.log(dimension);
   let newValue = parseFloat(
     document.getElementById(`${dimension}-value`).value
   );
@@ -652,7 +656,5 @@ export function tagDimensionChangeValue(e, tagType) {
 
   const slider = document.getElementById(`${dimension}-slider`);
   slider.value = newValue;
-  console.log(slider);
   LoadSlider(slider);
-  console.log(VR);
 }

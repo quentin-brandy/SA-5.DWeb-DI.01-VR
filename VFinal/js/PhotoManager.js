@@ -78,11 +78,9 @@ export function addPhoto() {
   // Ajouter la photo à l'explorateur de scène
   AddSceneExplorer(photoName, "photo");
   ModifyPhoto({ target: { id: photoName } });
-  console.log(VR);
 }
 
 export function ModifyPhoto(event) {
-  console.log(event.target.innerText);
   let templatePhoto = document.getElementById("template__photo").innerHTML;
   const recipe = document.getElementById("template_section");
   templatePhoto = templatePhoto.replaceAll("{{name}}", event.target.id);
@@ -94,7 +92,6 @@ export function ModifyPhoto(event) {
   const photo = selectedScene.tags.find(
     (tag) => tag.type === "photo" && tag.name === photoName
   );
-  console.log(photo);
   templatePhoto = templatePhoto.replaceAll("{{name}}", photoName);
   templatePhoto = templatePhoto.replaceAll("{{rangeValueX}}", photo.position.x);
   templatePhoto = templatePhoto.replaceAll("{{rangeValueY}}", photo.position.y);
@@ -249,7 +246,6 @@ export function updatePhoto(event) {
   if (file) {
     // Récupérer juste le nom du fichier (ou chemin)
     const newSrc = `../assets/img/${file.name}`;
-    console.log(newSrc);
 
     // Créer une instance de Photo pour mettre à jour la photo existante
     const sceneSelect = document.getElementById("selectscene");

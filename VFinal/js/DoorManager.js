@@ -69,7 +69,6 @@ export function addDoor() {
   // Ajouter la porte à l'explorateur de scène
   AddSceneExplorer(doorName, "door");
   ModifyDoor({ target: { id: doorName } });
-  console.log(VR);
 }
 
 export function TakeDoor(e) {
@@ -96,7 +95,6 @@ export function ModifyDoor(e) {
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
   const doorName = e.target.id;
-  console.log(doorName);
   const templateSection = document.getElementById("template_section");
   templateSection.className = "";
   templateSection.innerHTML = "";
@@ -240,7 +238,6 @@ export function RouteSelect() {
   const RouteSelect = document.getElementById("scene-route-select");
   const selectedScene = VR.scenes[sceneSelect.value];
   RouteSelect.innerHTML = "";
-  console.log(VR.scenes);
 
   // Add "no scene" option
   var noSceneOption = document.createElement("option");
@@ -260,7 +257,6 @@ export function RouteSelect() {
 
 export function RouteSelected() {
   const doorName = document.getElementById("door-name").textContent;
-  console.log(doorName);
   const RouteSelect = document.getElementById("scene-route-select");
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];

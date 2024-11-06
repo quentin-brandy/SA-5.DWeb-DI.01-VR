@@ -1,5 +1,5 @@
 import VR from "./main.js";
-import { Text } from "./Tagclass.js";
+import { Robot } from "./Tagclass.js";
 import { AddSceneExplorer, updateSelectedTag } from "./SceneManager.js";
 import {
   loadTag,
@@ -15,11 +15,10 @@ import {
   TagColorFillChange,
   tagScaleChange,
   radToDeg,
-  sphericalToCartesian,
 } from "./TagManager.js";
 import { createEntity } from "./a-frame_entity.js";
 
-export function addText() {
+export function addRobot() {
   // Sélection de la scène actuelle
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
@@ -30,7 +29,7 @@ export function addText() {
   }
 
   // Instancier la classe Text pour gérer les tags
-  const textManager = new Text(selectedScene);
+  const robotManager = new Robot(selectedScene);
 
   // Obtenir la caméra et la direction
   const cameraEl = document.querySelector("#camera").object3D;
@@ -45,17 +44,15 @@ export function addText() {
 
   // Créer un nom unique pour le texte
   const textCount = selectedScene.tags.filter(
-    (tag) => tag.type === "text"
+    (tag) => tag.type === "robot"
   ).length;
-  const textName = `text${textCount + 1}`;
+  const textName = `robot${textCount + 1}`;
 
-  // Ajouter le texte via TextManager
-  textManager.addTextTag(
+  // Ajouter le texte via robotManager
+  robotManager.addRobotTag(
     textName,
     { x: position.x, y: position.y, z: position.z },
     { rx: 0, ry: radToDeg(cameraEl.rotation.y), rz: cameraEl.rotation.z },
-    "Sample Text",
-    "#00C058",
     { sx: 5, sy: 5, sz: 5 }
   );
 
@@ -64,15 +61,15 @@ export function addText() {
     selectedScene.tags.find((tag) => tag.name === textName)
   );
   // Ajouter l'entité à la scène
-  document.querySelector("#text-entity").appendChild(newEntity);
+  document.querySelector("#robot-entity").appendChild(newEntity);
 
   // Ajouter le texte à l'explorateur de scène
-  AddSceneExplorer(textName, "text");
-  ModifyText({ target: { id: textName } });
+  AddSceneExplorer(textName, "robot");
+  ModifyRobot({ target: { id: textName } });
 }
 
-export function ModifyText(event) {
-  let templateText = document.getElementById("template__texte").innerHTML;
+export function ModifyRobot(event) {
+  let templateText = document.getElementById("template__robot").innerHTML;
   const recipe = document.getElementById("template_section");
   templateText = templateText.replaceAll("{{name}}", event.target.id);
   recipe.innerHTML = templateText;
@@ -81,17 +78,15 @@ export function ModifyText(event) {
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
   const text = selectedScene.tags.find(
-    (tag) => tag.type === "text" && tag.name === textName
+    (tag) => tag.type === "robot" && tag.name === textName
   );
   templateText = templateText.replaceAll("{{name}}", textName);
-  templateText = templateText.replaceAll("{{Text}}", text.content);
   templateText = templateText.replaceAll("{{rangeValueX}}", text.position.x);
   templateText = templateText.replaceAll("{{rangeValueY}}", text.position.y);
   templateText = templateText.replaceAll("{{rangeValueZ}}", text.position.z);
   templateText = templateText.replaceAll("{{rangeValueRx}}", text.rotation.rx);
   templateText = templateText.replaceAll("{{rangeValueRy}}", text.rotation.ry);
   templateText = templateText.replaceAll("{{rangeValueRz}}", text.rotation.rz);
-  templateText = templateText.replaceAll("{{colorFill}}", text.fill);
   templateText = templateText.replaceAll("{{scale}}", text.scale.sx);
   recipe.innerHTML = templateText;
   recipe.className =
@@ -110,39 +105,39 @@ export function ModifyText(event) {
       handler: function (event) {
         clearTimeout(renameTimeout);
         renameTimeout = setTimeout(() => {
-          renameTag("text", textName); // Utilise la valeur de l'input
+          renameTag("robot", textName); // Utilise la valeur de l'input
         }, 1000);
       },
     },
     {
       selector: "#x-value",
-      handler: (event) => TagPositionChangeValue(event, "text"),
+      handler: (event) => TagPositionChangeValue(event, "robot"),
     },
     {
       selector: "#y-value",
-      handler: (event) => TagPositionChangeValue(event, "text"),
+      handler: (event) => TagPositionChangeValue(event, "robot"),
     },
     {
       selector: "#z-value",
-      handler: (event) => TagPositionChangeValue(event, "text"),
+      handler: (event) => TagPositionChangeValue(event, "robot"),
     },
     {
       selector: "#rx-value",
-      handler: (event) => tagRotationChangeValue(event, "text"),
+      handler: (event) => tagRotationChangeValue(event, "robot"),
     },
     {
       selector: "#ry-value",
-      handler: (event) => tagRotationChangeValue(event, "text"),
+      handler: (event) => tagRotationChangeValue(event, "robot"),
     },
     {
       selector: "#rz-value",
-      handler: (event) => tagRotationChangeValue(event, "text"),
+      handler: (event) => tagRotationChangeValue(event, "robot"),
     },
     {
       selector: "#scale-value",
-      handler: (event) => tagScaleChange(event, "text"),
+      handler: (event) => tagScaleChange(event, "robot"),
     },
-    { selector: "#fill", handler: () => TagColorFillChange("text") },
+    { selector: "#fill", handler: () => TagColorFillChange("robot") },
   ];
 
   // Liste des événements 'click'
@@ -161,11 +156,11 @@ export function ModifyText(event) {
         Explorer.style.backgroundColor = "";
       },
     },
-    { selector: "#dupliButton", handler: () => duplicateTag("text") },
+    { selector: "#dupliButton", handler: () => duplicateTag("robot") },
     {
       selector: "#TrashButton",
       handler: function () {
-        deleteTag("text");
+        deleteTag("robot");
       },
     },
   ];
@@ -182,7 +177,7 @@ export function ModifyText(event) {
   const positionSliders = document.querySelectorAll(".position");
   positionSliders.forEach((inputRange) => {
     inputRange.addEventListener("input", (event) =>
-      TagPositionChange(event, "text")
+      TagPositionChange(event, "robot")
     );
   });
 
@@ -190,7 +185,7 @@ export function ModifyText(event) {
   const rotationSliders = document.querySelectorAll(".rotation");
   rotationSliders.forEach((inputRange) => {
     inputRange.addEventListener("input", (event) =>
-      tagRotationChange(event, "text")
+      tagRotationChange(event, "robot")
     );
   });
 
@@ -209,20 +204,4 @@ export function ModifyText(event) {
       element.addEventListener("click", event.handler);
     }
   });
-}
-
-export function LegendText(nom) {
-  let sceneName = document.getElementById("selectscene").value;
-  let scene = VR.scenes[sceneName];
-  let tags = scene.tags;
-  let tag = tags.find(isGoodText);
-
-  let valueInput = document.getElementById("text_legend").value;
-  tag.content = valueInput;
-
-  function isGoodText(text) {
-    return text.name === nom;
-  }
-
-  loadTag();
 }

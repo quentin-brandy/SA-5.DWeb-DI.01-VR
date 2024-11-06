@@ -71,14 +71,14 @@ export function createEntity(tag) {
             y: tag.rotation.ry,
             z: tag.rotation.rz,
         });
-    } else if (tag.type === "infoBulle") {
+    }
+    else if (tag.type === "infoBulle") {
         newEntity = document.createElement("a-entity");
         newEntity.setAttribute("id", `${tag.name}`);
         newEntity.setAttribute(
             "position",
             tag.position.x + " " + tag.position.y + " " + tag.position.z
         );
-        console.log(tag);
 
         newEntity.setAttribute("rotation", {
             x: tag.rotation.rx,
@@ -135,6 +135,35 @@ export function createEntity(tag) {
         infoPanelEntity.appendChild(infoPlane);
 
         newEntity.appendChild(sphereEntity);
+        newEntity.appendChild(modelEntity);
+        newEntity.appendChild(infoPanelEntity);
+    }
+    else if (tag.type === "robot") {
+        newEntity = document.createElement("a-entity");
+        newEntity.setAttribute("id", `${tag.name}`);
+        newEntity.setAttribute(
+            "position",
+            tag.position.x + " " + tag.position.y + " " + tag.position.z
+        );
+        console.log(tag);
+
+        newEntity.setAttribute("rotation", {
+            x: tag.rotation.rx,
+            y: tag.rotation.ry,
+            z: tag.rotation.rz,
+        });
+        newEntity.setAttribute("scale", `${tag.scale.sx} ${tag.scale.sy} ${tag.scale.sz}`);
+
+        var modelEntity = document.createElement("a-entity");
+        modelEntity.setAttribute("id", `${tag.name}-model`);
+        modelEntity.setAttribute("obj-model", "obj: url(../assets/3d/robot/model.obj); mtl: url(../assets/3d/robot/materials.mtl)");
+        modelEntity.setAttribute("scale", "1 1 1"); // Adjust scale as needed
+        modelEntity.setAttribute("position", "0 0 0"); // Adjust position as needed
+        modelEntity.setAttribute("rotation", "0 -90 0"); // Adjust rotation as needed
+        var infoPanelEntity = document.createElement("a-entity");
+        infoPanelEntity.setAttribute("id", `${tag.name}-info-panel`);
+        infoPanelEntity.setAttribute("visible", tag.isVisible);
+
         newEntity.appendChild(modelEntity);
         newEntity.appendChild(infoPanelEntity);
     }

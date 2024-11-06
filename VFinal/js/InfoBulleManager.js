@@ -52,7 +52,6 @@ export function ModifyInfoBulle(event) {
     const sceneSelect = document.getElementById('selectscene');
     const selectedScene = VR.scenes[sceneSelect.value];
     const InfoBulle = selectedScene.tags.find(tag => tag.type === 'infoBulle' && tag.name === textInfoBulle);
-    console.log(InfoBulle);
     
     templateInfBulle = templateInfBulle.replaceAll("{{name}}", textInfoBulle.name);
     templateInfBulle = templateInfBulle.replaceAll("{{title}}", InfoBulle.title);
@@ -158,7 +157,6 @@ export function InfBulleText(nom) {
   let scene = VR.scenes[sceneName];
   let tags = scene.tags;
   let tag = tags.find(isGoodInfBulle);
-  console.log(tag);
 
   let valueInputTitle = document.getElementById("textInfoBulleTitle").value;
   let valueInputDesc = document.getElementById("textInfoBulleDesc").value;
@@ -177,14 +175,12 @@ export function InfBulleRadiusChange(e) {
   const infBulleName = document.getElementById("infoBulle-name").textContent;
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
-  console.log(e);
   const infBulleRadius = parseFloat(e.target.value);
 
   document.querySelector(`#rad-value`).textContent = `${infBulleRadius}`;
   const infBulle = selectedScene.tags.find(
     (tag) => tag.type === "infoBulle" && tag.name === infBulleName
   );
-  console.log(infBulle);
 
   if (infBulle) {
     infBulle.radius = infBulleRadius;
@@ -225,7 +221,6 @@ export function switchAnimInfoBulle(ev) {
   let infBulle = selectedScene.tags.find(
     (tag) => tag.type === "infoBulle" && tag.name === baseId
   );
-  console.log(infBulle);
 
   var isVisible = panel.getAttribute("visible");
   panel.setAttribute("visible", !isVisible);

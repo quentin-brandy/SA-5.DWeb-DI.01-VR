@@ -130,6 +130,11 @@
             <img src="../assets/svg/file-image.svg" alt="Photo icon">
             Photo
           </button>
+          <button id="plus-robot"
+            class="relative flex items-center gap-[5px] text-[15px] text-custom-white cursor-pointer pl-9 pr-3 py-2 rounded-[20rem] border-[none] bg-gradient-to-r from-custom-green to-custom-blue before:content-[url('../assets/svg/plus-lg-light.svg')] before:flex before:justify-center before:items-center before:absolute before:w-6 before:h-6 before:bg-custom-white before:rounded-[20rem] before:left-[7px] before:top-[7px]">
+            <img src="../assets/svg/robot.svg" alt="Robot icon">
+            Robot
+          </button>
         </div>
       </div>
 
@@ -175,6 +180,9 @@
     </a-entity>
 
     <a-entity id="infoBulle-entity">
+    </a-entity>
+
+    <a-entity id="robot-entity">
     </a-entity>
 
 
@@ -724,7 +732,6 @@
   </div>
 </template>
 
-
 <template id="template__photo">
   <img id="close-object" src="../assets/svg/cross-svgrepo-com.svg" alt=""
     class="absolute w-10 top-0 left-0 cursor-pointer">
@@ -936,5 +943,162 @@
   </div>
 </template>
 
+<template id="template__robot">
+  <img id="close-object" src="../assets/svg/cross-svgrepo-com.svg" alt=""
+    class="absolute w-10 top-0 left-0 cursor-pointer">
+  <h2 class="text-center mx-0 my-4 text-[25px]">Objet</h2>
+
+  <div class="flex items-center gap-2 mt-10 mb-0 mx-0">
+    <img src="../assets/svg/box.svg" alt="Box icon">
+    <label id="text-name">{{name}}</label>
+    <div class="flex items-center ml-2">
+      <button id="dupliButton" class="flex items-center cursor-pointer p-[5px] border-[none]">
+        <img class="icon__scene" src="../assets/svg/copy.svg" alt="Copy icon">
+      </button>
+      <button id="TrashButton" class="flex items-center cursor-pointer p-[5px] border-[none]">
+        <img class="icon__scene" src="../assets/svg/trash3.svg" alt="Trash icon">
+      </button>
+    </div>
+  </div>
+  <div class="flex justify-between gap-3">
+    <input
+      class="flex items-center gap-[5px] w-full bg-custom-light-gray mb-0 mx-0 px-2 py-1 rounded-[5px] border-[none] before:w-4 before:h-4 before:content-[url('../assets/svg/card-text-dark.svg')]"
+      type="text" id="rename" name="rename" placeholder="Renommez" value="{{name}}" />
+  </div>
+  <span id="span__error" class="text-red-500"></span>
+  </div>
+
+  <div id="text-position" class="mt-[50px]">
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center justify-between gap-[5px] mb-[5px]">
+        <img src="../assets/svg/crosshair.svg" alt="Crosshair icon">
+        <label>Position</label>
+      </div>
+      <img id="button_move" class=" cursor-pointer bg-gray-300 p-2 rounded-md  hover:bg-gray-400  w-8"
+        src="../assets/svg/reshot-icon-direction-arrow-VF2Q9X3CEB.svg" alt="">
+    </div>
+
+    <div class="flex items-center gap-[5px]">
+      <label for="x">x</label>
+      <input type="range" name="x" id="x-slider" value="{{rangeValueX}}" min="-100" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+        [&::-webkit-slider-thumb]:w-2.5
+        [&::-webkit-slider-thumb]:h-2.5
+        [&::-webkit-slider-thumb]:appearance-none
+        [&::-webkit-slider-thumb]:bg-custom-blue
+        [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+        [&::-webkit-slider-thumb]:rounded-full
+        [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="x" id="x-value" value="{{rangeValueX}}" min="-100" max="100" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
+    </div>
+    <div class="flex items-center gap-[5px]">
+      <label for="y">y</label>
+      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-100" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      [&::-webkit-slider-thumb]:w-2.5
+      [&::-webkit-slider-thumb]:h-2.5
+      [&::-webkit-slider-thumb]:appearance-none
+      [&::-webkit-slider-thumb]:bg-custom-blue
+      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+      [&::-webkit-slider-thumb]:rounded-full
+      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="y" id="y-value" value="{{rangeValueY}}" min="-100" max="100" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
+    </div>
+    <div class="flex items-center gap-[5px]">
+      <label for="z">z</label>
+      <input type="range" name="z" id="z-slider" value="{{rangeValueZ}}" min="-100" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      [&::-webkit-slider-thumb]:w-2.5
+      [&::-webkit-slider-thumb]:h-2.5
+      [&::-webkit-slider-thumb]:appearance-none
+      [&::-webkit-slider-thumb]:bg-custom-blue
+      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+      [&::-webkit-slider-thumb]:rounded-full
+      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="z" id="z-value" value="{{rangeValueZ}}" min="-100" max="100" step="0.1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
+    </div>
+  </div>
+
+  <div id="text-position" class="mt-[50px]">
+    <div class="flex items-center gap-[5px] mb-[5px]">
+      <img src="../assets/svg/arrow-repeat.svg" alt="Rotation icon">
+      <label>Rotation</label>
+    </div>
+
+    <div class="flex items-center gap-[5px]">
+      <label for="rx">rx</label>
+      <input type="range" name="rx" data-axis="x" id="rx-slider" value="{{rangeValueRx}}" min="-180" max="180" step="1"
+        class="inputRange rotation appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      [&::-webkit-slider-thumb]:w-2.5
+      [&::-webkit-slider-thumb]:h-2.5
+      [&::-webkit-slider-thumb]:appearance-none
+      [&::-webkit-slider-thumb]:bg-custom-blue
+      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+      [&::-webkit-slider-thumb]:rounded-full
+      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="rx" id="rx-value" value="{{rangeValueRx}}" min="-180" max="180" step="1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
+    </div>
+    <div class="flex items-center gap-[5px]">
+      <label for="ry">ry</label>
+      <input type="range" name="ry" data-axis="y" id="ry-slider" value="{{rangeValueRy}}" min="-180" max="180" step="1"
+        class="inputRange rotation appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      [&::-webkit-slider-thumb]:w-2.5
+      [&::-webkit-slider-thumb]:h-2.5
+      [&::-webkit-slider-thumb]:appearance-none
+      [&::-webkit-slider-thumb]:bg-custom-blue
+      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+      [&::-webkit-slider-thumb]:rounded-full
+      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="ry" id="ry-value" value="{{rangeValueRy}}" min="-180" max="180" step="1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
+    </div>
+    <div class="flex items-center gap-[5px]">
+      <label for="rz">rz</label>
+      <input type="range" name="rz" data-axis="z" id="rz-slider" value="{{rangeValueRz}}" min="-180" max="180" step="1"
+        class="inputRange rotation appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      [&::-webkit-slider-thumb]:w-2.5
+      [&::-webkit-slider-thumb]:h-2.5
+      [&::-webkit-slider-thumb]:appearance-none
+      [&::-webkit-slider-thumb]:bg-custom-blue
+      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+      [&::-webkit-slider-thumb]:rounded-full
+      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
+      <div class="flex items-center gap-[5px]">
+        <input type="number" name="rz" id="rz-value" value="{{rangeValueRz}}" min="-180" max="180" step="1"
+          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-[50px]">
+    <div class="flex items-center gap-[5px] mb-[5px]">
+      <img src="../assets/svg/arrows-angle-expand.svg" alt="Arrows icon">
+      <label>Taille</label>
+    </div>
+
+    <div class="flex items-center gap-[5px]">
+      <label for="scale-value">échelle</label>
+      <input type="range" name="scale-value" id="scale-value" value="{{scale}}" min="0.1" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      [&::-webkit-slider-thumb]:w-2.5
+      [&::-webkit-slider-thumb]:h-2.5
+      [&::-webkit-slider-thumb]:appearance-none
+      [&::-webkit-slider-thumb]:bg-custom-blue
+      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+      [&::-webkit-slider-thumb]:rounded-full
+      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
+    </div>
+  </div>
+</template>
 
 <script type="module" src="../js/main.js"></script>

@@ -196,3 +196,16 @@ export class InfoBulle extends TagManager {
     });
   }
 }
+
+export class Robot extends TagManager {
+  addRobotTag(
+    name,
+    position,
+    rotation = {},
+    scale = { sx: 1, sy: 1, sz: 1 }
+  ) {
+    return this.addTag("robot", name, position, rotation, {
+      scale,
+    });
+  }
+}
