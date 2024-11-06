@@ -37,7 +37,7 @@ export function addRobot() {
   cameraEl.getWorldDirection(direction);
 
   // Calculer la position en fonction de la caméra
-  const radius = -5;
+  const radius = -50;
   const position = cameraEl.position
   .clone()
   .add(direction.multiplyScalar(radius));

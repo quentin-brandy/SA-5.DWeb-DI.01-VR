@@ -141,6 +141,12 @@ export function createEntity(tag) {
     else if (tag.type === "robot") {
         newEntity = document.createElement("a-entity");
         newEntity.setAttribute("id", `${tag.name}`);
+        newEntity.setAttribute("gltf-model", "../assets/3d/robot/grosbot3.gltf");
+        newEntity.setAttribute("animation-mixer", {
+            clip: "*",
+            loop: "repeat",
+            timeScale: 1
+        });
         newEntity.setAttribute(
             "position",
             tag.position.x + " " + tag.position.y + " " + tag.position.z
@@ -153,16 +159,6 @@ export function createEntity(tag) {
             z: tag.rotation.rz,
         });
         newEntity.setAttribute("scale", `${tag.scale.sx} ${tag.scale.sy} ${tag.scale.sz}`);
-
-        var modelEntity = document.createElement("a-entity");
-        modelEntity.setAttribute("id", `${tag.name}-model`);
-        // modelEntity.setAttribute("obj-model", "obj: url(../assets/3d/robot/model.obj); mtl: url(../assets/3d/robot/materials.mtl)");
-        modelEntity.setAttribute("glb-model", "#test");
-        modelEntity.setAttribute("scale", "1 1 1"); // Adjust scale as needed
-        modelEntity.setAttribute("position", "0 0 0"); // Adjust position as needed
-        modelEntity.setAttribute("rotation", "0 -90 0"); // Adjust rotation as needed
-
-        newEntity.appendChild(modelEntity);
     }
     return newEntity;
 }
