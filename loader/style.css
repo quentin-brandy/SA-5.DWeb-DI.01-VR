@@ -3,6 +3,8 @@
     --custom-white: #ffffff;
     --custom-green: #00c058;
     --custom-blue: #009ec0;
+    --custom-dark-green: #007738;
+    --custom-dark-blue: #00657c;
     --custom-light-gray: #e3e3e3;
     --custom-gray: #949494;
     --custom-dark-gray: #515151;
@@ -32,7 +34,7 @@ section {
     min-width: 5rem;
     width: 40rem;
     min-height: 5rem;
-    height: 20rem;
+    height: 25rem;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -132,7 +134,7 @@ input[type=file] {
 }
 
 .submit-button:hover {
-    background: linear-gradient(45deg, var(--custom-blue), var(--custom-green));
+    background: linear-gradient(45deg, var(--custom-dark-green), var(--custom-dark-blue));
 }
 
 .form-class{
@@ -141,4 +143,32 @@ input[type=file] {
     gap: 10px;
     height: 100%;
     width: 100%;
+}
+
+.div__email {
+    margin-top: 1rem;
+}
+
+#email {
+    width: 100%;
+    margin-top: 5px;
+    padding: 8px;
+    border: 1px solid var(--custom-gray);
+    border-radius: 5px;
+}
+
+#email::placeholder {
+    color: var(--custom-gray);
+}
+
+.p__info {
+    text-align: end;
+    margin-top: 5px;
+    font-size: 12px;
+    font-style: italic;
+    color: var(--custom-gray);
+}
+
+.p__info::before {
+    content: '*';
 }
