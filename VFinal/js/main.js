@@ -86,24 +86,32 @@ Object.keys(actions).forEach((id) => {
 });
 
 document.getElementById("selectscene").addEventListener("change", switchScene);
-
 async function saveVRToZip() {
   let zip = new JSZip();
-  let vrFolder = zip.folder("VR");
-  vrFolder.file("VR.json", JSON.stringify(VR));
+  let jsonFolder = zip.folder("json");
+  jsonFolder.file("VR.json", JSON.stringify(VR));
 
-  // Add assets folder to the zip
-  let assetsFolder = vrFolder.folder("assets");
-  let imgFolder = assetsFolder.folder("img");
+  // Add img folder to the zip
+  let imgFolder = zip.folder("img");
 
-  // Assuming you have a list of image URLs to add to the zip
-  let imageUrls = []; // Add more image URLs as needed
   // Collect image URLs from VR object
+  let imageUrls = new Set();
   for (let sceneKey in VR.scenes) {
-    if (VR.scenes.hasOwnProperty(sceneKey) && VR.scenes[sceneKey].image) {
-      imageUrls.push(VR.scenes[sceneKey].image.url);
+    if (VR.scenes.hasOwnProperty(sceneKey)) {
+      let scene = VR.scenes[sceneKey];
+      if (scene.image) {
+        imageUrls.add(scene.image.url);
+      }
+      if (scene.tags) {
+        scene.tags.forEach(tag => {
+          if (tag.type === "photo" && tag.src) {
+            imageUrls.add(tag.src);
+          }
+        });
+      }
     }
   }
+
   for (let url of imageUrls) {
     let response = await fetch(url);
     let blob = await response.blob();
