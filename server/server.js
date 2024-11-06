@@ -14,16 +14,13 @@ app.use(cors());
 // Configuration de multer pour gérer le fichier ZIP uploadé
 const upload = multer({ dest: 'uploads/' });
 
-
-require('dotenv').config();
-
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_SERVER, // Serveur SMTP de IONOS
-    port: process.env.SMTP_PORT, // Port SMTP
-    secure: process.env.SMTP_SECURE === 'true', // true pour 465, false pour d'autres ports
+    host: "smtp.ionos.fr", // Serveur SMTP de IONOS
+    port: 587, // Port SMTP
+    secure: false, // true pour 465, false pour d'autres ports
     auth: {
-        user: process.env.SMTP_USERNAME, // Adresse e-mail IONOS
-        pass: process.env.SMTP_PASSWORD, // Mot de passe
+        user: "sae501@quentinbrandy.fr", // Adresse e-mail IONOS
+        pass: "Cw*d1S9kHKxyXNPerfb", // Mot de passe
     },
 });
 
@@ -43,9 +40,22 @@ function copyRecursiveSync(src, dest) {
     }
 }
 
+function isImageFile(file) {
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'];
+    return imageExtensions.includes(path.extname(file).toLowerCase());
+}
+
 app.post('/watch', upload.single('archive'), async (req, res) => {
     if (!req.file) {
         return res.status(400).send('No file uploaded');
+    }
+
+    const allowedExtensions = ['.zip', '.rar', '.7z'];
+    const fileExtension = path.extname(req.file.originalname).toLowerCase();
+
+    if (!allowedExtensions.includes(fileExtension)) {
+        fs.unlinkSync(req.file.path);
+        return res.status(400).send('Invalid file type. Only ZIP, RAR, and 7z files are allowed.');
     }
 
     const directoryPath = path.join(__dirname, '..', 'Vfinal');
@@ -63,50 +73,83 @@ app.post('/watch', upload.single('archive'), async (req, res) => {
     // Décompression de l'archive
     fs.createReadStream(archivePath)
         .pipe(unzipper.Extract({ path: newDirectoryPath }))
-        .on('close', async () => { // Utilisation de async ici
-            // Déplace les dossiers img et json dans assets
+        .on('close', async () => {
+            const directories = fs.readdirSync(newDirectoryPath).filter(file => fs.statSync(path.join(newDirectoryPath, file)).isDirectory());
+            console.log(directories)
+            const requiredDirectories = ['img', 'json' , 'assets'];
+
+            const missingDirectories = requiredDirectories.filter(dir => !directories.includes(dir));
+            const extraDirectories = directories.filter(dir => !requiredDirectories.includes(dir));
+
+            if (missingDirectories.length > 0) {
+                fs.rmSync(newDirectoryPath, { recursive: true, force: true });
+                return res.status(400).send(`The archive is missing required directories: ${missingDirectories.join(', ')}`);
+            }
+
+            if (extraDirectories.length > 0) {
+                fs.rmSync(newDirectoryPath, { recursive: true, force: true });
+                return res.status(400).send(`The archive contains extra directories: ${extraDirectories.join(', ')}`);
+            }
+
             const imgPath = path.join(newDirectoryPath, 'img');
             const jsonPath = path.join(newDirectoryPath, 'json');
 
-            if (fs.existsSync(imgPath)) {
-                fs.renameSync(imgPath, path.join(assetsPath, 'img'));
+            const vrJsonPath = path.join(jsonPath, 'VR.json');
+
+            if (!fs.existsSync(vrJsonPath)) {
+                fs.rmSync(newDirectoryPath, { recursive: true, force: true });
+                return res.status(400).send('Missing VR.json file in json directory.');
             }
 
-            if (fs.existsSync(jsonPath)) {
-                fs.renameSync(jsonPath, path.join(assetsPath, 'json'));
+            const jsonFiles = fs.readdirSync(jsonPath);
+            if (jsonFiles.length !== 1 || jsonFiles[0] !== 'VR.json') {
+                fs.rmSync(newDirectoryPath, { recursive: true, force: true });
+                return res.status(400).send('The json directory must contain only one file named VR.json.');
             }
 
-            // Copie tous les fichiers de Vfinal dans le nouveau dossier
+            const imgFiles = fs.readdirSync(imgPath);
+            if (!imgFiles.every(isImageFile)) {
+                fs.rmSync(newDirectoryPath, { recursive: true, force: true });
+                return res.status(400).send('The img directory contains non-image files.');
+            }
+
+            fs.renameSync(imgPath, path.join(assetsPath, 'img'));
+            fs.renameSync(jsonPath, path.join(assetsPath, 'json'));
+
             copyRecursiveSync(directoryPath, newDirectoryPath);
 
-            // Supprime le fichier temporaire une fois terminé
             fs.unlinkSync(archivePath);
             const responseUrl = `http://127.0.0.1:5500/${newDirectoryName}/src/index.html`;
             console.log('URL générée:', responseUrl);
-            
-            // Envoi de l'e-mail
-            const mailOptions = {
-                from: 'sae501@quentinbrandy.fr', // Remplacez par votre adresse e-mail IONOS
-                to: req.body.email, // Utilise l'email du formulaire
-                subject: 'Fichier reçu',
-                text: `Votre fichier a été reçu avec succès. Vous pouvez le consulter à l'adresse suivante : ${responseUrl}`,
-            };
 
-            try {
-                await transporter.sendMail(mailOptions); // Attendre l'envoi de l'e-mail
-                console.log('E-mail envoyé');
+            if (!req.body.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email)) {
+                console.error('Invalid or missing email address');
                 res.json({ url: responseUrl });
-            } catch (error) {
-                console.error('Erreur lors de l\'envoi de l\'email:', error);
-                res.status(500).send('Erreur lors de l\'envoi de l\'email');
+            } else {
+                const mailOptions = {
+                    from: 'sae501@quentinbrandy.fr',
+                    to: req.body.email,
+                    subject: 'Fichier reçu',
+                    text: `Votre fichier a été reçu avec succès. Vous pouvez le consulter à l'adresse suivante : ${responseUrl}`,
+                };
+
+                try {
+                    await transporter.sendMail(mailOptions);
+                    console.log('E-mail envoyé');
+                    res.json({ url: responseUrl });
+                } catch (error) {
+                    console.error('Erreur lors de l\'envoi de l\'email:', error);
+                    res.status(500).send('Erreur lors de l\'envoi de l\'email');
+                }
             }
         })
         .on('error', (err) => {
+            fs.rmSync(newDirectoryPath, { recursive: true, force: true });
             res.status(500).send(`Error extracting files: ${err.message}`);
         });
 });
 
-app.get("/watch" , (req, res) => {
+app.get("/watch", (req, res) => {
     res.send("Hello World");
 });
 

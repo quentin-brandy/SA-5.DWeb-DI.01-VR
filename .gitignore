@@ -5,7 +5,7 @@
 *.mkv
 *.flv
 *.wmv
-.env
+
 # Ne pas ignorer le dossier assets
 !assets/
 
