@@ -13,7 +13,7 @@
             <label for="images" class="drop-container" id="dropcontainer">
                 <span class="drop-title">Déposer vos fichiers</span>
                 <div id="file-info">
-                    <span id="file-name"></span>
+                    <a id="file-name"></a>
                     <button type="button" id="remove-file" class="remove-button">✕</button>
                 </div>
                 <input type="file" id="images" accept=".zip,.rar,.7zip" required>
@@ -24,6 +24,8 @@
                 <input id="email" type="email" id="email" name="email" placeholder="Email" required />
                 <p class="p__info">Renseignez votre adresse email pour recevoir le lien de la visite par mail</p>
             </div>
+
+            <span id="error"> </span>
             <!-- Bouton d'envoi sous la zone de dépôt -->
             <button type="submit" id="send-file" class="submit-button">Envoyer le fichier</button>
         </form>

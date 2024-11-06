@@ -1,6 +1,7 @@
 :root {
     --custom-black: #000000;
     --custom-white: #ffffff;
+    --custom-red: #ff0000;
     --custom-green: #00c058;
     --custom-blue: #009ec0;
     --custom-dark-green: #007738;
@@ -171,4 +172,11 @@ input[type=file] {
 
 .p__info::before {
     content: '*';
+}
+
+#error {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 12px;
+    color: var(--custom-red);
 }

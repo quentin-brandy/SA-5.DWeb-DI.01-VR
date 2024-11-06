@@ -5,6 +5,7 @@ const fileForm = document.getElementById('file-form');
 const fileInfo = document.getElementById('file-info');
 const fileNameDisplay = document.getElementById('file-name');
 const dropTitle = document.querySelector('.drop-title');
+const spanError = document.getElementById('error');
 let selectedFile = null;
 
 // Gestion du drag-and-drop
@@ -78,18 +79,16 @@ fileForm.addEventListener('submit', async (e) => {
         console.log('Réponse:', responseData);
 
         if (responseData.url) {
-            const link = document.createElement('a');
-            link.href = responseData.url;
-            link.textContent = 'Le lien vers votre application est disponible';
-            link.target = responseData.url;
-            fileNameDisplay.innerHTML = ''; 
-            fileNameDisplay.appendChild(link);
+            fileNameDisplay.href = responseData.url;
+            fileNameDisplay.innerHTML = 'Le lien vers votre application est disponible';
+            fileNameDisplay.target = responseData.url;
         } else {
             alert('Erreur lors de l\'envoi du fichier');
         }
     } catch (error) {
         console.error('Erreur lors de l\'envoi du fichier:', error);
-        alert('Une erreur est survenue lors de l\'envoi du fichier.');
+        // alert('Une erreur est survenue lors de l\'envoi du fichier.');
+        spanError.innerHTML = 'Une erreur est survenue lors de l\'envoi du fichier.';
     }
 });
 
