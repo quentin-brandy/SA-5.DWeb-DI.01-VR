@@ -20,6 +20,11 @@ import {
 import { LoadFile } from "./FileManager.js";
 import { createEntity } from "./a-frame_entity.js";
 
+
+function degToRad(degrees) {
+  return degrees * (Math.PI / 180);
+}
+
 export function addDoor() {
   // Sélection de la scène actuelle
   const sceneSelect = document.getElementById("selectscene");
@@ -33,24 +38,29 @@ export function addDoor() {
   // Instancier Door pour gérer les portes
   const doorManager = new Door(selectedScene);
 
-  // Obtenir la caméra et la direction
+  // Obtenir la caméra et sa rotation pour calcul sphérique
   const cameraEl = document.querySelector("#camera").object3D;
-  const direction = new THREE.Vector3();
-  cameraEl.getWorldDirection(direction);
+  
+  // Rayon pour la distance à laquelle placer la porte
+  const radius = 3;
+  
+  // Récupérer les angles de rotation de la caméra
+  const cameraRotationY = degToRad(cameraEl.rotation.y); // angle horizontal
+  const cameraRotationX = degToRad(cameraEl.rotation.x); // angle vertical
 
-  // Calculer la position en fonction de la caméra
-  const distance = -3;
-  const position = cameraEl.position
-    .clone()
-    .add(direction.multiplyScalar(distance));
+  // Calcul des coordonnées sphériques pour positionner la porte devant la caméra
+  const x = radius * Math.cos(cameraRotationX) * Math.sin(cameraRotationY);
+  const y = radius * Math.sin(cameraRotationX);
+  const z = -radius * Math.cos(cameraRotationX) * Math.cos(cameraRotationY);
+
+  // Calculer la position finale en fonction de la caméra
+  const position = cameraEl.position.clone().add(new THREE.Vector3(x, y, z));
 
   // Créer un nom unique pour la porte
-  const doorCount = selectedScene.tags.filter(
-    (tag) => tag.type === "door"
-  ).length;
+  const doorCount = selectedScene.tags.filter(tag => tag.type === "door").length;
   const doorName = `door${doorCount + 1}`;
 
-  // Ajouter la porte via Door
+  // Ajouter la porte via Door avec la position sphérique
   doorManager.addDoorTag(
     doorName,
     { x: position.x, y: position.y, z: position.z },
@@ -60,7 +70,7 @@ export function addDoor() {
   );
 
   const newEntity = createEntity(
-    selectedScene.tags.find((tag) => tag.name === doorName)
+    selectedScene.tags.find(tag => tag.name === doorName)
   );
 
   // Ajouter l'entité à la scène
@@ -71,6 +81,7 @@ export function addDoor() {
   ModifyDoor({ target: { id: doorName } });
   console.log(VR);
 }
+
 
 export function TakeDoor(e) {
   const sceneSelect = document.getElementById("selectscene");

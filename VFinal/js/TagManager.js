@@ -10,6 +10,9 @@ import { ModifyInfoBulle } from "./InfoBulleManager.js";
 export function radToDeg(radians) {
   return radians * (180 / Math.PI);
 }
+export function degToRad(degrees) {
+  return degrees * (Math.PI / 180);
+}
 
 export function LoadSlider(e) {
   const ratio = ((e.value - e.min) / (e.max - e.min)) * 100;
@@ -34,22 +37,42 @@ export function TagPositionChange(e, tagType) {
   const tagName = document.getElementById(`${tagType}-name`).textContent; // "door-name" ou "text-name"
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
-  const axis = e.target.name; // 'x', 'y', or 'z'
+
+  // On récupère l'axe modifié (azimuth ou radius)
+  const axis = e.target.name; // 'azimuth' ou 'radius'
   let newPosition = parseFloat(e.target.value);
   newPosition = parseFloat(newPosition.toFixed(1));
-  // Mettre à jour l'affichage de la valeur du slider
 
+  // Mettre à jour l'affichage de la valeur du slider
   document.getElementById(`${axis}-value`).value = newPosition;
+
   // Créer une instance de TagManager pour gérer les tags
   const tagManager = new TagManager(selectedScene);
 
+  // On récupère les informations existantes sur le tag
+  const tag = selectedScene.tags.find((tag) => tag.type === tagType && tag.name === tagName);
+
+  // Calculer la position de la porte en fonction de azimuth et radius
+  let updatedPosition;
+  if (axis === 'azimuth' || axis === 'radius') {
+    // Si l'axe est 'azimuth', on met à jour l'angle autour de la caméra
+    const azimuth = axis === 'azimuth' ? newPosition : tag.position.azimuth;
+    // Si l'axe est 'radius', on met à jour la distance (profondeur) par rapport à la caméra
+    const radius = axis === 'radius' ? newPosition : tag.position.radius;
+
+    // Calcul des coordonnées sphériques : x, y, z
+    const x = radius * Math.sin(degToRad(azimuth));
+    const z = -radius * Math.cos(degToRad(azimuth));
+    const y = tag.position.y || 0;  // Garder la hauteur actuelle si disponible
+
+    updatedPosition = { x, y, z, azimuth, radius };
+  } else {
+    // Si l'axe est x, y ou z, on garde les coordonnées cartésiennes
+    updatedPosition = { ...tag.position, [axis]: newPosition };
+  }
+
   // Mettre à jour la position en utilisant la méthode moveTag
-  const updatedTag = tagManager.moveTag(tagName, {
-    ...selectedScene.tags.find(
-      (tag) => tag.type === tagType && tag.name === tagName
-    ).position,
-    [axis]: newPosition,
-  });
+  const updatedTag = tagManager.moveTag(tagName, updatedPosition);
 
   // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
   if (updatedTag) {
@@ -70,9 +93,31 @@ export function TagPositionChangeValue(e, tagType) {
   const tagName = document.getElementById(`${tagType}-name`).textContent; // "door-name" ou "text-name"
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
-  const axis = e.target.name; // 'x', 'y', or 'z'
+  const axis = e.target.name; // 'radius', 'azimuth', or 'y'
+
   let newPosition = parseFloat(document.getElementById(`${axis}-value`).value);
   newPosition = parseFloat(newPosition.toFixed(1));
+
+  // Si l'axe est 'radius', 'azimuth' ou 'y'
+  if (axis === "radius") {
+    // Récupérer les valeurs actuelles de x, y, z
+    const currentPosition = selectedScene.tags.find(
+      (tag) => tag.type === tagType && tag.name === tagName
+    ).position;
+
+    // Calculer la nouvelle position cartésienne à partir de la position sphérique
+    const radius = newPosition;
+    const azimuth = parseFloat(document.getElementById("azimuth-value").value);
+    const height = parseFloat(document.getElementById("y-value").value);
+
+    const azimuthRad = degToRad(azimuth); // Convertir azimuth de degrés à radians
+    const x = radius * Math.cos(azimuthRad);
+    const z = radius * Math.sin(azimuthRad);
+
+    // Mettre à jour la position avec les nouvelles coordonnées calculées
+    newPosition = { x, y: height, z };
+  }
+
   // Créer une instance de TagManager pour gérer les tags
   const tagManager = new TagManager(selectedScene);
 
@@ -94,10 +139,13 @@ export function TagPositionChangeValue(e, tagType) {
       );
     }
   }
+
+  // Mettre à jour la valeur du slider
   const slider = document.getElementById(`${axis}-slider`);
   slider.value = newPosition;
   LoadSlider(slider);
 }
+
 
 export function renameTag(type, nom) {
   const sceneName = document.getElementById("selectscene").value;
