@@ -176,7 +176,6 @@ input[type=file] {
 
 #error {
     text-align: center;
-    margin-top: 1rem;
     font-size: 12px;
     color: var(--custom-red);
 }
