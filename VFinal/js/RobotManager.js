@@ -53,7 +53,7 @@ export function addRobot() {
     textName,
     { x: position.x, y: position.y, z: position.z },
     { rx: 0, ry: radToDeg(cameraEl.rotation.y), rz: cameraEl.rotation.z },
-    { sx: 5, sy: 5, sz: 5 }
+    { sx: 3, sy: 3, sz: 3 }
   );
 
   // Créer l'entité pour le texte
@@ -99,6 +99,7 @@ export function ModifyRobot(event) {
   });
 
   // Liste des événements 'input'
+  let renameTimeout;
   const inputEvents = [
     {
       selector: "#rename",
@@ -142,12 +143,6 @@ export function ModifyRobot(event) {
 
   // Liste des événements 'click'
   const clickEvents = [
-    {
-      selector: "#LegendButton",
-      handler: function () {
-        LegendText(event.target.id);
-      },
-    },
     {
       selector: "#close-object",
       handler: function () {

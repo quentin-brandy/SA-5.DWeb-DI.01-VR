@@ -156,16 +156,13 @@ export function createEntity(tag) {
 
         var modelEntity = document.createElement("a-entity");
         modelEntity.setAttribute("id", `${tag.name}-model`);
-        modelEntity.setAttribute("obj-model", "obj: url(../assets/3d/robot/model.obj); mtl: url(../assets/3d/robot/materials.mtl)");
+        // modelEntity.setAttribute("obj-model", "obj: url(../assets/3d/robot/model.obj); mtl: url(../assets/3d/robot/materials.mtl)");
+        modelEntity.setAttribute("glb-model", "#test");
         modelEntity.setAttribute("scale", "1 1 1"); // Adjust scale as needed
         modelEntity.setAttribute("position", "0 0 0"); // Adjust position as needed
         modelEntity.setAttribute("rotation", "0 -90 0"); // Adjust rotation as needed
-        var infoPanelEntity = document.createElement("a-entity");
-        infoPanelEntity.setAttribute("id", `${tag.name}-info-panel`);
-        infoPanelEntity.setAttribute("visible", tag.isVisible);
 
         newEntity.appendChild(modelEntity);
-        newEntity.appendChild(infoPanelEntity);
     }
     return newEntity;
 }

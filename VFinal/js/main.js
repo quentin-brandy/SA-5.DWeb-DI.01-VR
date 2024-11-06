@@ -143,3 +143,4 @@ rightController.addEventListener("abuttondown", () => {
 
 AddSceneSelectOption();
 checkAndSpawnDefaultScene();
+console.log(VR);

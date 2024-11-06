@@ -104,6 +104,7 @@ export function ModifyText(event) {
   });
 
   // Liste des événements 'input'
+  let renameTimeout;
   const inputEvents = [
     {
       selector: "#rename",

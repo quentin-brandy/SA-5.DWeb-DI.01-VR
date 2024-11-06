@@ -150,6 +150,8 @@ export function renameTag(type, nom) {
       ModifyPhoto({ target: { id: inputRename } });
     } else if (type === "infoBulle") {
       ModifyInfoBulle({ target: { id: inputRename } });
+    } else if (type === "robot") {
+      ModifyRobot({ target: { id: inputRename } });
     }
   }
 }
@@ -237,6 +239,7 @@ export function duplicateTag(tagType) {
 }
 
 export function deleteTag(tagType) {
+  console.log(tagType);
   const tagName = document.getElementById(`${tagType}-name`).textContent;
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
