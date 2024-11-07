@@ -202,10 +202,12 @@ export class Robot extends TagManager {
     name,
     position,
     rotation = {},
-    scale = { sx: 1, sy: 1, sz: 1 }
+    scale = { sx: 1, sy: 1, sz: 1 },
+    state
   ) {
     return this.addTag("robot", name, position, rotation, {
       scale,
+      state,
     });
   }
 }

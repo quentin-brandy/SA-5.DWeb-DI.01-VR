@@ -1,5 +1,6 @@
 import { TakeDoor } from "./DoorManager.js";
 import { switchAnimInfoBulle } from "./InfoBulleManager.js";
+import { switchAnimRobot } from "./RobotManager.js";
 
 
 export function createEntity(tag) {
@@ -89,9 +90,10 @@ export function createEntity(tag) {
         var sphereEntity = document.createElement("a-sphere");
         sphereEntity.setAttribute("id", `${tag.name}-sphere`);
         sphereEntity.setAttribute("radius", tag.radius);
+        
         sphereEntity.setAttribute("color", "#EF2D5E");
         sphereEntity.setAttribute("opacity", "0.1");
-        sphereEntity.setAttribute("class", "link clickable movableBox");
+        sphereEntity.setAttribute("class", "link clickable movableSphere");
         sphereEntity.addEventListener("click", function (event) {
             switchAnimInfoBulle(event);
         });
@@ -140,8 +142,10 @@ export function createEntity(tag) {
     }
     else if (tag.type === "robot") {
         newEntity = document.createElement("a-entity");
-        newEntity.setAttribute("id", `${tag.name}`);
+        newEntity.setAttribute("id", `${tag.name}-3Drobot`);
         newEntity.setAttribute("gltf-model", "../assets/3d/robot/grosbot3.gltf");
+        newEntity.setAttribute("animation", "property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear");
+        // newEntity.setAttribute("glb-model", "../assets/3d/robot/robot21.glb");
         newEntity.setAttribute("animation-mixer", {
             clip: "*",
             loop: "repeat",
@@ -151,14 +155,27 @@ export function createEntity(tag) {
             "position",
             tag.position.x + " " + tag.position.y + " " + tag.position.z
         );
-        console.log(tag);
-
+        
         newEntity.setAttribute("rotation", {
             x: tag.rotation.rx,
             y: tag.rotation.ry,
             z: tag.rotation.rz,
         });
         newEntity.setAttribute("scale", `${tag.scale.sx} ${tag.scale.sy} ${tag.scale.sz}`);
+        
+        var boxEntity = document.createElement("a-box");
+        boxEntity.setAttribute("id", `${tag.name}-box`);
+        boxEntity.setAttribute("width", `6`);
+        boxEntity.setAttribute("height", `4.5`);
+        boxEntity.setAttribute("color", "#EF2D5E");
+        boxEntity.setAttribute("opacity", "0.5");
+        boxEntity.setAttribute("class", "link clickable movableBox");
+        boxEntity.setAttribute("position", "0 2.25 0");
+        boxEntity.addEventListener("click", function (event) {
+            switchAnimRobot(event);
+        });
+
+        newEntity.appendChild(boxEntity);
     }
     return newEntity;
 }

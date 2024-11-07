@@ -39,21 +39,23 @@ export function addRobot() {
   // Calculer la position en fonction de la caméra
   const radius = -50;
   const position = cameraEl.position
-  .clone()
-  .add(direction.multiplyScalar(radius));
+    .clone()
+    .add(direction.multiplyScalar(radius));
 
   // Créer un nom unique pour le texte
   const textCount = selectedScene.tags.filter(
     (tag) => tag.type === "robot"
   ).length;
   const textName = `robot${textCount + 1}`;
+  const state = "rotation";
 
   // Ajouter le texte via robotManager
   robotManager.addRobotTag(
     textName,
     { x: position.x, y: position.y, z: position.z },
     { rx: 0, ry: radToDeg(cameraEl.rotation.y), rz: cameraEl.rotation.z },
-    { sx: 3, sy: 3, sz: 3 }
+    { sx: 3, sy: 3, sz: 3 },
+    state
   );
 
   // Créer l'entité pour le texte
@@ -69,6 +71,7 @@ export function addRobot() {
 }
 
 export function ModifyRobot(event) {
+  
   let templateText = document.getElementById("template__robot").innerHTML;
   const recipe = document.getElementById("template_section");
   templateText = templateText.replaceAll("{{name}}", event.target.id);
@@ -137,8 +140,7 @@ export function ModifyRobot(event) {
     {
       selector: "#scale-value",
       handler: (event) => tagScaleChange(event, "robot"),
-    },
-    { selector: "#fill", handler: () => TagColorFillChange("robot") },
+    }
   ];
 
   // Liste des événements 'click'
@@ -199,4 +201,27 @@ export function ModifyRobot(event) {
       element.addEventListener("click", event.handler);
     }
   });
+}
+
+export function switchAnimRobot(ev) {
+  let baseId = ev.target.id.split("-")[0];
+  var robot = document.querySelector(`#${baseId}-3Drobot`);
+
+  const sceneSelect = document.getElementById("selectscene");
+  const selectedScene = VR.scenes[sceneSelect.value];
+  let rbt = selectedScene.tags.find(
+    (tag) => tag.type === "robot" && tag.name === baseId
+  );
+
+  robot.setAttribute("animation", {
+    property: "scale",
+    dir: "normal",
+    dur: 1000,
+    to: `${rbt.scale.sx + 1} ${rbt.scale.sy + 1} ${rbt.scale.sz + 1}`,
+    loop: true,
+    easing: "easeInOutQuad"
+  });
+
+  robot.setAttribute("scale", `${rbt.scale.sx} ${rbt.scale.sy} ${rbt.scale.sz}`);
+  // robot.setAttribute("animation", "property: scale; to: 4 4 4; loop: true; dur: 10000; easing: linear");
 }

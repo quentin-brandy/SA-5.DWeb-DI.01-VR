@@ -16,7 +16,7 @@ export function sphericalToCartesian(radius, theta, phi) {
   const x = radius * Math.sin(phi) * Math.cos(theta);
   const y = radius * Math.sin(phi) * Math.sin(theta);
   const z = radius * Math.cos(phi);
-  return { x, y, z }; 
+  return { x, y, z };
 }
 
 export function LoadSlider(e) {
@@ -39,7 +39,9 @@ function generateUniqueName(baseName, tags, type) {
 }
 
 export function TagPositionChange(e, tagType) {
-  const tagName = document.getElementById(`${tagType}-name`).textContent; // "door-name" ou "text-name"
+  console.log(VR);
+  
+  const tagName = document.getElementById(`${tagType}-name`).textContent; // "door-name" ou "text-name"  
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
   const axis = e.target.name; // 'x', 'y', or 'z'
@@ -61,7 +63,12 @@ export function TagPositionChange(e, tagType) {
 
   // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
   if (updatedTag) {
-    const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+    let tagElement;
+    if (tagType == "robot") {
+      tagElement = document.querySelector(`#${tagType}-entity #${tagName}-3Drobot`);
+    } else {
+      tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+    }
     if (tagElement) {
       tagElement.setAttribute(
         "position",
@@ -129,7 +136,12 @@ export function renameTag(type, nom) {
   spanError.innerHTML = ""; // Clear the error message
 
   const tag = tagManager.getTag(nom);
-  let tagScene = document.querySelector(`#${type}-entity #${nom}`);
+  let tagScene;
+    if (type == "robot") {
+      tagScene = document.querySelector(`#${type}-entity #${nom}-3Drobot`);
+    } else {
+      tagScene = document.querySelector(`#${type}-entity #${nom}`);
+    }
 
   if (tag) {
     tagManager.renameTag(nom, inputRename);
@@ -248,7 +260,12 @@ export function deleteTag(tagType) {
   const tagManager = new TagManager(selectedScene);
 
   // Supprimer le tag via TagManager
-  const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+  let tagElement;
+  if (tagType == "robot") {
+    tagElement = document.querySelector(`#${tagType}-entity #${tagName}-3Drobot`);
+  } else {
+    tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+  }
   const deletedTag = tagManager.getTag(tagName);
 
   if (deletedTag) {
@@ -486,7 +503,12 @@ export function tagRotationChange(e, tagType) {
 
   // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
   if (updatedTag) {
-    const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+    let tagElement;
+    if (tagType == "robot") {
+      tagElement = document.querySelector(`#${tagType}-entity #${tagName}-3Drobot`);
+    } else {
+      tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+    }
     if (tagElement) {
       tagElement.setAttribute(
         "rotation",
@@ -586,7 +608,12 @@ export function tagScaleChange(e, tagType) {
 
   // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
   if (updatedTag) {
-    const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+    let tagElement;
+    if (tagType == "robot") {
+      tagElement = document.querySelector(`#${tagType}-entity #${tagName}-3Drobot`);
+    } else {
+      tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+    }
     if (tagElement) {
       tagElement.setAttribute("scale", `${newScale} ${newScale} ${newScale}`);
     }

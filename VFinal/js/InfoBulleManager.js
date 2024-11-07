@@ -209,6 +209,8 @@ export function InfBulleClrsChange(e) {
 }
 
 export function switchAnimInfoBulle(ev) {
+  console.log(ev);
+  
   let baseId = ev.target.id.split("-")[0];
   var panel = document.querySelector(`#${baseId}-info-panel`);
   var sphere = document.querySelector(`#${baseId}-sphere`);
