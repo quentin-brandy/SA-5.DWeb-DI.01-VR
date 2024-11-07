@@ -9,7 +9,6 @@ import {
 import {
   renameTag,
   TagPositionChange,
-  TagPositionChangeValue,
   duplicateTag,
   deleteTag,
   toggleMove,
@@ -24,6 +23,7 @@ import { createEntity } from "./a-frame_entity.js";
 function degToRad(degrees) {
   return degrees * (Math.PI / 180);
 }
+let initialAzimuth = null;
 
 export function addDoor() {
   // Sélection de la scène actuelle
@@ -38,40 +38,62 @@ export function addDoor() {
   // Instancier Door pour gérer les portes
   const doorManager = new Door(selectedScene);
 
-  // Obtenir la caméra et sa rotation pour calcul sphérique
-  const cameraEl = document.querySelector("#camera").object3D;
-  
-  // Rayon pour la distance à laquelle placer la porte
+  // Fixer le rayon pour la distance à laquelle placer la porte (par exemple, 3 unités devant la caméra)
   const radius = 3;
+
+  // Récupérer la position et l'orientation de la caméra
+  const cameraEl = document.querySelector("#camera").object3D;
+  const cameraPosition = new THREE.Vector3();
+  cameraEl.getWorldPosition(cameraPosition);
   
-  // Récupérer les angles de rotation de la caméra
-  const cameraRotationY = degToRad(cameraEl.rotation.y); // angle horizontal
-  const cameraRotationX = degToRad(cameraEl.rotation.x); // angle vertical
+  // Utiliser getWorldDirection pour obtenir la direction de la caméra
+  const cameraDirection = new THREE.Vector3();
+  cameraEl.getWorldDirection(cameraDirection);
 
-  // Calcul des coordonnées sphériques pour positionner la porte devant la caméra
-  const x = radius * Math.cos(cameraRotationX) * Math.sin(cameraRotationY);
-  const y = radius * Math.sin(cameraRotationX);
-  const z = -radius * Math.cos(cameraRotationX) * Math.cos(cameraRotationY);
+  // Calculer l'azimut initial si ce n'est pas déjà fait
+  if (initialAzimuth === null) {
+    initialAzimuth = Math.atan2(cameraDirection.x, cameraDirection.z);
+  }
 
-  // Calculer la position finale en fonction de la caméra
-  const position = cameraEl.position.clone().add(new THREE.Vector3(x, y, z));
+  // Inverser la direction pour obtenir la bonne position
+  cameraDirection.multiplyScalar(-1);
+
+  // Calculer la position de la porte en utilisant la direction de la caméra inversée
+  const doorPosition = new THREE.Vector3(
+    cameraPosition.x + cameraDirection.x * radius,
+    cameraPosition.y,
+    cameraPosition.z + cameraDirection.z * radius
+  );
+
+  // Calculer l'azimut basé sur la direction de la caméra
+  const azimuthRad = Math.atan2(cameraDirection.z, cameraDirection.x);
+  let azimuth = radToDeg(azimuthRad);
+
+  // Ajuster l'azimut pour qu'il soit correct par rapport à l'initial
+  azimuth = (azimuth + 180) % 360 - 180;
+
+  console.log(`Position calculée : x=${doorPosition.x}, y=${doorPosition.y}, z=${doorPosition.z}, azimuth=${azimuth}°`);
 
   // Créer un nom unique pour la porte
   const doorCount = selectedScene.tags.filter(tag => tag.type === "door").length;
   const doorName = `door${doorCount + 1}`;
 
-  // Ajouter la porte via Door avec la position sphérique
+  // Ajouter la porte via Door avec la position calculée
   doorManager.addDoorTag(
     doorName,
-    { x: position.x, y: position.y, z: position.z },
+    { azimuth: azimuth, radius: radius, y: cameraPosition.y },
     "no scene",
     "#FF0000",
-    { sx: 0.5, sy: 0.5, sz: 0.5 }
+    { sx: 1, sy: 1, sz: 1 }
   );
 
+  // Créer une nouvelle entité pour la porte
   const newEntity = createEntity(
     selectedScene.tags.find(tag => tag.name === doorName)
   );
+
+  // Mettre à jour la position de l'entité dans la scène A-Frame
+  newEntity.setAttribute("position", `${doorPosition.x} ${doorPosition.y} ${doorPosition.z}`);
 
   // Ajouter l'entité à la scène
   document.querySelector("#door-entity").appendChild(newEntity);
@@ -81,6 +103,14 @@ export function addDoor() {
   ModifyDoor({ target: { id: doorName } });
   console.log(VR);
 }
+
+// Fonction pour convertir radians en degrés
+function radToDeg(radians) {
+  return radians * (180 / Math.PI);
+}
+
+
+
 
 
 export function TakeDoor(e) {
@@ -120,9 +150,9 @@ export function ModifyDoor(e) {
     (tag) => tag.type === "door" && tag.name === doorName
   );
   templateText = templateText.replaceAll("{{name}}", text.name);
-  templateText = templateText.replaceAll("{{rangeValueX}}", text.position.x);
-  templateText = templateText.replaceAll("{{rangeValueY}}", text.position.y);
-  templateText = templateText.replaceAll("{{rangeValueZ}}", text.position.z);
+  templateText = templateText.replaceAll("{{rangeValueRadius}}", text.position.radius.toFixed(2));
+  templateText = templateText.replaceAll("{{rangeValueY}}", text.position.y.toFixed(2));
+  templateText = templateText.replaceAll("{{rangeValueAzimuth}}", text.position.azimuth);
   templateText = templateText.replaceAll("{{colorFill}}", text.fill);
   templateText = templateText.replaceAll("{{scale}}", text.scale);
   recipe.innerHTML = templateText;
@@ -132,6 +162,9 @@ export function ModifyDoor(e) {
   rangeInputs.forEach((rgInput) => {
     LoadSlider(rgInput);
   });
+  let slider = document.getElementById("radius-slider").value;
+  let slider2 = document.getElementById("azimuth-slider").value;
+  console.log(slider , slider2);
   document.getElementById("rename").value = doorName;
   let Explorer = document.getElementById(doorName);
   updateSelectedTag(Explorer);
@@ -178,21 +211,6 @@ export function ModifyDoor(e) {
       event: "input",
       handler: (event) => TagPositionChange(event, "door"),
       isMultiple: true,
-    },
-    {
-      selector: "#x-value",
-      event: "input",
-      handler: (event) => TagPositionChangeValue(event, "door"),
-    },
-    {
-      selector: "#y-value",
-      event: "input",
-      handler: (event) => TagPositionChangeValue(event, "door"),
-    },
-    {
-      selector: "#z-value",
-      event: "input",
-      handler: (event) => TagPositionChangeValue(event, "door"),
     },
     {
       selector: "#scale-value",

@@ -28,7 +28,7 @@ export function createEntity(tag) {
         var modelEntity = document.createElement("a-entity");
         modelEntity.setAttribute("obj-model", "obj: url(../assets/3d/door/model.obj); mtl: url(../assets/3d/door/materials.mtl)");
         modelEntity.setAttribute("animation", "property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear");
-        modelEntity.setAttribute("scale", "2 2 2 "); // Adjust scale as needed
+        modelEntity.setAttribute("scale", "1 1 1 "); // Adjust scale as needed
         modelEntity.setAttribute("position", "0 0 0"); // Adjust position as needed
         modelEntity.setAttribute("rotation", "0 0 0"); // Adjust rotation as needed
 

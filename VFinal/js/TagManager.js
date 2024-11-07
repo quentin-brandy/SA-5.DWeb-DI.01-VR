@@ -44,7 +44,7 @@ export function TagPositionChange(e, tagType) {
   newPosition = parseFloat(newPosition.toFixed(1));
 
   // Mettre à jour l'affichage de la valeur du slider
-  document.getElementById(`${axis}-value`).value = newPosition;
+  document.getElementById(`${axis}-slider`).value = newPosition;
 
   // Créer une instance de TagManager pour gérer les tags
   const tagManager = new TagManager(selectedScene);
@@ -61,10 +61,10 @@ export function TagPositionChange(e, tagType) {
     const radius = axis === 'radius' ? newPosition : tag.position.radius;
 
     // Calcul des coordonnées sphériques : x, y, z
-    const x = radius * Math.sin(degToRad(azimuth));
-    const z = -radius * Math.cos(degToRad(azimuth));
+    const x = radius * Math.sin(degToRad(azimuth + 90)); // Correction pour le décalage
+    const z = -radius * Math.cos(degToRad(azimuth + 90)); // Correction pour le décalage
     const y = tag.position.y || 0;  // Garder la hauteur actuelle si disponible
-
+    console.log(azimuth, y, radius)
     updatedPosition = { x, y, z, azimuth, radius };
   } else {
     // Si l'axe est x, y ou z, on garde les coordonnées cartésiennes
@@ -88,6 +88,7 @@ export function TagPositionChange(e, tagType) {
     LoadSlider(e.target);
   }
 }
+
 
 export function TagPositionChangeValue(e, tagType) {
   const tagName = document.getElementById(`${tagType}-name`).textContent; // "door-name" ou "text-name"
