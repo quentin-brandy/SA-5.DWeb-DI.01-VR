@@ -254,8 +254,8 @@
     </div>
 
     <div class="flex items-center gap-[5px]">
-      <label for="radius">Radius</label>
-      <input type="range" name="radius" id="radius-slider" value="{{rangeValueRadius}}" min="1" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <label for="radius">Profondeur</label>
+      <input type="range" name="radius" id="radius-slider" value="{{rangeValueRadius}}" min="1" max="10" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
         [&::-webkit-slider-thumb]:w-2.5
         [&::-webkit-slider-thumb]:h-2.5
         [&::-webkit-slider-thumb]:appearance-none
@@ -263,14 +263,10 @@
         [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
         [&::-webkit-slider-thumb]:rounded-full
         [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div class="flex items-center gap-[5px]">
-        <input type="number" name="radius" id="radius-value" value="{{rangeValueRadius}}" min="1" max="100" step="0.1"
-          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-      </div>
     </div>
     <div class="flex items-center gap-[5px]">
-      <label for="azimuth">Azimuth</label>
-      <input type="range" name="azimuth" id="azimuth-slider" value="{{rangeValueAzimuth}}" min="0" max="360" step="1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <label for="azimuth">Position</label>
+      <input type="range" name="azimuth" id="azimuth-slider" value="{{rangeValueAzimuth}}" min="-180" max="181" step="1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
         [&::-webkit-slider-thumb]:w-2.5
         [&::-webkit-slider-thumb]:h-2.5
         [&::-webkit-slider-thumb]:appearance-none
@@ -278,14 +274,10 @@
         [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
         [&::-webkit-slider-thumb]:rounded-full
         [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div class="flex items-center gap-[5px]">
-        <input type="number" name="azimuth" id="azimuth-value" value="{{rangeValueAzimuth}}" min="0" max="360" step="1"
-          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-      </div>
     </div>
     <div class="flex items-center gap-[5px]">
-      <label for="y">Height (Y)</label>
-      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-100" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <label for="y">Hauteur</label>
+      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-10" max="10" step="0.01" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
         [&::-webkit-slider-thumb]:w-2.5
         [&::-webkit-slider-thumb]:h-2.5
         [&::-webkit-slider-thumb]:appearance-none
@@ -293,10 +285,6 @@
         [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
         [&::-webkit-slider-thumb]:rounded-full
         [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div class="flex items-center gap-[5px]">
-        <input type="number" name="y" id="y-value" value="{{rangeValueY}}" min="-100" max="100" step="0.1"
-          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-      </div>
     </div>
     
   </div>
@@ -309,7 +297,7 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="scale-value">échelle</label>
-      <input type="range" name="scale-value" id="scale-value" value="{{scale}}" min="0.1" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <input type="range" name="scale-value" id="scale-value" value="{{scale}}" min="1" max="10" step="0.1" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -419,8 +407,8 @@
     </div>
 
     <div class="flex items-center gap-[5px]">
-      <label for="x">x</label>
-      <input type="range" name="x" id="x-slider" value="{{rangeValueX}}" min="-100" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <label for="radius">Profondeur</label>
+      <input type="range" name="radius" id="radius-slider" value="{{rangeValueRadius}}" min="1" max="10" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
         [&::-webkit-slider-thumb]:w-2.5
         [&::-webkit-slider-thumb]:h-2.5
         [&::-webkit-slider-thumb]:appearance-none
@@ -428,41 +416,30 @@
         [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
         [&::-webkit-slider-thumb]:rounded-full
         [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div class="flex items-center gap-[5px]">
-        <input type="number" name="x" id="x-value" value="{{rangeValueX}}" min="-100" max="100" step="0.1"
-          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-      </div>
     </div>
     <div class="flex items-center gap-[5px]">
-      <label for="y">y</label>
-      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-100" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
-      [&::-webkit-slider-thumb]:w-2.5
-      [&::-webkit-slider-thumb]:h-2.5
-      [&::-webkit-slider-thumb]:appearance-none
-      [&::-webkit-slider-thumb]:bg-custom-blue
-      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
-      [&::-webkit-slider-thumb]:rounded-full
-      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div class="flex items-center gap-[5px]">
-        <input type="number" name="y" id="y-value" value="{{rangeValueY}}" min="-100" max="100" step="0.1"
-          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-      </div>
+      <label for="azimuth">Position</label>
+      <input type="range" name="azimuth" id="azimuth-slider" value="{{rangeValueAzimuth}}" min="-180" max="181" step="1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+        [&::-webkit-slider-thumb]:w-2.5
+        [&::-webkit-slider-thumb]:h-2.5
+        [&::-webkit-slider-thumb]:appearance-none
+        [&::-webkit-slider-thumb]:bg-custom-blue
+        [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+        [&::-webkit-slider-thumb]:rounded-full
+        [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
     </div>
     <div class="flex items-center gap-[5px]">
-      <label for="z">z</label>
-      <input type="range" name="z" id="z-slider" value="{{rangeValueZ}}" min="-100" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
-      [&::-webkit-slider-thumb]:w-2.5
-      [&::-webkit-slider-thumb]:h-2.5
-      [&::-webkit-slider-thumb]:appearance-none
-      [&::-webkit-slider-thumb]:bg-custom-blue
-      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
-      [&::-webkit-slider-thumb]:rounded-full
-      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div class="flex items-center gap-[5px]">
-        <input type="number" name="z" id="z-value" value="{{rangeValueZ}}" min="-100" max="100" step="0.1"
-          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-      </div>
+      <label for="y">Hauteur</label>
+      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-10" max="10" step="0.01" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+        [&::-webkit-slider-thumb]:w-2.5
+        [&::-webkit-slider-thumb]:h-2.5
+        [&::-webkit-slider-thumb]:appearance-none
+        [&::-webkit-slider-thumb]:bg-custom-blue
+        [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+        [&::-webkit-slider-thumb]:rounded-full
+        [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
     </div>
+  </div>
   </div>
 
   <div id="infoBulle-position" class="mt-[50px]">
@@ -529,7 +506,7 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="scale-value">échelle</label>
-      <input type="range" name="scale-value" id="scale-value" value="{{scale}}" min="0.1" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <input type="range" name="scale-value" id="scale-value" value="{{scale}}" min="0.1" max="10" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -587,8 +564,8 @@
     </div>
 
     <div class="flex items-center gap-[5px]">
-      <label for="x">x</label>
-      <input type="range" name="x" id="x-slider" value="{{rangeValueX}}" min="-100" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <label for="radius">Profondeur</label>
+      <input type="range" name="radius" id="radius-slider" value="{{rangeValueRadius}}" min="1" max="10" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
         [&::-webkit-slider-thumb]:w-2.5
         [&::-webkit-slider-thumb]:h-2.5
         [&::-webkit-slider-thumb]:appearance-none
@@ -596,41 +573,30 @@
         [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
         [&::-webkit-slider-thumb]:rounded-full
         [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div class="flex items-center gap-[5px]">
-        <input type="number" name="x" id="x-value" value="{{rangeValueX}}" min="-100" max="100" step="0.1"
-          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-      </div>
     </div>
     <div class="flex items-center gap-[5px]">
-      <label for="y">y</label>
-      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-100" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
-      [&::-webkit-slider-thumb]:w-2.5
-      [&::-webkit-slider-thumb]:h-2.5
-      [&::-webkit-slider-thumb]:appearance-none
-      [&::-webkit-slider-thumb]:bg-custom-blue
-      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
-      [&::-webkit-slider-thumb]:rounded-full
-      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div class="flex items-center gap-[5px]">
-        <input type="number" name="y" id="y-value" value="{{rangeValueY}}" min="-100" max="100" step="0.1"
-          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-      </div>
+      <label for="azimuth">Position</label>
+      <input type="range" name="azimuth" id="azimuth-slider" value="{{rangeValueAzimuth}}" min="-180" max="181" step="1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+        [&::-webkit-slider-thumb]:w-2.5
+        [&::-webkit-slider-thumb]:h-2.5
+        [&::-webkit-slider-thumb]:appearance-none
+        [&::-webkit-slider-thumb]:bg-custom-blue
+        [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+        [&::-webkit-slider-thumb]:rounded-full
+        [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
     </div>
     <div class="flex items-center gap-[5px]">
-      <label for="z">z</label>
-      <input type="range" name="z" id="z-slider" value="{{rangeValueZ}}" min="-100" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
-      [&::-webkit-slider-thumb]:w-2.5
-      [&::-webkit-slider-thumb]:h-2.5
-      [&::-webkit-slider-thumb]:appearance-none
-      [&::-webkit-slider-thumb]:bg-custom-blue
-      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
-      [&::-webkit-slider-thumb]:rounded-full
-      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div class="flex items-center gap-[5px]">
-        <input type="number" name="z" id="z-value" value="{{rangeValueZ}}" min="-100" max="100" step="0.1"
-          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-      </div>
+      <label for="y">Hauteur</label>
+      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-10" max="10" step="0.01" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+        [&::-webkit-slider-thumb]:w-2.5
+        [&::-webkit-slider-thumb]:h-2.5
+        [&::-webkit-slider-thumb]:appearance-none
+        [&::-webkit-slider-thumb]:bg-custom-blue
+        [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+        [&::-webkit-slider-thumb]:rounded-full
+        [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
     </div>
+  </div>
   </div>
 
   <div id="text-position" class="mt-[50px]">
@@ -697,7 +663,7 @@
 
     <div class="flex items-center gap-[5px]">
       <label for="scale-value">échelle</label>
-      <input type="range" name="scale-value" id="scale-value" value="{{scale}}" min="0.1" max="100" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <input type="range" name="scale-value" id="scale-value" value="{{scale}}" min="0.1" max="10" step="any" class="inputRange appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none
@@ -784,8 +750,8 @@
     </div>
 
     <div class="flex items-center gap-[5px]">
-      <label for="x">x</label>
-      <input type="range" name="x" id="x-slider" value="{{rangeValueX}}" min="-100" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+      <label for="radius">Profondeur</label>
+      <input type="range" name="radius" id="radius-slider" value="{{rangeValueRadius}}" min="1" max="10" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
         [&::-webkit-slider-thumb]:w-2.5
         [&::-webkit-slider-thumb]:h-2.5
         [&::-webkit-slider-thumb]:appearance-none
@@ -793,41 +759,30 @@
         [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
         [&::-webkit-slider-thumb]:rounded-full
         [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div class="flex items-center gap-[5px]">
-        <input type="number" name="x" id="x-value" value="{{rangeValueX}}" min="-100" max="100" step="0.1"
-          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-      </div>
     </div>
     <div class="flex items-center gap-[5px]">
-      <label for="y">y</label>
-      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-100" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
-      [&::-webkit-slider-thumb]:w-2.5
-      [&::-webkit-slider-thumb]:h-2.5
-      [&::-webkit-slider-thumb]:appearance-none
-      [&::-webkit-slider-thumb]:bg-custom-blue
-      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
-      [&::-webkit-slider-thumb]:rounded-full
-      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div class="flex items-center gap-[5px]">
-        <input type="number" name="y" id="y-value" value="{{rangeValueY}}" min="-100" max="100" step="0.1"
-          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-      </div>
+      <label for="azimuth">Position</label>
+      <input type="range" name="azimuth" id="azimuth-slider" value="{{rangeValueAzimuth}}" min="-180" max="181" step="1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+        [&::-webkit-slider-thumb]:w-2.5
+        [&::-webkit-slider-thumb]:h-2.5
+        [&::-webkit-slider-thumb]:appearance-none
+        [&::-webkit-slider-thumb]:bg-custom-blue
+        [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+        [&::-webkit-slider-thumb]:rounded-full
+        [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
     </div>
     <div class="flex items-center gap-[5px]">
-      <label for="z">z</label>
-      <input type="range" name="z" id="z-slider" value="{{rangeValueZ}}" min="-100" max="100" step="0.1" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
-      [&::-webkit-slider-thumb]:w-2.5
-      [&::-webkit-slider-thumb]:h-2.5
-      [&::-webkit-slider-thumb]:appearance-none
-      [&::-webkit-slider-thumb]:bg-custom-blue
-      [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
-      [&::-webkit-slider-thumb]:rounded-full
-      [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
-      <div class="flex items-center gap-[5px]">
-        <input type="number" name="z" id="z-value" value="{{rangeValueZ}}" min="-100" max="100" step="0.1"
-          class="w-16 border border-custom-gray text-custom-gray ml-2 mr-0 my-1 px-2 py-1 rounded-[5px] border-solid truncate">
-      </div>
+      <label for="y">Hauteur</label>
+      <input type="range" name="y" id="y-slider" value="{{rangeValueY}}" min="-10" max="10" step="0.01" class="inputRange position appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+        [&::-webkit-slider-thumb]:w-2.5
+        [&::-webkit-slider-thumb]:h-2.5
+        [&::-webkit-slider-thumb]:appearance-none
+        [&::-webkit-slider-thumb]:bg-custom-blue
+        [&::-webkit-slider-thumb]:shadow-[0_0_0_4px_rgba(217,217,217,1)]
+        [&::-webkit-slider-thumb]:rounded-full
+        [&::-webkit-slider-thumb]:dark:bg-custom-gray" />
     </div>
+  </div>
   </div>
 
   <div id="text-position" class="mt-[50px]">
@@ -924,7 +879,7 @@
     </div>
     <div class="flex items-center gap-[5px]"></div>
     <label for="scale-value">échelle</label>
-    <input type="range" name="scale-value" id="scale-value" value="{{scale}}" min="0.1" max="100" step="any" class=" inputRange scale appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
+    <input type="range" name="scale-value" id="scale-value" value="{{scale}}" min="0.1" max="10" step="any" class=" inputRange scale appearance-none w-full h-[9px] border border-custom-light-gray cursor-pointer rounded-full 
       [&::-webkit-slider-thumb]:w-2.5
       [&::-webkit-slider-thumb]:h-2.5
       [&::-webkit-slider-thumb]:appearance-none

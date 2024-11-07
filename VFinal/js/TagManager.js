@@ -44,7 +44,7 @@ export function TagPositionChange(e, tagType) {
   newPosition = parseFloat(newPosition.toFixed(1));
 
   // Mettre à jour l'affichage de la valeur du slider
-  document.getElementById(`${axis}-value`).value = newPosition;
+  document.getElementById(`${axis}-slider`).value = newPosition;
 
   // Créer une instance de TagManager pour gérer les tags
   const tagManager = new TagManager(selectedScene);
@@ -61,10 +61,10 @@ export function TagPositionChange(e, tagType) {
     const radius = axis === 'radius' ? newPosition : tag.position.radius;
 
     // Calcul des coordonnées sphériques : x, y, z
-    const x = radius * Math.sin(degToRad(azimuth));
-    const z = -radius * Math.cos(degToRad(azimuth));
+    const x = radius * Math.sin(degToRad(azimuth + 90)); // Correction pour le décalage
+    const z = -radius * Math.cos(degToRad(azimuth + 90)); // Correction pour le décalage
     const y = tag.position.y || 0;  // Garder la hauteur actuelle si disponible
-
+    console.log(azimuth, y, radius)
     updatedPosition = { x, y, z, azimuth, radius };
   } else {
     // Si l'axe est x, y ou z, on garde les coordonnées cartésiennes
@@ -88,6 +88,7 @@ export function TagPositionChange(e, tagType) {
     LoadSlider(e.target);
   }
 }
+
 
 export function TagPositionChangeValue(e, tagType) {
   const tagName = document.getElementById(`${tagType}-name`).textContent; // "door-name" ou "text-name"
@@ -299,27 +300,25 @@ export function deleteTag(tagType) {
 
 let isMoving = false; // Assurez-vous que cette variable est en dehors de la fonction pour garder son état
 
+
 export function toggleMove(Name) {
-  const sceneEl = document.querySelector("a-scene"); // Assurez-vous que la scène est correctement sélectionnée
+  const sceneEl = document.querySelector("a-scene");
 
   function handleSceneClick(event) {
-    // Trouver l'élément sur lequel on a cliqué en utilisant `event.target`
     const clickedElement = document.querySelector(`#${Name}`);
     console.log(clickedElement);
-    // Si l'élément a une classe ou un attribut indiquant son type, récupérons-le
     let Type =
       clickedElement.getAttribute("data-type") ||
       (clickedElement.classList.contains("door")
         ? "door"
         : clickedElement.classList.contains("text")
-          ? "text"
-          : clickedElement.classList.contains("photo")
-            ? "photo"
-            : clickedElement.classList.contains("infoBulle")
-              ? "infoBulle"
-              : null); // Remplace 'data-type' par l'attribut qui te convient si besoin
+        ? "text"
+        : clickedElement.classList.contains("photo")
+        ? "photo"
+        : clickedElement.classList.contains("infoBulle")
+        ? "infoBulle"
+        : null);
 
-    // Appeler `handleMove` avec le nom de l'élément et le type récupéré dynamiquement
     handleMove(event, Name, Type);
 
     // Désactiver le mouvement après un clic
@@ -327,27 +326,19 @@ export function toggleMove(Name) {
     sceneEl.removeEventListener("click", handleSceneClick);
   }
 
-  // Si nous venons d'activer le mouvement
   if (!isMoving) {
-    isMoving = true; // Marquer comme en mouvement
-
-    // Ajouter un listener pour le clic sur la scène
+    isMoving = true;
     sceneEl.addEventListener("click", handleSceneClick);
   } else {
-    isMoving = false; // Désactiver le mouvement
-
-    // Supprimer le listener lorsque le mouvement est désactivé
+    isMoving = false;
     sceneEl.removeEventListener("click", handleSceneClick);
   }
 }
-
 export function handleMove(event, Name, Type) {
   console.log(Name);
 
   if (!event.clientX || !event.clientY) {
-    console.error(
-      "Les coordonnées de l'écran ne sont pas disponibles. Assurez-vous que l'événement est un 'click' ou similaire."
-    );
+    console.error("Les coordonnées de l'écran ne sont pas disponibles. Assurez-vous que l'événement est un 'click' ou similaire.");
     return;
   }
 
@@ -370,14 +361,32 @@ export function handleMove(event, Name, Type) {
     return;
   }
 
+  // Calculer l'azimut et le radius
+  const cameraPosition = cameraEl.object3D.position;
+  const dx = intersectionPoint.x - cameraPosition.x;
+  const dz = intersectionPoint.z - cameraPosition.z;
+  const azimuthRad = Math.atan2(dz, dx);
+  let azimuth = radToDeg(azimuthRad);
+
+  // Ajuster l'azimut pour qu'il soit correct par rapport à l'initial
+  azimuth = (azimuth + 180) % 360 - 180;
+
+  // Utiliser le même radius (distance) et l'azimut calculé
+  const updatedPosition = {
+    x: intersectionPoint.x,
+    y: intersectionPoint.y,
+    z: intersectionPoint.z,
+    azimuth: azimuth,
+    radius: distance
+  };
+
+  // Mettre à jour la position de l'élément dans la scène
   tagElement.setAttribute("position", {
     x: intersectionPoint.x,
     y: intersectionPoint.y,
     z: intersectionPoint.z,
   });
-  console.log(
-    `Position mise à jour : ${intersectionPoint.x}, ${intersectionPoint.y}, ${intersectionPoint.z}`
-  );
+  console.log(`Position mise à jour : x=${intersectionPoint.x}, y=${intersectionPoint.y}, z=${intersectionPoint.z}, azimuth=${azimuth}°`);
 
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
@@ -388,7 +397,6 @@ export function handleMove(event, Name, Type) {
   );
 
   if (!tagInstance) {
-    // Créer une nouvelle instance si elle n'existe pas déjà
     if (Type === "door") {
       tagInstance = new Door(Name, selectedScene);
     } else if (Type === "text") {
@@ -404,39 +412,28 @@ export function handleMove(event, Name, Type) {
   }
 
   // Mettre à jour la position dans l'instance du tag
-  tagInstance.position = {
-    x: intersectionPoint.x,
-    y: intersectionPoint.y,
-    z: intersectionPoint.z,
-  };
+  tagInstance.position = updatedPosition;
 
   // Mettre à jour les sliders avec la nouvelle position
-  document.getElementById("x-slider").value = tagInstance.position.x.toFixed(1);
-  document.getElementById("y-slider").value = tagInstance.position.y.toFixed(1);
-  document.getElementById("z-slider").value = tagInstance.position.z.toFixed(1);
+  document.getElementById("azimuth-slider").value = updatedPosition.azimuth.toFixed(1);
+  document.getElementById("y-slider").value = updatedPosition.y.toFixed(1);
+  document.getElementById("radius-slider").value = updatedPosition.radius.toFixed(1);
 
-  // Mettre à jour les valeurs des sliders affichées
-  document.getElementById("x-value").textContent =
-    tagInstance.position.x.toFixed(1);
-  document.getElementById("y-value").textContent =
-    tagInstance.position.y.toFixed(1);
-  document.getElementById("z-value").textContent =
-    tagInstance.position.z.toFixed(1);
 
   // Mettre à jour le dégradé des sliders
-  ["x", "y", "z"].forEach((axis) => {
+  ["azimuth", "y", "radius"].forEach((axis) => {
     const slider = document.getElementById(`${axis}-slider`);
-    const ratio =
-      ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+    const ratio = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
     const activeColor = "#00C058";
     const inactiveColor = "transparent";
     slider.style.background = `linear-gradient(90deg, ${activeColor} ${ratio}%, ${inactiveColor} ${ratio}%)`;
   });
 
-  console.log(
-    `Tag déplacé à la position : ${intersectionPoint.x}, ${intersectionPoint.y}, ${intersectionPoint.z}`
-  );
+  console.log(`Tag déplacé à la position : azimuth=${updatedPosition.azimuth}°, y=${updatedPosition.y}, radius=${updatedPosition.radius}`);
 }
+
+
+
 
 // Fonction générique pour charger et instancier les tags (door, text, et photo)
 export function loadTag() {
