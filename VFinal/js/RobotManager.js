@@ -47,14 +47,14 @@ export function addRobot() {
     (tag) => tag.type === "robot"
   ).length;
   const textName = `robot${textCount + 1}`;
-  const state = "rotation";
+  const state = "none";
 
   // Ajouter le robot via robotManager
   robotManager.addRobotTag(
     textName,
     { x: position.x, y: position.y, z: position.z },
     { rx: 0, ry: radToDeg(cameraEl.rotation.y), rz: cameraEl.rotation.z },
-    { sx: 3, sy: 3, sz: 3 },
+    { sx: 50, sy: 50, sz: 50 },
     state
   );
 
@@ -104,9 +104,8 @@ export function ModifyRobot(event) {
   recipe.innerHTML = templateRobot;
 
   const selectEtat = document.getElementById("state");
-  console.log(robot.state);
   selectOptionByValue(selectEtat, robot.state);
-  console.log(selectEtat);
+  console.log(VR);
 
   recipe.className =
     "fixed h-[97%] border-4 border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2 top-2";
@@ -225,13 +224,14 @@ export function ModifyRobot(event) {
 
 
 export function applyAnimation(robot, rbt) {
-  console.log(robot);
-  
   if (rbt.state === "rotation") {
     robot.setAttribute("animation", "property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear");
   }
   else if (rbt.state === "bump") {
-    robot.setAttribute("animation", `property: scale; dir: alternate; dur: 1000; to: ${rbt.scale.sx + 1} ${rbt.scale.sy + 1} ${rbt.scale.sz + 1}; loop: true; easing: easeInOutQuad`);
+    robot.setAttribute("animation", `property: scale; dir: alternate; dur: 1000; to: ${rbt.scale.sx + 10} ${rbt.scale.sy + 10} ${rbt.scale.sz + 10}; loop: true; easing: easeInOutQuad`);
+  }
+  else if (rbt.state === "none") {
+    robot.removeAttribute('animation');
   }
 }
 
@@ -252,15 +252,19 @@ export function switchAnimRobot() {
 function ModifyStateRobot(ev) {
   var selectElement = ev.target;
   var selectedOption = selectElement.options[selectElement.selectedIndex].value;
-  console.log(selectedOption);
 
-  var defaultScene = VR.scenes[VR.scenes.defaultScene];
-
-  for (var i = 0; i < defaultScene.tags.length; i++) {
-    var tag = defaultScene.tags[i];
-    if (tag.type === "robot") {
-      tag.state = selectedOption;
-    }
+  const sceneSelect = document.getElementById("selectscene");
+  const selectedScene = VR.scenes[sceneSelect.value];
+  const textName = document.getElementById(`robot-name`).textContent;
+  
+  let rbt = selectedScene.tags.find(
+    (tag) => tag.type === "robot" && tag.name === textName
+  );
+  console.log(sceneSelect);
+  
+  
+  if (rbt) {
+    rbt.state = selectedOption;
   }
 
   switchAnimRobot();

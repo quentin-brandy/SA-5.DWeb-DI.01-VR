@@ -348,8 +348,14 @@ export function handleMove(event, Name, Type) {
   const distance = 3;
   const intersectionPoint = new THREE.Vector3();
   raycaster.ray.at(distance, intersectionPoint);
+  
+  let tagElement;
+  if (Type == "robot") {
+    tagElement = document.querySelector(`#${Type}-entity #${Name}-3Drobot`);
+  } else {
+    tagElement = document.querySelector(`#${Type}-entity #${Name}`);
+  }
 
-  const tagElement = document.querySelector(`#${Type}-entity #${Name}`);
   if (!tagElement) {
     console.error(`Élément avec ID #${Type}-entity #${Name} non trouvé.`);
     return;

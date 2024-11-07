@@ -143,10 +143,9 @@ export function createEntity(tag) {
     else if (tag.type === "robot") {
         newEntity = document.createElement("a-entity");
         newEntity.setAttribute("id", `${tag.name}-3Drobot`);
-        newEntity.setAttribute("gltf-model", "../assets/3d/robot/grosbot3.gltf");
+        newEntity.setAttribute("obj-model", "obj: ../assets/3d/robot/model.obj; mtl: ../assets/3d/robot/materials.mtl");
+        // newEntity.setAttribute("gltf-model", "../assets/3d/robot/grosbot3.gltf");
         applyAnimation(newEntity, tag);
-        // newEntity.setAttribute("animation", "property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear");
-        // newEntity.setAttribute("glb-model", "../assets/3d/robot/robot21.glb");
         newEntity.setAttribute("animation-mixer", {
             clip: "*",
             loop: "repeat",
