@@ -5,41 +5,85 @@ import { InfoBulle } from "./Tagclass.js";
 import { createEntity } from './a-frame_entity.js';
 
 
+let initialAzimuth = null;
+
 export function addInfoBulle() {
-    const sceneSelect = document.getElementById('selectscene');
-    const selectedScene = VR.scenes[sceneSelect.value];
-    var cameraEl = document.querySelector('#camera').object3D;
-    var direction = new THREE.Vector3();
-    cameraEl.getWorldDirection(direction);
+  // Sélection de la scène actuelle
+  const sceneSelect = document.getElementById("selectscene");
+  const selectedScene = VR.scenes[sceneSelect.value];
 
-    const InfoBulleManager = new InfoBulle(selectedScene);
+  if (!selectedScene) {
+    console.error("Scène non trouvée");
+    return;
+  }
 
-    var distance = -3;
-    var position = cameraEl.position.clone().add(direction.multiplyScalar(distance));
+  // Instancier InfoBulle pour gérer les info bulles
+  const InfoBulleManager = new InfoBulle(selectedScene);
 
-    const infoBulleCount = selectedScene.tags.filter(tag => tag.type === 'infoBulle').length;
-    const infoBulleName = `infoBulle${infoBulleCount + 1}`;
-    // var Visibility = false;
-    // var rad = 0.5;
-    InfoBulleManager.addInfoBulleTag(
-        infoBulleName,
-        { x: position.x, y: position.y, z: position.z },
-        { rx: 0, ry: radToDeg(cameraEl.rotation.y), rz: cameraEl.rotation.z },
-        "Sample Title",
-        "Sample Description",
-        '#000',
-        '#000',
-        '0.5',
-        false
-    );
+  // Fixer le rayon pour la distance à laquelle placer l'info bulle (par exemple, 3 unités devant la caméra)
+  const radius = 3;
 
+  // Récupérer la position et l'orientation de la caméra
+  const cameraEl = document.querySelector("#camera").object3D;
+  const cameraPosition = new THREE.Vector3();
+  cameraEl.getWorldPosition(cameraPosition);
+  
+  // Utiliser getWorldDirection pour obtenir la direction de la caméra
+  const cameraDirection = new THREE.Vector3();
+  cameraEl.getWorldDirection(cameraDirection);
+
+  // Calculer l'azimut initial si ce n'est pas déjà fait
+  if (initialAzimuth === null) {
+    initialAzimuth = Math.atan2(cameraDirection.x, cameraDirection.z);
+  }
+
+  // Inverser la direction pour obtenir la bonne position
+  cameraDirection.multiplyScalar(-1);
+
+  // Calculer la position de l'info bulle en utilisant la direction de la caméra inversée
+  const infoBullePosition = new THREE.Vector3(
+    cameraPosition.x + cameraDirection.x * radius,
+    cameraPosition.y,
+    cameraPosition.z + cameraDirection.z * radius
+  );
+
+  // Calculer l'azimut basé sur la direction de la caméra
+  const azimuthRad = Math.atan2(cameraDirection.z, cameraDirection.x);
+  let azimuth = radToDeg(azimuthRad);
+
+  // Ajuster l'azimut pour qu'il soit correct par rapport à l'initial
+  azimuth = (azimuth + 180) % 360 - 180;
+
+  console.log(`Position calculée : x=${infoBullePosition.x}, y=${infoBullePosition.y}, z=${infoBullePosition.z}, azimuth=${azimuth}°`);
+
+  // Créer un nom unique pour l'info bulle
+  const infoBulleCount = selectedScene.tags.filter(tag => tag.type === 'infoBulle').length;
+  const infoBulleName = `infoBulle${infoBulleCount + 1}`;
+
+  // Ajouter l'info bulle via InfoBulle avec la position calculée
+  InfoBulleManager.addInfoBulleTag(
+    infoBulleName,
+    { x: infoBullePosition.x, y: infoBullePosition.y, z: infoBullePosition.z, azimuth: azimuth, radius: radius },
+    { rx: 0, ry: azimuth, rz: cameraEl.rotation.z },
+    "Sample Title",
+    "Sample Description",
+    '#000',
+    '#000',
+    '0.5',
+    false
+  );
+
+  // Créer une nouvelle entité pour l'info bulle
   let globalEntity = createEntity(selectedScene.tags.find(tag => tag.name === infoBulleName));
 
-    document.querySelector('#infoBulle-entity').appendChild(globalEntity);
+  // Ajouter l'entité à la scène
+  document.querySelector('#infoBulle-entity').appendChild(globalEntity);
 
-    AddSceneExplorer(infoBulleName, 'infoBulle');
-    ModifyInfoBulle({ target: { id: infoBulleName } });
+  // Ajouter l'info bulle à l'explorateur de scène
+  AddSceneExplorer(infoBulleName, 'infoBulle');
+  ModifyInfoBulle({ target: { id: infoBulleName } });
 }
+
 
 
 export function ModifyInfoBulle(event) {
@@ -61,9 +105,9 @@ export function ModifyInfoBulle(event) {
     templateInfBulle = templateInfBulle.replaceAll("{{colorDesc}}", InfoBulle.descColor);
     templateInfBulle = templateInfBulle.replaceAll("{{checkedOrNot}}", InfoBulle.visible);
     templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRad}}", InfoBulle.radius);
-    templateInfBulle = templateInfBulle.replaceAll("{{rangeValueX}}", InfoBulle.position.x);
+    templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRadius}}", InfoBulle.position.radius);
     templateInfBulle = templateInfBulle.replaceAll("{{rangeValueY}}", InfoBulle.position.y);
-    templateInfBulle = templateInfBulle.replaceAll("{{rangeValueZ}}", InfoBulle.position.z -4);
+    templateInfBulle = templateInfBulle.replaceAll("{{rangeValueAzimuth}}", InfoBulle.position.azimuth);
     templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRx}}", InfoBulle.rotation.rx);
     templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRy}}", InfoBulle.rotation.ry);
     templateInfBulle = templateInfBulle.replaceAll("{{rangeValueRz}}", InfoBulle.rotation.rz);

@@ -18,6 +18,8 @@ import {
 } from "./TagManager.js";
 import { createEntity } from "./a-frame_entity.js";
 
+let initialAzimuth = null;
+
 export function addText() {
   // Sélection de la scène actuelle
   const sceneSelect = document.getElementById("selectscene");
@@ -31,27 +33,50 @@ export function addText() {
   // Instancier la classe Text pour gérer les tags
   const textManager = new Text(selectedScene);
 
-  // Obtenir la caméra et la direction
-  const cameraEl = document.querySelector("#camera").object3D;
-  const direction = new THREE.Vector3();
-  cameraEl.getWorldDirection(direction);
+  // Fixer le rayon pour la distance à laquelle placer le texte (par exemple, 5 unités devant la caméra)
+  const radius = 5;
 
-  // Calculer la position en fonction de la caméra
-  const distance = -5;
-  const position = cameraEl.position
-    .clone()
-    .add(direction.multiplyScalar(distance));
+  // Récupérer la position et l'orientation de la caméra
+  const cameraEl = document.querySelector("#camera").object3D;
+  const cameraPosition = new THREE.Vector3();
+  cameraEl.getWorldPosition(cameraPosition);
+  
+  // Utiliser getWorldDirection pour obtenir la direction de la caméra
+  const cameraDirection = new THREE.Vector3();
+  cameraEl.getWorldDirection(cameraDirection);
+
+  // Calculer l'azimut initial si ce n'est pas déjà fait
+  if (initialAzimuth === null) {
+    initialAzimuth = Math.atan2(cameraDirection.x, cameraDirection.z);
+  }
+
+  // Inverser la direction pour obtenir la bonne position
+  cameraDirection.multiplyScalar(-1);
+
+  // Calculer la position du texte en utilisant la direction de la caméra inversée
+  const textPosition = new THREE.Vector3(
+    cameraPosition.x + cameraDirection.x * radius,
+    cameraPosition.y,
+    cameraPosition.z + cameraDirection.z * radius
+  );
+
+  // Calculer l'azimut basé sur la direction de la caméra
+  const azimuthRad = Math.atan2(cameraDirection.z, cameraDirection.x);
+  let azimuth = radToDeg(azimuthRad);
+
+  // Ajuster l'azimut pour qu'il soit correct par rapport à l'initial
+  azimuth = (azimuth + 180) % 360 - 180;
+
+  console.log(`Position calculée : x=${textPosition.x}, y=${textPosition.y}, z=${textPosition.z}, azimuth=${azimuth}°`);
 
   // Créer un nom unique pour le texte
-  const textCount = selectedScene.tags.filter(
-    (tag) => tag.type === "text"
-  ).length;
+  const textCount = selectedScene.tags.filter(tag => tag.type === 'text').length;
   const textName = `text${textCount + 1}`;
 
-  // Ajouter le texte via TextManager
+  // Ajouter le texte via TextManager avec la position calculée
   textManager.addTextTag(
     textName,
-    { x: position.x, y: position.y, z: position.z },
+    { x: textPosition.x, y: textPosition.y, z: textPosition.z, azimuth: azimuth, radius: radius },
     { rx: 0, ry: radToDeg(cameraEl.rotation.y), rz: cameraEl.rotation.z },
     "Sample Text",
     "#00C058",
@@ -59,9 +84,8 @@ export function addText() {
   );
 
   // Créer l'entité pour le texte
-  const newEntity = createEntity(
-    selectedScene.tags.find((tag) => tag.name === textName)
-  );
+  const newEntity = createEntity(selectedScene.tags.find(tag => tag.name === textName));
+
   // Ajouter l'entité à la scène
   document.querySelector("#text-entity").appendChild(newEntity);
 
@@ -70,6 +94,10 @@ export function addText() {
   ModifyText({ target: { id: textName } });
   console.log(VR);
 }
+
+
+
+
 
 export function ModifyText(event) {
   console.log(event.target.innerText);
@@ -87,9 +115,9 @@ export function ModifyText(event) {
   console.log(text);
   templateText = templateText.replaceAll("{{name}}", textName);
   templateText = templateText.replaceAll("{{Text}}", text.content);
-  templateText = templateText.replaceAll("{{rangeValueX}}", text.position.x);
-  templateText = templateText.replaceAll("{{rangeValueY}}", text.position.y);
-  templateText = templateText.replaceAll("{{rangeValueZ}}", text.position.z);
+  templateText = templateText.replaceAll("{{rangeValueRadius}}", text.position.radius.toFixed(2));
+  templateText = templateText.replaceAll("{{rangeValueY}}", text.position.y.toFixed(2));
+  templateText = templateText.replaceAll("{{rangeValueAzimuth}}", text.position.azimuth);
   templateText = templateText.replaceAll("{{rangeValueRx}}", text.rotation.rx);
   templateText = templateText.replaceAll("{{rangeValueRy}}", text.rotation.ry);
   templateText = templateText.replaceAll("{{rangeValueRz}}", text.rotation.rz);

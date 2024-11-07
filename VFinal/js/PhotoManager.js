@@ -18,6 +18,8 @@ import {
   radToDeg,
 } from "./TagManager.js";
 
+let initialAzimuth = null;
+
 export function addPhoto() {
   // Sélection de la scène actuelle
   const sceneSelect = document.getElementById("selectscene");
@@ -31,27 +33,50 @@ export function addPhoto() {
   // Instancier Photo pour gérer les photos
   const photoManager = new Photo(selectedScene);
 
-  // Obtenir la caméra et la direction
-  const cameraEl = document.querySelector("#camera").object3D;
-  const direction = new THREE.Vector3();
-  cameraEl.getWorldDirection(direction);
+  // Fixer le rayon pour la distance à laquelle placer la photo (par exemple, 3 unités devant la caméra)
+  const radius = 3;
 
-  // Calculer la position en fonction de la caméra
-  const distance = -3;
-  const position = cameraEl.position
-    .clone()
-    .add(direction.multiplyScalar(distance));
+  // Récupérer la position et l'orientation de la caméra
+  const cameraEl = document.querySelector("#camera").object3D;
+  const cameraPosition = new THREE.Vector3();
+  cameraEl.getWorldPosition(cameraPosition);
+  
+  // Utiliser getWorldDirection pour obtenir la direction de la caméra
+  const cameraDirection = new THREE.Vector3();
+  cameraEl.getWorldDirection(cameraDirection);
+
+  // Calculer l'azimut initial si ce n'est pas déjà fait
+  if (initialAzimuth === null) {
+    initialAzimuth = Math.atan2(cameraDirection.x, cameraDirection.z);
+  }
+
+  // Inverser la direction pour obtenir la bonne position
+  cameraDirection.multiplyScalar(-1);
+
+  // Calculer la position de la photo en utilisant la direction de la caméra inversée
+  const photoPosition = new THREE.Vector3(
+    cameraPosition.x + cameraDirection.x * radius,
+    cameraPosition.y,
+    cameraPosition.z + cameraDirection.z * radius
+  );
+
+  // Calculer l'azimut basé sur la direction de la caméra
+  const azimuthRad = Math.atan2(cameraDirection.z, cameraDirection.x);
+  let azimuth = radToDeg(azimuthRad);
+
+  // Ajuster l'azimut pour qu'il soit correct par rapport à l'initial
+  azimuth = (azimuth + 180) % 360 - 180;
+
+  console.log(`Position calculée : x=${photoPosition.x}, y=${photoPosition.y}, z=${photoPosition.z}, azimuth=${azimuth}°`);
 
   // Créer un nom unique pour la photo
-  const photoCount = selectedScene.tags.filter(
-    (tag) => tag.type === "photo"
-  ).length;
+  const photoCount = selectedScene.tags.filter(tag => tag.type === 'photo').length;
   const photoName = `photo${photoCount + 1}`;
 
-  // Ajouter la photo via Photo
+  // Ajouter la photo via PhotoManager avec la position calculée
   photoManager.addPhotoTag(
     photoName,
-    { x: position.x, y: position.y, z: position.z },
+    { x: photoPosition.x, y: photoPosition.y, z: photoPosition.z, azimuth: azimuth, radius: radius },
     { rx: 0, ry: radToDeg(cameraEl.rotation.y), rz: cameraEl.rotation.z },
     "../assets/img/image_photo.png",
     "image_photo.png",
@@ -59,18 +84,8 @@ export function addPhoto() {
     { sx: 1, sy: 1, sz: 1 }
   );
 
-  const newEntity = createEntity(
-    selectedScene.tags.find((tag) => tag.name === photoName)
-  );
-
-  document
-    .querySelector("#rightController")
-    .addEventListener("grip-down", function (event) {
-      if (event.target === newEntity) {
-        // Logique pour déplacer la photo
-        console.log(`Photo ${photoName} moved`);
-      }
-    });
+  // Créer l'entité pour la photo
+  const newEntity = createEntity(selectedScene.tags.find(tag => tag.name === photoName));
 
   // Ajouter l'entité à la scène
   document.querySelector("#photo-entity").appendChild(newEntity);
@@ -80,6 +95,11 @@ export function addPhoto() {
   ModifyPhoto({ target: { id: photoName } });
   console.log(VR);
 }
+
+
+
+
+
 
 export function ModifyPhoto(event) {
   console.log(event.target.innerText);
@@ -96,9 +116,9 @@ export function ModifyPhoto(event) {
   );
   console.log(photo);
   templatePhoto = templatePhoto.replaceAll("{{name}}", photoName);
-  templatePhoto = templatePhoto.replaceAll("{{rangeValueX}}", photo.position.x);
+  templatePhoto = templatePhoto.replaceAll("{{rangeValueRadius}}", photo.position.radius);
   templatePhoto = templatePhoto.replaceAll("{{rangeValueY}}", photo.position.y);
-  templatePhoto = templatePhoto.replaceAll("{{rangeValueZ}}", photo.position.z);
+  templatePhoto = templatePhoto.replaceAll("{{rangeValueAzimuth}}", photo.position.azimuth);
   templatePhoto = templatePhoto.replaceAll(
     "{{rangeValueRx}}",
     photo.rotation.rx
