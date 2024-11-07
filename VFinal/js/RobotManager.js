@@ -28,7 +28,7 @@ export function addRobot() {
     return;
   }
 
-  // Instancier la classe Text pour gérer les tags
+  // Instancier la classe robot pour gérer les tags
   const robotManager = new Robot(selectedScene);
 
   // Obtenir la caméra et la direction
@@ -49,7 +49,7 @@ export function addRobot() {
   const textName = `robot${textCount + 1}`;
   const state = "rotation";
 
-  // Ajouter le texte via robotManager
+  // Ajouter le robot via robotManager
   robotManager.addRobotTag(
     textName,
     { x: position.x, y: position.y, z: position.z },
@@ -70,28 +70,44 @@ export function addRobot() {
   ModifyRobot({ target: { id: textName } });
 }
 
+function selectOptionByValue(selectElement, value) {
+  for (var i = 0; i < selectElement.options.length; i++) {
+    if (selectElement.options[i].value === value) {
+      selectElement.selectedIndex = i;
+      break;
+    }
+  }
+}
+
 export function ModifyRobot(event) {
-  
-  let templateText = document.getElementById("template__robot").innerHTML;
+
+  let templateRobot = document.getElementById("template__robot").innerHTML;
   const recipe = document.getElementById("template_section");
-  templateText = templateText.replaceAll("{{name}}", event.target.id);
-  recipe.innerHTML = templateText;
+  templateRobot = templateRobot.replaceAll("{{name}}", event.target.id);
+  recipe.innerHTML = templateRobot;
 
   const textName = event.target.id;
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
-  const text = selectedScene.tags.find(
+  const robot = selectedScene.tags.find(
     (tag) => tag.type === "robot" && tag.name === textName
   );
-  templateText = templateText.replaceAll("{{name}}", textName);
-  templateText = templateText.replaceAll("{{rangeValueX}}", text.position.x);
-  templateText = templateText.replaceAll("{{rangeValueY}}", text.position.y);
-  templateText = templateText.replaceAll("{{rangeValueZ}}", text.position.z);
-  templateText = templateText.replaceAll("{{rangeValueRx}}", text.rotation.rx);
-  templateText = templateText.replaceAll("{{rangeValueRy}}", text.rotation.ry);
-  templateText = templateText.replaceAll("{{rangeValueRz}}", text.rotation.rz);
-  templateText = templateText.replaceAll("{{scale}}", text.scale.sx);
-  recipe.innerHTML = templateText;
+
+  templateRobot = templateRobot.replaceAll("{{name}}", textName);
+  templateRobot = templateRobot.replaceAll("{{rangeValueX}}", robot.position.x);
+  templateRobot = templateRobot.replaceAll("{{rangeValueY}}", robot.position.y);
+  templateRobot = templateRobot.replaceAll("{{rangeValueZ}}", robot.position.z);
+  templateRobot = templateRobot.replaceAll("{{rangeValueRx}}", robot.rotation.rx);
+  templateRobot = templateRobot.replaceAll("{{rangeValueRy}}", robot.rotation.ry);
+  templateRobot = templateRobot.replaceAll("{{rangeValueRz}}", robot.rotation.rz);
+  templateRobot = templateRobot.replaceAll("{{scale}}", robot.scale.sx);
+  recipe.innerHTML = templateRobot;
+
+  const selectEtat = document.getElementById("state");
+  console.log(robot.state);
+  selectOptionByValue(selectEtat, robot.state);
+  console.log(selectEtat);
+
   recipe.className =
     "fixed h-[97%] border-4 border-custom-blue z-10 bg-custom-white overflow-y-scroll px-6 py-0 rounded-lg right-2 top-2";
   let Explorer = document.getElementById(textName);
@@ -140,6 +156,10 @@ export function ModifyRobot(event) {
     {
       selector: "#scale-value",
       handler: (event) => tagScaleChange(event, "robot"),
+    },
+    {
+      selector: "#state",
+      handler: (event) => ModifyStateRobot(event),
     }
   ];
 
@@ -203,25 +223,45 @@ export function ModifyRobot(event) {
   });
 }
 
-export function switchAnimRobot(ev) {
-  let baseId = ev.target.id.split("-")[0];
-  var robot = document.querySelector(`#${baseId}-3Drobot`);
 
+export function applyAnimation(robot, rbt) {
+  console.log(robot);
+  
+  if (rbt.state === "rotation") {
+    robot.setAttribute("animation", "property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear");
+  }
+  else if (rbt.state === "bump") {
+    robot.setAttribute("animation", `property: scale; dir: alternate; dur: 1000; to: ${rbt.scale.sx + 1} ${rbt.scale.sy + 1} ${rbt.scale.sz + 1}; loop: true; easing: easeInOutQuad`);
+  }
+}
+
+export function switchAnimRobot() {
+  const textName = document.getElementById(`robot-name`).textContent;
+  const robot = document.getElementById(`${textName}-3Drobot`);
   const sceneSelect = document.getElementById("selectscene");
   const selectedScene = VR.scenes[sceneSelect.value];
+  
   let rbt = selectedScene.tags.find(
-    (tag) => tag.type === "robot" && tag.name === baseId
+    (tag) => tag.type === "robot" && tag.name === textName
   );
 
-  robot.setAttribute("animation", {
-    property: "scale",
-    dir: "normal",
-    dur: 1000,
-    to: `${rbt.scale.sx + 1} ${rbt.scale.sy + 1} ${rbt.scale.sz + 1}`,
-    loop: true,
-    easing: "easeInOutQuad"
-  });
-
+  applyAnimation(robot, rbt);
   robot.setAttribute("scale", `${rbt.scale.sx} ${rbt.scale.sy} ${rbt.scale.sz}`);
-  // robot.setAttribute("animation", "property: scale; to: 4 4 4; loop: true; dur: 10000; easing: linear");
+}
+
+function ModifyStateRobot(ev) {
+  var selectElement = ev.target;
+  var selectedOption = selectElement.options[selectElement.selectedIndex].value;
+  console.log(selectedOption);
+
+  var defaultScene = VR.scenes[VR.scenes.defaultScene];
+
+  for (var i = 0; i < defaultScene.tags.length; i++) {
+    var tag = defaultScene.tags[i];
+    if (tag.type === "robot") {
+      tag.state = selectedOption;
+    }
+  }
+
+  switchAnimRobot();
 }

@@ -1,6 +1,6 @@
 import { TakeDoor } from "./DoorManager.js";
 import { switchAnimInfoBulle } from "./InfoBulleManager.js";
-import { switchAnimRobot } from "./RobotManager.js";
+import { applyAnimation } from "./RobotManager.js";
 
 
 export function createEntity(tag) {
@@ -144,7 +144,8 @@ export function createEntity(tag) {
         newEntity = document.createElement("a-entity");
         newEntity.setAttribute("id", `${tag.name}-3Drobot`);
         newEntity.setAttribute("gltf-model", "../assets/3d/robot/grosbot3.gltf");
-        newEntity.setAttribute("animation", "property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear");
+        applyAnimation(newEntity, tag);
+        // newEntity.setAttribute("animation", "property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear");
         // newEntity.setAttribute("glb-model", "../assets/3d/robot/robot21.glb");
         newEntity.setAttribute("animation-mixer", {
             clip: "*",
@@ -168,11 +169,11 @@ export function createEntity(tag) {
         boxEntity.setAttribute("width", `6`);
         boxEntity.setAttribute("height", `4.5`);
         boxEntity.setAttribute("color", "#EF2D5E");
-        boxEntity.setAttribute("opacity", "0.5");
+        boxEntity.setAttribute("opacity", "0");
         boxEntity.setAttribute("class", "link clickable movableBox");
         boxEntity.setAttribute("position", "0 2.25 0");
-        boxEntity.addEventListener("click", function (event) {
-            switchAnimRobot(event);
+        boxEntity.addEventListener("click", function () {
+            console.log("Hello World!");
         });
 
         newEntity.appendChild(boxEntity);
