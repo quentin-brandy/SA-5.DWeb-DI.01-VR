@@ -32,6 +32,6 @@ Pour l'utiliser en local, il suffit de lancer le projet de la branche `main` ave
 
 ## 🛡️​ Utilisation serveur
 
-Pour utiliser l'application en ligne, rendez-vous simplement sur le **[loader](https://mmi22-03.mmi-limoges.fr/uptaleremake/loader/)**. Ensuite, déposez le `fichier ZIP` que vous avez préalablement exporté à partir de l'éditeur VR. `Un lien` apparaîtra. Il vous suffira de cliquer dessus pour accéder à l'expérience VR en ligne.
+Pour utiliser l'application en ligne, rendez-vous simplement sur le **[loader](https://mmi22-03.mmi-limoges.fr/uptaleremake/loader/)**. Ensuite, déposez le `fichier ZIP` que vous avez préalablement exporté à partir de l'éditeur VR. Un lien apparaîtra. Il vous suffira de cliquer dessus pour accéder à `l'expérience VR en ligne`.
 
 ---
