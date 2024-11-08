@@ -88,6 +88,15 @@ export function LoadSceneExplorer() {
                 ModifyInfoBulle(event);
                 updateSelectedTag(event.target);
             });
+        } else if (tag.type === 'robot') {
+            tagElement.setAttribute('data-type', 'robot');
+            iconArrow.src = '../assets/svg/arrow-return-right.svg';
+            icon.src = '../assets/svg/robot-dark.svg';
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
+            tagElement.addEventListener('click', function (event) {
+            ModifyRobot(event);
+            updateSelectedTag(event.target);
+            });
         }
         tagElement.prepend(icon);
 

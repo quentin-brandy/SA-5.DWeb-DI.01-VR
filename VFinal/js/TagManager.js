@@ -1,6 +1,5 @@
 import VR from "./main.js";
-
-import {  Door, Text, Photo, InfoBulle } from "./Tagclass.js";
+import {  Door, Text, Photo, InfoBulle , Robot } from "./Tagclass.js";
 import { createEntity } from "./a-frame_entity.js";
 
 // Fonction générique pour charger et instancier les tags (door, text, et photo)
@@ -13,11 +12,14 @@ export function loadTag() {
   const textEntities = document.querySelector("#text-entity");
   const photoEntities = document.querySelector("#photo-entity");
   const infoBulleEntities = document.querySelector("#infoBulle-entity");
+  const robotEntities = document.querySelector("#robot-entity");
 
-  [doorEntities, textEntities, infoBulleEntities, photoEntities].forEach(
+  [doorEntities, textEntities, infoBulleEntities, photoEntities , robotEntities].forEach(
     (entityContainer) => {
-      while (entityContainer.firstChild) {
-        entityContainer.removeChild(entityContainer.firstChild);
+      if (entityContainer) {
+        while (entityContainer.firstChild) {
+          entityContainer.removeChild(entityContainer.firstChild);
+        }
       }
     }
   );
@@ -35,20 +37,24 @@ export function loadTag() {
       tagInstance.isVisible = tag.isVisible = false;
     } else if (tag.type === "photo") {
       tagInstance = new Photo(tag.name, selectedScene);
+    } else if (tag.type === "robot") {
+      tagInstance = new Robot(tag.name, selectedScene);
     }
 
     // Crée l'entité correspondante à partir du tag et la classe
     const newEntity = createEntity(tag);
 
     // Ajoute l'entité à la scène en fonction du type
-    if (tag.type === "door") {
+    if (tag.type === "door" && doorEntities) {
       doorEntities.appendChild(newEntity);
-    } else if (tag.type === "text") {
+    } else if (tag.type === "text" && textEntities) {
       textEntities.appendChild(newEntity);
     } else if (tag.type === "infoBulle" && infoBulleEntities) {
       infoBulleEntities.appendChild(newEntity);
-    } else if (tag.type === "photo") {
+    } else if (tag.type === "photo" && photoEntities) {
       photoEntities.appendChild(newEntity);
+    } else if (tag.type === "robot" && robotEntities) {
+      robotEntities.appendChild(newEntity);
     }
   });
 }
