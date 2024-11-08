@@ -71,7 +71,13 @@ fileForm.addEventListener('submit', async (e) => {
 
         // Vérifiez si la réponse est OK
         if (!response.ok) {
-            throw new Error(`Erreur HTTP: ${response.status}`);
+            if (response.status === 400) {
+                throw new Error('Upload impossible: le zip n\'est pas conforme ou a été modifié');
+            } else if (response.status === 500) {
+                throw new Error('Erreur 500: L\'email n\'a pas pu être envoyé, veuillez réessayer');
+            } else {
+                throw new Error(`Erreur HTTP: ${response.status}`);
+            }
         }
 
         const responseData = await response.json();
