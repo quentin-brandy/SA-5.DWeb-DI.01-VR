@@ -112,28 +112,6 @@ async function saveVRToZip() {
     }
   }
 
-  // Collect video URLs from VR object
-  let videoUrls = new Set();  
-  for (let sceneKey in VR.scenes) {
-    if (VR.scenes.hasOwnProperty(sceneKey)) {
-      let scene = VR.scenes[sceneKey];
-      if (scene.tags) {
-        scene.tags.forEach(tag => {
-          if (tag.type === "video" && tag.src && tag.src.endsWith(".mp4")) {
-            videoUrls.add(tag.src);
-          }
-        });
-      }
-    }
-  }
-  
-  for (let url of videoUrls) {
-    let response = await fetch(url);
-    let blob = await response.blob();
-    let fileName = url.split("/").pop();
-    videoFolder.file(fileName, blob);
-  }
-
   for (let url of imageUrls) {
     let response = await fetch(url);
     let blob = await response.blob();
