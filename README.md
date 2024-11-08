@@ -28,7 +28,7 @@ Lien du Trello :
 
 ## ⚙️ Utilisation locale
 
-Pour l'utiliser en local, il suffit de lancer le projet de la branche `main` avec Live Server et créer votre scène. Ensuite, exportez le fichier JSON. Pour tester l'application, hébergez le code de la branche `server`, puis déposez dans le dossier `/assets/json` le fichier JSON avec le nom `VR.json`, ainsi que les images et vidéos 360 dans leurs dossiers respectifs dans `/assets`.
+Pour l'utiliser en local, il suffit de lancer le projet de la branche `main` avec Live Server et créer votre scène en mettant les images à utiliser (360 et 2D) dans le dossier `assets/img`. Ensuite, exportez le fichier JSON. Pour tester l'application en local, faites node server.js dans le dossier `server`  dans le code de la branche `server`, puis déposez dans le dossier `/assets/json` le fichier JSON avec le nom `VR.json`, ainsi que les images dans le dossier `/assets/img`.
 
 ## 🛡️​ Utilisation serveur
 
