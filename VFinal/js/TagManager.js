@@ -2,10 +2,11 @@ import VR from "./main.js";
 import { AddSceneExplorer, LoadSceneExplorer } from "./SceneManager.js";
 import { ModifyDoor } from "./DoorManager.js";
 import { ModifyText } from "./TextManager.js";
-import { TagManager, Door, Text, Photo, InfoBulle } from "./Tagclass.js";
+import { TagManager, Door, Text, Photo, InfoBulle , Robot } from "./Tagclass.js";
 import { ModifyPhoto } from "./PhotoManager.js";
 import { createEntity } from "./a-frame_entity.js";
 import { ModifyInfoBulle } from "./InfoBulleManager.js";
+import { ModifyRobot } from "./RobotManager.js";
 
 export function radToDeg(radians) {
   return radians * (180 / Math.PI);
@@ -76,7 +77,12 @@ export function TagPositionChange(e, tagType) {
 
   // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
   if (updatedTag) {
-    const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+    let tagElement;
+    if (tagType == "robot") {
+      tagElement = document.querySelector(`#${tagType}-entity #${tagName}-3Drobot`);
+    } else {
+      tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+    }
     if (tagElement) {
       tagElement.setAttribute(
         "position",
@@ -170,8 +176,12 @@ export function renameTag(type, nom) {
   spanError.innerHTML = ""; // Clear the error message
 
   const tag = tagManager.getTag(nom);
-  let tagScene = document.querySelector(`#${type}-entity #${nom}`);
-
+  let tagScene;
+    if (type == "robot") {
+      tagScene = document.querySelector(`#${type}-entity #${nom}-3Drobot`);
+    } else {
+      tagScene = document.querySelector(`#${type}-entity #${nom}`);
+    }
   if (tag) {
     tagManager.renameTag(nom, inputRename);
 
@@ -191,6 +201,9 @@ export function renameTag(type, nom) {
       ModifyPhoto({ target: { id: inputRename } });
     } else if (type === "infoBulle") {
       ModifyInfoBulle({ target: { id: inputRename } });
+    }
+    else if (type === "robot") {
+      ModifyRobot({ target: { id: inputRename } });
     }
   }
 }
@@ -246,6 +259,14 @@ export function duplicateTag(tagType) {
         originalTag.scale
       );
     }
+    else if (tagType === "robot") {
+      clonedTag = new Robot(selectedScene).addRobotTag(
+        newTagName,
+        newPosition,
+        originalTag.rotation,
+        originalTag.scale
+      );
+    }
 
     // Ajouter le tag cloné à la scène
     tagManager.addTag(clonedTag);
@@ -267,6 +288,9 @@ export function duplicateTag(tagType) {
     } else if (tagType === "infoBulle") {
       ModifyInfoBulle({ target: { id: newTagName } });
     }
+    else if (tagType === "robot") {
+      ModifyRobot({ target: { id: newTagName } });
+    }
   }
 }
 
@@ -279,7 +303,12 @@ export function deleteTag(tagType) {
   const tagManager = new TagManager(selectedScene);
 
   // Supprimer le tag via TagManager
-  const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+  let tagElement;
+  if (tagType == "robot") {
+    tagElement = document.querySelector(`#${tagType}-entity #${tagName}-3Drobot`);
+  } else {
+    tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+  }
   const deletedTag = tagManager.getTag(tagName);
 
   if (deletedTag) {
@@ -317,6 +346,8 @@ export function toggleMove(Name) {
         ? "photo"
         : clickedElement.classList.contains("infoBulle")
         ? "infoBulle"
+        : clickedElement.classList.contains("robot")
+        ? "robot"   
         : null);
 
     handleMove(event, Name, Type);
@@ -355,7 +386,12 @@ export function handleMove(event, Name, Type) {
   const intersectionPoint = new THREE.Vector3();
   raycaster.ray.at(distance, intersectionPoint);
 
-  const tagElement = document.querySelector(`#${Type}-entity #${Name}`);
+  let tagElement;
+  if (Type == "robot") {
+    tagElement = document.querySelector(`#${Type}-entity #${Name}-3Drobot`);
+  } else {
+    tagElement = document.querySelector(`#${Type}-entity #${Name}`);
+  }
   if (!tagElement) {
     console.error(`Élément avec ID #${Type}-entity #${Name} non trouvé.`);
     return;
@@ -405,6 +441,8 @@ export function handleMove(event, Name, Type) {
       tagInstance = new Photo(Name, selectedScene);
     } else if (Type === "infoBulle") {
       tagInstance = new InfoBulle(Name, selectedScene);
+    } else if (Type === "robot") {
+      tagInstance = new Robot(Name, selectedScene);
     } else {
       console.error("Type de tag non reconnu.");
       return;
@@ -445,8 +483,9 @@ export function loadTag() {
   const textEntities = document.querySelector("#text-entity");
   const photoEntities = document.querySelector("#photo-entity");
   const infoBulleEntities = document.querySelector("#infoBulle-entity");
+  const robotEntities = document.querySelector("#robot-entity");
 
-  [doorEntities, textEntities, infoBulleEntities, photoEntities].forEach(
+  [doorEntities, textEntities, infoBulleEntities, photoEntities , robotEntities].forEach(
     (entityContainer) => {
       while (entityContainer.firstChild) {
         entityContainer.removeChild(entityContainer.firstChild);
@@ -467,6 +506,8 @@ export function loadTag() {
       tagInstance.isVisible = tag.isVisible = false;
     } else if (tag.type === "photo") {
       tagInstance = new Photo(tag.name, selectedScene);
+    } else if (tag.type === "robot") {
+      tagInstance = new Robot(tag.name, selectedScene);
     }
 
     // Crée l'entité correspondante à partir du tag et la classe
@@ -481,6 +522,8 @@ export function loadTag() {
       infoBulleEntities.appendChild(newEntity);
     } else if (tag.type === "photo") {
       photoEntities.appendChild(newEntity);
+    } else if (tag.type === "robot") {
+      robotEntities.appendChild(newEntity);
     }
   });
 }
@@ -515,7 +558,12 @@ export function tagRotationChange(e, tagType) {
 
   // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
   if (updatedTag) {
-    const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+    let tagElement;
+    if (tagType == "robot") {
+      tagElement = document.querySelector(`#${tagType}-entity #${tagName}-3Drobot`);
+    } else {
+      tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+    }
     if (tagElement) {
       tagElement.setAttribute(
         "rotation",
@@ -557,7 +605,12 @@ export function tagRotationChangeValue(e, tagType) {
 
   // Si le tag a été mis à jour, mettre à jour l'entité dans la scène A-Frame
   if (updatedTag) {
-    const tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+    let tagElement;
+    if (tagType == "robot") {
+      tagElement = document.querySelector(`#${tagType}-entity #${tagName}-3Drobot`);
+    } else {
+      tagElement = document.querySelector(`#${tagType}-entity #${tagName}`);
+    }
     if (tagElement) {
       tagElement.setAttribute(
         "rotation",

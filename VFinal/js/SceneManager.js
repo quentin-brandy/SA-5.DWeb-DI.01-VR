@@ -5,6 +5,7 @@ import {  ModifyText  } from './TextManager.js';
 import { loadTag } from './TagManager.js';
 import { ModifyPhoto } from './PhotoManager.js';
 import { ModifyInfoBulle } from './InfoBulleManager.js';
+import { ModifyRobot } from './RobotManager.js';
 
 
 export function checkAndSpawnDefaultScene() {
@@ -190,6 +191,10 @@ export function SceneExplorer() {
             tagElement.setAttribute('data-type', 'infoBulle');
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
         }
+        else if (type === 'robot') {
+            tagElement.setAttribute('data-type', 'robot');
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
+        }
         sceneExplorer.appendChild(tagElement);
     });
 }
@@ -251,6 +256,19 @@ export function AddSceneExplorer(newtag, type) {
         document.addEventListener('click', function (event) {
             if (event.target.id === newtag) {
                 ModifyInfoBulle(event);
+                updateSelectedTag(event.target);
+            }
+            
+        });
+    }
+    else if (type === 'robot') {
+        tagElement.setAttribute('data-type', 'robot');
+        iconArrow.src = '../assets/svg/arrow-return-right.svg';
+        icon.src = '../assets/svg/robot-dark.svg';
+        tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer before:content-[url("../assets/svg/arrow-return-right.svg")]';
+        document.addEventListener('click', function (event) {
+            if (event.target.id === newtag) {
+                ModifyRobot(event);
                 updateSelectedTag(event.target);
             }
         });
@@ -319,6 +337,16 @@ export function LoadSceneExplorer() {
             tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
             tagElement.addEventListener('click', function (event) {
             ModifyInfoBulle(event);
+            updateSelectedTag(event.target);
+            });
+        }
+        else if (tag.type === 'robot') {
+            tagElement.setAttribute('data-type', 'robot');
+            iconArrow.src = '../assets/svg/arrow-return-right.svg';
+            icon.src = '../assets/svg/robot-dark.svg';
+            tagElement.className = 'flex items-center gap-2 border-b-custom-gray p-2 border-b border-solid cursor-pointer';
+            tagElement.addEventListener('click', function (event) {
+            ModifyRobot(event);
             updateSelectedTag(event.target);
             });
         }
