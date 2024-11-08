@@ -143,7 +143,7 @@ export function createEntity(tag) {
     else if (tag.type === "robot") {
         newEntity = document.createElement("a-entity");
         newEntity.setAttribute("id", `${tag.name}-3Drobot`);
-        newEntity.setAttribute("obj-model", "obj: ../assets/3d/robot/model.obj; mtl: ../assets/3d/robot/materials.mtl");
+        newEntity.setAttribute("gltf-model", "../assets/3d/robot/grosbot3.gltf");
         // newEntity.setAttribute("gltf-model", "../assets/3d/robot/grosbot3.gltf");
         applyAnimation(newEntity, tag);
         newEntity.setAttribute("animation-mixer", {
@@ -162,10 +162,11 @@ export function createEntity(tag) {
             z: tag.rotation.rz,
         });
         newEntity.setAttribute("scale", `${tag.scale.sx} ${tag.scale.sy} ${tag.scale.sz}`);
+        newEntity.setAttribute("opacity", "1");
         
         var boxEntity = document.createElement("a-box");
         boxEntity.setAttribute("id", `${tag.name}-box`);
-        boxEntity.setAttribute("width", `6`);
+        boxEntity.setAttribute("width", `6.5`);
         boxEntity.setAttribute("height", `4.5`);
         boxEntity.setAttribute("color", "#EF2D5E");
         boxEntity.setAttribute("opacity", "0");
