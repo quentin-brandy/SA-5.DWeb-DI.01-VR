@@ -19,6 +19,7 @@ Le projet serveur hébergé est accessible via ce lien :
 
 - La **branche `main`** contient la version finale de l'éditeur VR.
 - La **branche `server`** contient tous les fichiers pour l'utilisation serveur.
+- La **branche `version-online`** contient la version a frame sans éditeur.
 - Les autres branches peuvent contenir des versions de développement ou des fonctionnalités expérimentales.
 
 ## 📌 Trello
