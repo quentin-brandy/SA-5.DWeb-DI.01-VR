@@ -8,8 +8,10 @@ Le but de ce projet est de créer une expérience de visite 360 où les utilisat
 ## 🚀 Les différents liens
 L'expérience finale est hébergée sur GitHub Pages. Vous pouvez y accéder directement via ce lien :
 **[Accéder à l'expérience VR](https://quentin-brandy.github.io/SA-5.DWeb-DI.01-VR/src)**
+
 Le dépôt du projet sur GitHub, incluant toutes les branches et les versions de développement, est accessible ici :
 **[Accéder au projet](https://github.com/quentin-brandy/SA-5.DWeb-DI.01-VR)**
+
 Le projet serveur hébergé est accessible via ce lien :
 **[Accéder au projet](https://mmi22-03.mmi-limoges.fr/uptaleremake/loader/)**
 
